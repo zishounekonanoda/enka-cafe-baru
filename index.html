@@ -1,14 +1,8 @@
 <!--
-ooo        ooooo       .o.       oooooooooo.   oooooooooooo    oooooooooo.  oooooo   oooo    ooooooooo.   ooooo ooooo      ooo ooooooooooooo       .o.       ooooooooo.     .oooooo.   
-`88.       .888'      .888.      `888'   `Y8b  `888'     `8    `888'   `Y8b  `888.   .8'     `888   `Y88. `888' `888b.     `8' 8'   888   `8      .888.      `888   `Y88.  d8P'  `Y8b  
- 888b     d'888      .8"888.      888      888  888             888     888   `888. .8'       888   .d88'  888   8 `88b.    8       888          .8"888.      888   .d88' 888      888 
- 8 Y88. .P  888     .8' `888.     888      888  888oooo8        888oooo888'    `888.8'        888ooo88P'   888   8   `88b.  8       888         .8' `888.     888ooo88P'  888      888 
- 8  `888'   888    .88ooo8888.    888      888  888    "        888    `88b     `888'         888`88b.     888   8     `88b.8       888        .88ooo8888.    888`88b.    888      888 
- 8    Y     888   .8'     `888.   888     d88'  888       o     888    .88P      888          888  `88b.   888   8       `888       888       .8'     `888.   888  `88b.  `88b    d88' 
-o8o        o888o o88o     o8888o o888bood8P'   o888ooooood8    o888bood8P'      o888o        o888o  o888o o888o o8o        `8      o888o     o88o     o8888o o888o  o888o  `Y8bood8P'  
-                                                                                                                                                                                       
-                                                                                                                                                                                       
-                                                                                                                                                                                       -->
+░█▄█░█▀█░█▀▄░█▀▀░░░█▀▄░█░█░░░█▀▄░▀█▀░█▀█░▀█▀░█▀█░█▀▄░█▀█
+░█░█░█▀█░█░█░█▀▀░░░█▀▄░░█░░░░█▀▄░░█░░█░█░░█░░█▀█░█▀▄░█░█
+░▀░▀░▀░▀░▀▀░░▀▀▀░░░▀▀░░░▀░░░░▀░▀░▀▀▀░▀░▀░░▀░░▀░▀░▀░▀░▀▀▀                                                                                                                                                                                       
+-->
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -62,10 +56,6 @@ o8o        o888o o88o     o8888o o888bood8P'   o888ooooood8    o888bood8P'      
         }
         
         /* --- ヒーローセクションの背景画像 --- */
-        /* * 1. HTMLファイルと同じ階層に 'images' フォルダを作成します。
-         * 2. 'images' フォルダの中に、背景にしたい画像ファイル（例: hero-background.jpg）を入れます。
-         * 3. 下記の './images/your-hero-image.jpg' を実際のファイルパスに書き換えてください。
-        */
         .hero-bg {
             background-image: url('./images/hero.jpg');
             background-size: cover;
@@ -78,17 +68,63 @@ o8o        o888o o88o     o8888o o888bood8P'   o888ooooood8    o888bood8P'      
             backdrop-filter: blur(10px);
             box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
+
+        /* --- ローディングアニメーション --- */
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        #loader {
+            background-color: #fff;
+            transition: opacity 0.5s ease-out;
+        }
+
+        #loader.fade-out {
+            opacity: 0;
+        }
+
+        #loader img {
+            width: 12rem; /* 192px */
+            height: 12rem; /* 192px */
+            animation: spin 1.5s linear infinite;
+        }
+
+        /* --- コンテンツのフェードイン --- */
+        header,
+        main,
+        footer {
+            opacity: 0;
+            transition: opacity 0.8s ease-in-out;
+        }
+
+        .content-visible {
+            opacity: 1;
+        }
     </style>
 </head>
 <body class="antialiased">
 
+    <!-- ローディング画面 -->
+    <div id="loader" class="fixed inset-0 z-[100] flex items-center justify-center">
+        <img src="./images/load.png" alt="Loading...">
+    </div>
+
     <!-- ヘッダー -->
     <header id="header" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
         <div class="container mx-auto px-6 py-4 flex justify-between items-center">
-            <a href="#" class="text-2xl font-bold tracking-wider">enka</a>
+            <a href="#" class="flex items-center space-x-2 text-2xl font-bold tracking-wider">
+                <img src="./images/load.png" alt="enka logo" class="h-8">
+                <span>enka</span>
+            </a>
             <nav class="hidden md:flex space-x-8 items-center">
+                <a href="#" class="hover:text-gray-500 transition-colors">Home</a>
                 <a href="#about" class="hover:text-gray-500 transition-colors">About</a>
-                <a href="#menu" class="hover:text-gray-500 transition-colors">Menu</a>
+                <a href="menu.html" class="hover:text-gray-500 transition-colors">Menu</a>
                 <a href="#access" class="hover:text-gray-500 transition-colors">Access</a>
                 <a href="#contact" class="bg-stone-800 text-white px-4 py-2 rounded-full hover:bg-stone-700 transition-colors">Contact</a>
             </nav>
@@ -98,8 +134,9 @@ o8o        o888o o88o     o8888o o888bood8P'   o888ooooood8    o888bood8P'      
         </div>
         <!-- モバイルメニュー -->
         <div id="mobile-menu" class="hidden md:hidden bg-white/90 backdrop-blur-md">
+            <a href="#" class="block text-center py-3 hover:bg-gray-100">Home</a>
             <a href="#about" class="block text-center py-3 hover:bg-gray-100">About</a>
-            <a href="#menu" class="block text-center py-3 hover:bg-gray-100">Menu</a>
+            <a href="menu.html" class="block text-center py-3 hover:bg-gray-100">Menu</a>
             <a href="#access" class="block text-center py-3 hover:bg-gray-100">Access</a>
             <a href="#contact" class="block text-center py-3 hover:bg-gray-100">Contact</a>
         </div>
@@ -107,64 +144,50 @@ o8o        o888o o88o     o8888o o888bood8P'   o888ooooood8    o888bood8P'      
 
     <main>
         <!-- ヒーローセクション -->
-        <section class="h-screen flex items-center justify-center text-white hero-bg">
+        <section class="h-screen flex items-center justify-center text-white hero-bg relative">
             <div class="text-center bg-black bg-opacity-30 p-10 rounded-lg">
                 <h1 class="text-5xl md:text-7xl font-bold tracking-wider fade-in">A moment of peace.</h1>
                 <p class="mt-4 text-lg md:text-xl fade-in" style="transition-delay: 200ms;">一杯のコーヒーがもたらす、心安らぐひとときを。</p>
+            </div>
+            <!-- Scroll Indicator -->
+            <div class="absolute bottom-10 right-10 text-white text-center opacity-70">
+                <span class="text-sm tracking-widest">SCROLL</span>
+                <div class="mt-2 animate-bounce">
+                    <i class="fas fa-arrow-down"></i>
+                </div>
             </div>
         </section>
 
         <!-- Aboutセクション -->
         <section id="about" class="py-20 md:py-32">
             <div class="container mx-auto px-6">
-                <div class="grid md:grid-cols-2 gap-12 items-center">
-                    <div class="fade-in">
-                        <img src="https://images.unsplash.com/photo-1511920183353-3c7c95a5742c?q=80&w=2787&auto=format&fit=crop" alt="カフェの内装" class="rounded-lg shadow-xl w-full h-auto object-cover" onerror="this.onerror=null;this.src='https://placehold.co/600x800/e2e8f0/4a5568?text=Cafe+Interior';">
+                <div class="relative fade-in flex items-end">
+                    <!-- 画像のコンテナを小さく設定し、アスペクト比を16:9に -->
+                    <div class="w-10/12 md:w-9/12">
+                        <div class="relative pt-[56.25%] rounded-lg shadow-2xl overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1511920183353-3c7c95a5742c?q=80&w=2787&auto=format&fit=crop" alt="カフェの内装" class="absolute inset-0 w-full h-full object-cover" onerror="this.onerror=null;this.src='https://placehold.co/1600x900/e2e8f0/4a5568?text=Cafe+Interior';">
+                        </div>
                     </div>
-                    <div class="fade-in">
-                        <h2 class="text-3xl md:text-4xl font-bold mb-6">About enka</h2>
-                        <p class="text-gray-600 leading-relaxed mb-4">
-                            「enka」は、都会の喧騒から少し離れた場所に佇む、あなたのための隠れ家です。
-                            厳選された特別なコーヒーと、燻製の素材を活かした手作りパニーニやニョッキなどをお楽しみいただけます
-                        </p>
-                        <p class="text-gray-600 leading-relaxed">
-                            ミニマルで洗練された空間で、読書をしたり、友人と語らったり、あるいはただ静かに物思いにふけったり。
-                            思い思いの「余白」の時間をお過ごしください。
-                        </p>
+
+                    <!-- 説明文パネルを右下からはみ出すように配置 -->
+                    <div class="absolute bottom-0 right-0 w-full md:w-7/12 lg:w-1/2 fade-in mb-[-2rem] md:mb-[-4rem]" style="transition-delay: 300ms;">
+                        <div class="bg-white/80 backdrop-blur-md p-8 md:p-10 rounded-lg shadow-xl">
+                            <h2 class="text-3xl md:text-4xl font-bold mb-6">About enka</h2>
+                            <p class="text-gray-600 leading-relaxed mb-4">
+                                「enka」は、都会の喧騒から少し離れた場所に佇む、あなたのための隠れ家です。
+                                厳選された特別なコーヒーと、燻製の素材を活かした手作りパニーニやニョッキなどをお楽しみいただけます
+                            </p>
+                            <p class="text-gray-600 leading-relaxed">
+                                ミニマルで洗練された空間で、読書をしたり、友人と語らったり、あるいはただ静かに物思いにふけったり。
+                                思い思いの「余白」の時間をお過ごしください。
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Menuセクション -->
-        <section id="menu" class="py-20 md:py-32 bg-white">
-            <div class="container mx-auto px-6">
-                <div class="text-center mb-16 fade-in">
-                    <h2 class="text-3xl md:text-4xl font-bold">Our Menu</h2>
-                    <p class="text-gray-500 mt-2">心を込めて、一杯ずつ丁寧に。</p>
-                </div>
-                <div class="grid md:grid-cols-3 gap-8">
-                    <!-- メニュー項目 1 -->
-                    <div class="text-center fade-in">
-                        <img src="https://images.unsplash.com/photo-1514432324607-a09d9b4a8675?q=80&w=2787&auto=format&fit=crop" alt="ドリップコーヒー" class="rounded-lg shadow-lg w-full h-64 object-cover mb-4" onerror="this.onerror=null;this.src='https://placehold.co/400x300/e2e8f0/4a5568?text=Drip+Coffee';">
-                        <h3 class="text-xl font-semibold">Specialty Drip Coffee</h3>
-                        <p class="text-gray-500 mt-1">産地ごとの個性を楽しむ一杯</p>
-                    </div>
-                    <!-- メニュー項目 2 -->
-                    <div class="text-center fade-in" style="transition-delay: 200ms;">
-                        <img src="https://images.unsplash.com/photo-1571328023794-91241c4b1b36?q=80&w=2787&auto=format&fit=crop" alt="カフェラテ" class="rounded-lg shadow-lg w-full h-64 object-cover mb-4" onerror="this.onerror=null;this.src='https://placehold.co/400x300/e2e8f0/4a5568?text=Cafe+Latte';">
-                        <h3 class="text-xl font-semibold">Creamy Cafe Latte</h3>
-                        <p class="text-gray-500 mt-1">エスプレッソとミルクの優しい調和</p>
-                    </div>
-                    <!-- メニュー項目 3 -->
-                    <div class="text-center fade-in" style="transition-delay: 400ms;">
-                        <img src="https://images.unsplash.com/photo-1565001475753-4347537b0c8a?q=80&w=2787&auto=format&fit=crop" alt="チーズケーキ" class="rounded-lg shadow-lg w-full h-64 object-cover mb-4" onerror="this.onerror=null;this.src='https://placehold.co/400x300/e2e8f0/4a5568?text=Cheesecake';">
-                        <h3 class="text-xl font-semibold">Seasonal Cheesecake</h3>
-                        <p class="text-gray-500 mt-1">季節のフルーツを使った濃厚な味わい</p>
-                    </div>
-                </div>
-            </div>
-        </section>
+        
 
         <!-- Accessセクション -->
         <section id="access" class="py-20 md:py-32">
@@ -247,7 +270,30 @@ o8o        o888o o88o     o8888o o888bood8P'   o888ooooood8    o888bood8P'      
             mobileMenuButton.addEventListener('click', () => {
                 mobileMenu.classList.toggle('hidden');
             });
-        });       
+        });
+
+        // --- ローディング画面 --- 
+        window.onload = () => {
+            const loader = document.getElementById('loader');
+            const header = document.getElementById('header');
+            const main = document.querySelector('main');
+            const footer = document.querySelector('footer');
+
+            // 1. ローダーをフェードアウト
+            loader.classList.add('fade-out');
+
+            // 2. コンテンツをフェードイン
+            setTimeout(() => {
+                header.classList.add('content-visible');
+                main.classList.add('content-visible');
+                footer.classList.add('content-visible');
+            }, 200); // ローダーが消え始める少し後にコンテンツを表示開始
+
+            // 3. ローダーをDOMから削除
+            setTimeout(() => {
+                loader.style.display = 'none';
+            }, 500); // transitionと同じ時間
+        };       
                                                                                                                   
 // ##   ##    ##     ### ##   ### ###           ### ##   ##  ##            ### ##     ####   ###  ##  #### ##    ##     ### ##    ## ##
 //  ## ##      ##     ##  ##   ##  ##            ##  ##  ##  ##             ##  ##     ##      ## ##  # ## ##     ##     ##  ##  ##   ##
