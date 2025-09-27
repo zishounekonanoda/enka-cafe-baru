@@ -1,7 +1,7 @@
 <!--
 ░█▄█░█▀█░█▀▄░█▀▀░░░█▀▄░█░█░░░█▀▄░▀█▀░█▀█░▀█▀░█▀█░█▀▄░█▀█
 ░█░█░█▀█░█░█░█▀▀░░░█▀▄░░█░░░░█▀▄░░█░░█░█░░█░░█▀█░█▀▄░█░█
-░▀░▀░▀░▀░▀▀░░▀▀▀░░░▀▀░░░▀░░░░▀░▀░▀▀▀░▀░▀░░▀░░▀░▀░▀░▀░▀▀▀                                                                                                                                                                                       
+░▀░▀░▀░▀░▀▀░░▀▀▀░░░▀▀░░░▀░░░░▀░▀░▀▀▀░▀░▀░░▀░░▀░▀░▀░▀░▀▀▀
 -->
 <!DOCTYPE html>
 <html lang="ja">
@@ -9,17 +9,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>enka - カフェ・バル</title>
-    
+
     <!-- Tailwind CSSの読み込み -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Google Fonts (Inter) の読み込み - ローカルフォントを使用するためコメントアウト -->
-    <!-- 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
-    -->
-    
+
     <!-- Font Awesome (アイコン) の読み込み -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
@@ -27,9 +20,7 @@
         /* --- ローカルフォントの読み込み設定 --- */
         @font-face {
             font-family: 'YourLocalFontName'; /* CSSで指定するためのフォント名 */
-            src: url('./fonts/YourFontFile.woff2') format('woff2'), /* 推奨 */
-                 url('./fonts/YourFontFile.woff') format('woff'),   /* 次点 */
-                 url('./fonts/59314.ttf') format('truetype'); /* TTF形式のフォント */
+            src: url('./fonts/59314.ttf') format('truetype'); /* TTF形式のフォント */
             font-weight: normal;
             font-style: normal;
             font-display: swap;
@@ -37,24 +28,24 @@
 
         /* カスタムスタイル */
         body {
-            /* font-familyの先頭に、@font-faceで設定したフォント名を追加します */
             font-family: 'YourLocalFontName', 'Inter', 'Noto Serif JP', sans-serif;
             background-color: #F8F8F4; /* やや温かみのある白 */
             color: #1a1a1a;
         }
 
-        /* フェードインアニメーション用のスタイル */
-        .fade-in {
+        /* GSAPでアニメーションさせる要素の初期状態 */
+        .gsap-fade-up {
             opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+            transform: translateY(40px);
+        }
+        .gsap-fade-in {
+            opacity: 0;
+        }
+        /* 文字アニメーション用の基本スタイル */
+        .gsap-char {
+            display: inline-block;
         }
 
-        .fade-in.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        
         /* --- ヒーローセクションの背景画像 --- */
         .hero-bg {
             background-image: url('./images/hero.jpg');
@@ -71,21 +62,13 @@
 
         /* --- ローディングアニメーション --- */
         @keyframes spin {
-            from {
-                transform: rotate(0deg);
-            }
-            to {
-                transform: rotate(360deg);
-            }
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
         }
 
         #loader {
             background-color: #fff;
             transition: opacity 0.5s ease-out;
-        }
-
-        #loader.fade-out {
-            opacity: 0;
         }
 
         #loader img {
@@ -94,16 +77,18 @@
             animation: spin 1.5s linear infinite;
         }
 
-        /* --- コンテンツのフェードイン --- */
-        header,
-        main,
-        footer {
+        /* --- コンテンツの初期状態 --- */
+        header, main, footer {
             opacity: 0;
-            transition: opacity 0.8s ease-in-out;
         }
 
-        .content-visible {
-            opacity: 1;
+        /* Featured Menu カードのスタイル */
+        .menu-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .menu-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
         }
     </style>
 </head>
@@ -124,33 +109,36 @@
             <nav class="hidden md:flex space-x-8 items-center">
                 <a href="#" class="hover:text-gray-500 transition-colors">Home</a>
                 <a href="#about" class="hover:text-gray-500 transition-colors">About</a>
+                <a href="#concept" class="hover:text-gray-500 transition-colors">Concept</a>
                 <a href="menu.html" class="hover:text-gray-500 transition-colors">Menu</a>
                 <a href="#access" class="hover:text-gray-500 transition-colors">Access</a>
                 <a href="#contact" class="bg-stone-800 text-white px-4 py-2 rounded-full hover:bg-stone-700 transition-colors">Contact</a>
             </nav>
-            <button id="mobile-menu-button" class="md:hidden text-2xl">
+            <button id="mobile-menu-button" class="md:hidden text-2xl z-50">
                 <i class="fas fa-bars"></i>
             </button>
         </div>
-        <!-- モバイルメニュー -->
-        <div id="mobile-menu" class="hidden md:hidden bg-white/90 backdrop-blur-md">
-            <a href="#" class="block text-center py-3 hover:bg-gray-100">Home</a>
-            <a href="#about" class="block text-center py-3 hover:bg-gray-100">About</a>
-            <a href="menu.html" class="block text-center py-3 hover:bg-gray-100">Menu</a>
-            <a href="#access" class="block text-center py-3 hover:bg-gray-100">Access</a>
-            <a href="#contact" class="block text-center py-3 hover:bg-gray-100">Contact</a>
-        </div>
     </header>
+
+    <!-- モバイルメニュー -->
+    <div id="mobile-menu" class="md:hidden bg-white/90 backdrop-blur-md fixed top-0 left-0 right-0 shadow-lg pt-[64px] z-40">
+        <a href="#" class="block text-center py-3 hover:bg-gray-100">Home</a>
+        <a href="#about" class="block text-center py-3 hover:bg-gray-100">About</a>
+        <a href="#concept" class="block text-center py-3 hover:bg-gray-100">Concept</a>
+        <a href="menu.html" class="block text-center py-3 hover:bg-gray-100">Menu</a>
+        <a href="#access" class="block text-center py-3 hover:bg-gray-100">Access</a>
+        <a href="#contact" class="block text-center py-3 hover:bg-gray-100">Contact</a>
+    </div>
 
     <main>
         <!-- ヒーローセクション -->
         <section class="h-screen flex items-center justify-center text-white hero-bg relative">
             <div class="text-center bg-black bg-opacity-30 p-10 rounded-lg">
-                <h1 class="text-5xl md:text-7xl font-bold tracking-wider fade-in">A moment of peace.</h1>
-                <p class="mt-4 text-lg md:text-xl fade-in" style="transition-delay: 200ms;">一杯のコーヒーがもたらす、心安らぐひとときを。</p>
+                <h1 id="hero-title" class="text-5xl md:text-7xl font-bold tracking-wider">A moment of peace.</h1>
+                <p id="hero-subtitle" class="mt-4 text-lg md:text-xl">一杯のコーヒーがもたらす、心安らぐひとときを。</p>
             </div>
             <!-- Scroll Indicator -->
-            <div class="absolute bottom-10 right-10 text-white text-center opacity-70">
+            <div class="absolute bottom-10 right-10 text-white text-center opacity-70 hidden md:flex flex-col items-center gsap-fade-in">
                 <span class="text-sm tracking-widest">SCROLL</span>
                 <div class="mt-2 animate-bounce">
                     <i class="fas fa-arrow-down"></i>
@@ -159,18 +147,19 @@
         </section>
 
         <!-- Aboutセクション -->
-        <section id="about" class="py-20 md:py-32">
+        <section id="about" class="py-20 md:py-32 overflow-hidden">
             <div class="container mx-auto px-6">
-                <div class="relative fade-in flex items-end">
-                    <!-- 画像のコンテナを小さく設定し、アスペクト比を16:9に -->
-                    <div class="w-10/12 md:w-9/12">
+                <!-- md以上ではrelative、スマホでは通常のブロック -->
+                <div class="md:relative md:flex md:items-end">
+                    <!-- 画像のコンテナ: スマホでは幅いっぱい、下マージンを追加 -->
+                    <div class="w-full md:w-9/12 gsap-fade-up mb-8 md:mb-0">
                         <div class="relative pt-[56.25%] rounded-lg shadow-2xl overflow-hidden">
                             <img src="https://images.unsplash.com/photo-1511920183353-3c7c95a5742c?q=80&w=2787&auto=format&fit=crop" alt="カフェの内装" class="absolute inset-0 w-full h-full object-cover" onerror="this.onerror=null;this.src='https://placehold.co/1600x900/e2e8f0/4a5568?text=Cafe+Interior';">
                         </div>
                     </div>
 
-                    <!-- 説明文パネルを右下からはみ出すように配置 -->
-                    <div class="absolute bottom-0 right-0 w-full md:w-7/12 lg:w-1/2 fade-in mb-[-2rem] md:mb-[-4rem]" style="transition-delay: 300ms;">
+                    <!-- 説明文パネル: スマホでは通常のブロック、md以上でabsolute配置 -->
+                    <div class="w-full md:absolute md:bottom-0 md:right-0 md:w-7/12 lg:w-1/2 gsap-fade-up md:mb-[-4rem]" data-gsap-delay="0.2">
                         <div class="bg-white/80 backdrop-blur-md p-8 md:p-10 rounded-lg shadow-xl">
                             <h2 class="text-3xl md:text-4xl font-bold mb-6">About enka</h2>
                             <p class="text-gray-600 leading-relaxed mb-4">
@@ -187,13 +176,97 @@
             </div>
         </section>
 
-        
+        <!-- Conceptセクション (新規追加) -->
+        <section id="concept" class="py-20 md:py-32 bg-stone-50 overflow-hidden">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl md:text-4xl font-bold gsap-fade-up">Our Concept</h2>
+                    <p class="text-gray-500 mt-2 gsap-fade-up" data-gsap-delay="0.1">私たちが大切にする3つのこと</p>
+                </div>
+                <div class="grid md:grid-cols-3 gap-12 text-center">
+                    <div class="gsap-fade-up" data-gsap-delay="0.2">
+                        <div class="bg-white/70 backdrop-blur-sm p-8 rounded-lg shadow-lg h-full transition-all duration-300 hover:shadow-xl hover:bg-white/80">
+                            <div class="text-5xl text-amber-700 mb-4"><i class="fas fa-coffee"></i></div>
+                            <h3 class="text-2xl font-bold mb-3">Specialty Coffee</h3>
+                            <p class="text-gray-600 leading-relaxed">
+                                世界中から厳選した豆を、一杯ずつ丁寧にハンドドリップ。豆の個性が際立つ、格別な味わいをお届けします。
+                            </p>
+                        </div>
+                    </div>
+                    <div class="gsap-fade-up" data-gsap-delay="0.3">
+                        <div class="bg-white/70 backdrop-blur-sm p-8 rounded-lg shadow-lg h-full transition-all duration-300 hover:shadow-xl hover:bg-white/80">
+                            <div class="text-5xl text-orange-900 mb-4"><i class="fas fa-cloud-meatball"></i></div>
+                            <h3 class="text-2xl font-bold mb-3">Smoked Cuisine</h3>
+                            <p class="text-gray-600 leading-relaxed">
+                                食材の旨味を最大限に引き出す、こだわりの燻製料理。パニーニやニョッキなど、独創的なメニューをご用意しています。
+                            </p>
+                        </div>
+                    </div>
+                    <div class="gsap-fade-up" data-gsap-delay="0.4">
+                        <div class="bg-white/70 backdrop-blur-sm p-8 rounded-lg shadow-lg h-full transition-all duration-300 hover:shadow-xl hover:bg-white/80">
+                            <div class="text-5xl text-stone-500 mb-4"><i class="fas fa-couch"></i></div>
+                            <h3 class="text-2xl font-bold mb-3">Comfortable Space</h3>
+                            <p class="text-gray-600 leading-relaxed">
+                                ミニマルで洗練された、居心地の良い空間。おひとりで、または大切な人と、心安らぐ時間をお過ごしください。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Featured Menuセクション (新規追加) -->
+        <section id="featured-menu" class="py-20 md:py-32 overflow-hidden">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl md:text-4xl font-bold gsap-fade-up">Featured Menu</h2>
+                    <p class="text-gray-500 mt-2 gsap-fade-up" data-gsap-delay="0.1">おすすめのメニュー</p>
+                </div>
+                <div class="grid md:grid-cols-3 gap-8">
+                    <!-- Menu Card 1 -->
+                    <div class="bg-white rounded-lg shadow-lg overflow-hidden menu-card gsap-fade-up" data-gsap-delay="0.2">
+                        <img src="https://images.unsplash.com/photo-1551024709-8f23befc6f87?q=80&w=2814&auto=format&fit=crop" alt="パニーニ" class="w-full h-64 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/600x400/e2e8f0/4a5568?text=Panini';">
+                        <div class="p-6">
+                            <h3 class="text-2xl font-bold mb-2">燻製ベーコンとチーズのパニーニ</h3>
+                            <p class="text-gray-600 mb-4">
+                                香り高い燻製ベーコンととろけるチーズの組み合わせが絶妙な、当店自慢のパニーニです。
+                            </p>
+                        </div>
+                    </div>
+                    <!-- Menu Card 2 -->
+                    <div class="bg-white rounded-lg shadow-lg overflow-hidden menu-card gsap-fade-up" data-gsap-delay="0.3">
+                        <img src="https://images.unsplash.com/photo-1621996346565-e326b20f5413?q=80&w=2940&auto=format&fit=crop" alt="ニョッキ" class="w-full h-64 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/600x400/e2e8f0/4a5568?text=Gnocchi';">
+                        <div class="p-6">
+                            <h3 class="text-2xl font-bold mb-2">チーズソースのニョッキ</h3>
+                            <p class="text-gray-600 mb-4">
+                                もちもちの自家製ニョッキに、濃厚なチーズソースをたっぷりと絡めました。
+                            </p>
+                        </div>
+                    </div>
+                    <!-- Menu Card 3 -->
+                    <div class="bg-white rounded-lg shadow-lg overflow-hidden menu-card gsap-fade-up" data-gsap-delay="0.4">
+                        <img src="https://images.unsplash.com/photo-1514432324607-a07d7b3f7393?q=80&w=2787&auto=format&fit=crop" alt="ハンドドリップコーヒー" class="w-full h-64 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/600x400/e2e8f0/4a5568?text=Hand+Drip+Coffee';">
+                        <div class="p-6">
+                            <h3 class="text-2xl font-bold mb-2">ハンドドリップコーヒー</h3>
+                            <p class="text-gray-600 mb-4">
+                                厳選されたスペシャルティコーヒー豆の個性を最大限に引き出した、至極の一杯。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center mt-16 gsap-fade-up">
+                    <a href="menu.html" class="bg-stone-800 text-white px-8 py-3 rounded-full text-lg hover:bg-stone-700 transition-all duration-300 transform hover:scale-105">
+                        すべてのメニューを見る
+                    </a>
+                </div>
+            </div>
+        </section>
 
         <!-- Accessセクション -->
-        <section id="access" class="py-20 md:py-32">
+        <section id="access" class="py-20 md:py-32 bg-stone-50 overflow-hidden">
             <div class="container mx-auto px-6">
                 <div class="grid md:grid-cols-2 gap-12 items-center">
-                    <div class="fade-in">
+                    <div class="gsap-fade-up">
                         <h2 class="text-3xl md:text-4xl font-bold mb-6">Access/アクセス</h2>
                         <div class="space-y-4 text-gray-600">
                             <p><i class="fas fa-map-marker-alt w-6"></i> 〒214-0014 神奈川県川崎市多摩区登戸２５１２ 稲田第3ビル 2F</p>
@@ -204,14 +277,27 @@
                             <p><i class="fas fa-train w-6"></i> JR向ヶ丘遊園駅 北口より徒歩3分</p>
                         </div>
                     </div>
-                    <div class="fade-in h-80 md:h-96 rounded-lg overflow-hidden shadow-xl">
+                    <div class="gsap-fade-up h-80 md:h-96 rounded-lg overflow-hidden shadow-xl" data-gsap-delay="0.2">
                         <!-- Google Mapsの埋め込み -->
-                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2293.4245521263424!2d139.56603063694567!3d35.61805896932246!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6018f1c0fd21ccbf%3A0xb5430b8fd88f7a34!2zQ2FmZe-8hkJhcnUgRW5rYSjjgqvjg5Xjgqcm44OQ44OrIOOCqOODs-OCqyk!5e0!3m2!1sja!2sjp!4v1756204285727!5m2!1sja!2sjp" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2293.4245521263424!2d139.56603063694567!3d35.61805896932246!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6018f1c0fd21ccbf%3A0xb5430b8fd88f7a34!2zQ2FmZe-8hkJhcnUgRW5rYSjjgqvjg5Xjgqcm44OQ44OrIOOCqOODs-OCqyk!5e0!3m2!1sja!2sjp!4v1756204285727!5m2!1sja!2sjp" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                     </div>
                 </div>
             </div>
         </section>
-    </main>
+
+        <!-- Newsセクション (新規追加) -->
+        <section id="news" class="py-20 md:py-32 bg-white overflow-hidden">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl md:text-4xl font-bold gsap-fade-up">News</h2>
+                    <p class="text-gray-500 mt-2 gsap-fade-up" data-gsap-delay="0.1">お知らせ</p>
+                </div>
+
+                <div class="max-w-4xl mx-auto" id="news-list">
+                    <!-- お知らせはnews.jsonから動的に読み込まれます -->
+                </div>
+            </div>
+        </section>
 
     <!-- フッター -->
     <footer id="contact" class="bg-stone-800 text-white py-12">
@@ -226,32 +312,124 @@
         </div>
     </footer>
 
+    <!-- Back to Top Button -->
+    <a href="#" id="back-to-top-button" class="fixed bottom-8 right-8 z-50 w-12 h-12 bg-stone-800 text-white rounded-full flex items-center justify-center shadow-lg transform scale-0 transition-all duration-300 ease-in-out hover:bg-stone-700 hover:scale-110">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+
+    <!-- GSAPの読み込み -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // --- フェードインアニメーション ---
-            const fadeInElements = document.querySelectorAll('.fade-in');
+        window.addEventListener('load', () => {
+            // --- ヒーローテキストを分割 ---
+            function splitText(selector) {
+                const elem = document.querySelector(selector);
+                if (!elem) return;
+                const text = elem.textContent; // innerTextからtextContentに変更
+                elem.innerHTML = '';
+                for (let i = 0; i < text.length; i++) {
+                    const char = text[i] === ' ' ? '&nbsp;' : text[i];
+                    elem.innerHTML += `<span class="gsap-char">${char}</span>`;
+                }
+            }
+            splitText('#hero-title');
+            splitText('#hero-subtitle');
 
-            const observerOptions = {
-                root: null, // ビューポートをルートとする
-                rootMargin: '0px',
-                threshold: 0.1 // 10%要素が見えたら発火
-            };
 
-            const observer = new IntersectionObserver((entries, observer) => {
-                entries.forEach(entry => {
-                    // 要素がビューポート内に入ったら'visible'クラスを追加
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('visible');
-                        // 一度表示されたら監視を停止
-                        observer.unobserve(entry.target);
-                    }
+            gsap.registerPlugin(ScrollTrigger);
+
+            // --- ローディング & 初期表示アニメーション ---
+            const loader = document.getElementById('loader');
+            const timeline = gsap.timeline();
+
+            timeline
+                .to(loader, { opacity: 0, duration: 0.8, ease: "power1.inOut" })
+                .set(loader, { display: "none" })
+                .to(["#header", "main", "footer"], { opacity: 1, duration: 1, ease: 'power1.inOut' }, "-=0.5")
+                .from(".gsap-char", {
+                    y: 30,
+                    opacity: 0,
+                    stagger: 0.03,
+                    duration: 0.8,
+                    ease: "power2.out"
+                }, "-=0.8")
+                .to(".gsap-fade-in", {
+                    opacity: 1,
+                    duration: 1,
+                    ease: 'power2.out'
+                }, "-=0.5");
+
+            // --- スクロールトリガーアニメーションのセットアップ関数 ---
+            function setupScrollTriggers() {
+                const fadeUpElements = document.querySelectorAll('.gsap-fade-up');
+                fadeUpElements.forEach(el => {
+                    const delay = parseFloat(el.dataset.gsapDelay) || 0;
+                    gsap.fromTo(el,
+                        { opacity: 0, y: 50 },
+                        {
+                            opacity: 1,
+                            y: 0,
+                            duration: 1,
+                            delay: delay,
+                            ease: 'power2.out',
+                            scrollTrigger: {
+                                trigger: el,
+                                start: 'top 85%',
+                                toggleActions: 'play none none none',
+                            }
+                        }
+                    );
                 });
-            }, observerOptions);
+                // ScrollTriggerに新しい要素を認識させる
+                ScrollTrigger.refresh();
+            }
 
-            // 各要素を監視対象に追加
-            fadeInElements.forEach(el => {
-                observer.observe(el);
-            });
+            // --- News Section Dynamic Loading ---
+            fetch('news.json')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok ' + response.statusText);
+                    }
+                    return response.json();
+                })
+                .then(newsItems => {
+                    const newsList = document.getElementById('news-list');
+                    if (!newsList) return;
+
+                    newsItems.forEach(item => {
+                        const imageHtml = item.image
+                            ? `<div class="md:w-1/3 lg:w-1/4">
+                                   <img src="${item.image}" alt="${item.alt}" class="w-full rounded-lg object-cover aspect-video shadow-md">
+                               </div>`
+                            : '<div class="hidden md:block md:w-1/3 lg:w-1/4"></div>'; // 画像がない場合はスペースを確保
+
+                        const newsItemHtml = `
+                            <div class="gsap-fade-up flex flex-col md:flex-row gap-6 border-b border-gray-200 py-8 last:border-b-0">
+                                ${imageHtml}
+                                <div class="flex-1">
+                                    <p class="text-sm text-gray-500 mb-2">
+                                        <time datetime="${item.datetime}">${item.date}</time>
+                                        <span class="ml-4 inline-block ${item.category_color} text-white text-xs font-semibold px-2 py-1 rounded">${item.category}</span>
+                                    </p>
+                                    <h3 class="text-xl font-bold mb-2">${item.title}</h3>
+                                    <p class="text-gray-600 leading-relaxed">${item.content}</p>
+                                </div>
+                            </div>
+                        `;
+                        newsList.innerHTML += newsItemHtml;
+                    });
+                })
+                .catch(error => {
+                    console.error('お知らせの読み込みに失敗しました:', error);
+                    const newsList = document.getElementById('news-list');
+                    if(newsList) newsList.innerHTML = '<p class="text-center text-red-500">お知らせの読み込みに失敗しました。</p>';
+                })
+                .finally(() => {
+                    // お知らせの読み込み成否に関わらず、アニメーションをセットアップ
+                    setupScrollTriggers();
+                });
 
 
             // --- ヘッダーの背景色変更 ---
@@ -267,42 +445,41 @@
             // --- モバイルメニューのトグル ---
             const mobileMenuButton = document.getElementById('mobile-menu-button');
             const mobileMenu = document.getElementById('mobile-menu');
+            let isMenuOpen = false;
+
+            // メニューの初期状態をGSAPでセット
+            gsap.set(mobileMenu, { yPercent: -100, autoAlpha: 0 });
+
             mobileMenuButton.addEventListener('click', () => {
-                mobileMenu.classList.toggle('hidden');
+                isMenuOpen = !isMenuOpen;
+                gsap.to(mobileMenu, {
+                    yPercent: isMenuOpen ? 0 : -100,
+                    autoAlpha: isMenuOpen ? 1 : 0, // autoAlphaはvisibilityとopacityを同時に扱います
+                    duration: 0.4,
+                    ease: 'power2.out'
+                });
+            });
+
+            // --- Back to Top Button ---
+            const backToTopButton = document.getElementById('back-to-top-button');
+
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 400) {
+                    backToTopButton.classList.add('scale-100');
+                } else {
+                    backToTopButton.classList.remove('scale-100');
+                }
+            });
+
+            backToTopButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
             });
         });
 
-        // --- ローディング画面 --- 
-        window.onload = () => {
-            const loader = document.getElementById('loader');
-            const header = document.getElementById('header');
-            const main = document.querySelector('main');
-            const footer = document.querySelector('footer');
-
-            // 1. ローダーをフェードアウト
-            loader.classList.add('fade-out');
-
-            // 2. コンテンツをフェードイン
-            setTimeout(() => {
-                header.classList.add('content-visible');
-                main.classList.add('content-visible');
-                footer.classList.add('content-visible');
-            }, 200); // ローダーが消え始める少し後にコンテンツを表示開始
-
-            // 3. ローダーをDOMから削除
-            setTimeout(() => {
-                loader.style.display = 'none';
-            }, 500); // transitionと同じ時間
-        };       
-                                                                                                                  
-// ##   ##    ##     ### ##   ### ###           ### ##   ##  ##            ### ##     ####   ###  ##  #### ##    ##     ### ##    ## ##
-//  ## ##      ##     ##  ##   ##  ##            ##  ##  ##  ##             ##  ##     ##      ## ##  # ## ##     ##     ##  ##  ##   ##
-// # ### #   ## ##    ##  ##   ##                ##  ##  ##  ##             ##  ##     ##     # ## #    ##      ## ##    ##  ##  ##   ##
-// ## # ##   ##  ##   ##  ##   ## ##             ## ##    ## ##             ## ##      ##     ## ##     ##      ##  ##   ## ##   ##   ##
-// ##   ##   ## ###   ##  ##   ##                ##  ##    ##               ## ##      ##     ##  ##    ##      ## ###   ## ##   ##   ##
-// ##   ##   ##  ##   ##  ##   ##  ##            ##  ##    ##               ##  ##     ##     ##  ##    ##      ##  ##   ##  ##  ##   ##
-// ##   ##  ###  ##  ### ##   ### ###           ### ##     ##              #### ##    ####   ###  ##   ####    ###  ##  #### ##   ## ##                                                                      
-                                                                                                          
     </script>
 </body>
 </html>
