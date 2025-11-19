@@ -16,6 +16,7 @@
     <!-- Font Awesome (アイコン) の読み込み -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
+
     <style>
         /* --- ローカルフォントの読み込み設定 --- */
         @font-face {
@@ -38,6 +39,10 @@
             opacity: 0;
             transform: translateY(40px);
         }
+        .gsap-fade-up[data-animate="static"] {
+            opacity: 1;
+            transform: none;
+        }
         .gsap-fade-in {
             opacity: 0;
         }
@@ -51,6 +56,26 @@
             background-image: url('./images/hero.jpg');
             background-size: cover;
             background-position: center;
+        }
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(120deg, rgba(8, 8, 8, 0.85), rgba(69, 57, 43, 0.65));
+            pointer-events: none;
+            z-index: 0;
+        }
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            text-shadow: 0 15px 45px rgba(0,0,0,0.45);
+        }
+        .hero-cta-secondary {
+            border: 1px solid rgba(255,255,255,0.7);
+            color: #fff;
+            background-color: transparent;
+        }
+        .hero-cta-secondary:hover {
+            background-color: rgba(255,255,255,0.15);
         }
 
         /* ヘッダーの背景がスクロールで変わるスタイル */
@@ -112,7 +137,7 @@
                 <a href="#concept" class="hover:text-gray-500 transition-colors">Concept</a>
                 <a href="menu.html" class="hover:text-gray-500 transition-colors">Menu</a>
                 <a href="#access" class="hover:text-gray-500 transition-colors">Access</a>
-                <a href="#contact" class="bg-stone-800 text-white px-4 py-2 rounded-full hover:bg-stone-700 transition-colors">Contact</a>
+                <a href="https://www.hotpepper.jp/strJ004421212/yoyaku/?vos=othpporgzzzzx00000001" target="_blank" rel="noopener noreferrer" class="bg-amber-500 text-stone-900 px-5 py-2 rounded-full font-semibold hover:bg-amber-400 transition-colors">Reserve</a>
             </nav>
             <button id="mobile-menu-button" class="md:hidden text-2xl z-50">
                 <i class="fas fa-bars"></i>
@@ -127,16 +152,38 @@
         <a href="#concept" class="block text-center py-3 hover:bg-gray-100">Concept</a>
         <a href="menu.html" class="block text-center py-3 hover:bg-gray-100">Menu</a>
         <a href="#access" class="block text-center py-3 hover:bg-gray-100">Access</a>
-        <a href="#contact" class="block text-center py-3 hover:bg-gray-100">Contact</a>
+        <a href="https://www.hotpepper.jp/strJ004421212/yoyaku/?vos=othpporgzzzzx00000001" target="_blank" rel="noopener noreferrer" class="block text-center py-3 hover:bg-gray-100">Reserve (Hot Pepper)</a>
     </div>
 
     <main>
         <!-- ヒーローセクション -->
-        <section class="h-screen flex items-center justify-center text-white hero-bg relative">
-            <div class="text-center bg-black bg-opacity-30 p-10 rounded-lg">
+        <section class="h-screen flex items-center justify-center text-white hero-bg relative overflow-hidden">
+            <div class="hero-overlay"></div>
+            <div class="hero-content text-center bg-black bg-opacity-10 p-10 rounded-lg backdrop-blur-sm">
                 <h1 id="hero-title" class="text-5xl md:text-7xl font-bold tracking-wider">A moment of peace.</h1>
-                <p id="hero-subtitle" class="mt-4 text-lg md:text-xl">一杯のコーヒーがもたらす、心安らぐひとときを。</p>
+                <p id="hero-subtitle" class="mt-4 text-lg md:text-xl text-white/90">一杯のコーヒーがもたらす、心安らぐひとときを。</p>
+                <div class="mt-8 flex flex-col md:flex-row items-center justify-center gap-4">
+                    <a href="https://www.hotpepper.jp/strJ004421212/yoyaku/?vos=othpporgzzzzx00000001" target="_blank" rel="noopener noreferrer" class="bg-amber-500 text-stone-900 font-semibold px-8 py-3 rounded-full shadow-lg hover:bg-amber-400 transition-colors">
+                        Hot Pepperで予約する
+                    </a>
+                    <a href="tel:0448198004" class="border border-white/70 text-white px-8 py-3 rounded-full hover:bg-white/20 transition-colors" aria-label="電話で予約する">
+                        044-819-8004 に電話
+                    </a>
+                </div>
             </div>
+            <!-- News Link Box -->
+            <a href="#news" class="absolute bottom-10 left-10 z-10 gsap-fade-in">
+                <div class="bg-white/20 backdrop-blur-md border border-white/30 rounded-lg p-4 text-white transition-all duration-300 hover:bg-white/30 hover:shadow-lg transform hover:-translate-y-1">
+                    <div class="flex items-center">
+                        <i class="fas fa-bell text-xl"></i>
+                        <div class="ml-4">
+                            <h3 class="font-bold tracking-widest">NEWS</h3>
+                            <p class="text-xs opacity-80">最新のお知らせ</p>
+                        </div>
+                    </div>
+                </div>
+            </a>
+
             <!-- Scroll Indicator -->
             <div class="absolute bottom-10 right-10 text-white text-center opacity-70 hidden md:flex flex-col items-center gsap-fade-in">
                 <span class="text-sm tracking-widest">SCROLL</span>
@@ -219,12 +266,12 @@
         <section id="featured-menu" class="py-20 md:py-32 overflow-hidden">
             <div class="container mx-auto px-6">
                 <div class="text-center mb-16">
-                    <h2 class="text-3xl md:text-4xl font-bold gsap-fade-up">Featured Menu</h2>
-                    <p class="text-gray-500 mt-2 gsap-fade-up" data-gsap-delay="0.1">おすすめのメニュー</p>
+                    <h2 class="text-3xl md:text-4xl font-bold gsap-fade-up" data-animate="static">Featured Menu</h2>
+                    <p class="text-gray-500 mt-2 gsap-fade-up" data-gsap-delay="0.1" data-animate="static">おすすめのメニュー</p>
                 </div>
                 <div class="grid md:grid-cols-3 gap-8">
                     <!-- Menu Card 1 -->
-                    <div class="bg-white rounded-lg shadow-lg overflow-hidden menu-card gsap-fade-up" data-gsap-delay="0.2">
+                    <div class="bg-white rounded-lg shadow-lg overflow-hidden menu-card gsap-fade-up" data-gsap-delay="0.2" data-animate="static">
                         <img src="https://images.unsplash.com/photo-1551024709-8f23befc6f87?q=80&w=2814&auto=format&fit=crop" alt="パニーニ" class="w-full h-64 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/600x400/e2e8f0/4a5568?text=Panini';">
                         <div class="p-6">
                             <h3 class="text-2xl font-bold mb-2">燻製ベーコンとチーズのパニーニ</h3>
@@ -234,7 +281,7 @@
                         </div>
                     </div>
                     <!-- Menu Card 2 -->
-                    <div class="bg-white rounded-lg shadow-lg overflow-hidden menu-card gsap-fade-up" data-gsap-delay="0.3">
+                    <div class="bg-white rounded-lg shadow-lg overflow-hidden menu-card gsap-fade-up" data-gsap-delay="0.3" data-animate="static">
                         <img src="https://images.unsplash.com/photo-1621996346565-e326b20f5413?q=80&w=2940&auto=format&fit=crop" alt="ニョッキ" class="w-full h-64 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/600x400/e2e8f0/4a5568?text=Gnocchi';">
                         <div class="p-6">
                             <h3 class="text-2xl font-bold mb-2">チーズソースのニョッキ</h3>
@@ -244,7 +291,7 @@
                         </div>
                     </div>
                     <!-- Menu Card 3 -->
-                    <div class="bg-white rounded-lg shadow-lg overflow-hidden menu-card gsap-fade-up" data-gsap-delay="0.4">
+                    <div class="bg-white rounded-lg shadow-lg overflow-hidden menu-card gsap-fade-up" data-gsap-delay="0.4" data-animate="static">
                         <img src="https://images.unsplash.com/photo-1514432324607-a07d7b3f7393?q=80&w=2787&auto=format&fit=crop" alt="ハンドドリップコーヒー" class="w-full h-64 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/600x400/e2e8f0/4a5568?text=Hand+Drip+Coffee';">
                         <div class="p-6">
                             <h3 class="text-2xl font-bold mb-2">ハンドドリップコーヒー</h3>
@@ -262,24 +309,55 @@
             </div>
         </section>
 
+        <!-- CTA セクション -->
+        <section id="reservation-cta" class="py-16 md:py-24 bg-gradient-to-r from-stone-900 via-stone-800 to-stone-600 text-white overflow-hidden">
+            <div class="container mx-auto px-6">
+                <div class="max-w-4xl mx-auto text-center space-y-6">
+                    <p class="text-sm uppercase tracking-[0.3em] text-white/70">Reservation</p>
+                    <h2 class="text-3xl md:text-4xl font-bold gsap-fade-up">夜のバルタイムも、お昼のカフェも。</h2>
+                    <p class="text-lg text-white/80 gsap-fade-up" data-gsap-delay="0.1">
+                        少人数の貸切やイベント利用も歓迎です。ご希望の時間を下のボタンからお知らせください。スタッフが丁寧にご案内いたします。
+                    </p>
+                    <div class="flex flex-col md:flex-row items-center justify-center gap-4 gsap-fade-up" data-gsap-delay="0.2">
+                        <a href="https://www.hotpepper.jp/strJ004421212/yoyaku/?vos=othpporgzzzzx00000001" target="_blank" rel="noopener noreferrer" class="bg-white text-stone-900 font-semibold px-8 py-3 rounded-full shadow-lg hover:bg-stone-200 transition-colors">
+                            Hot Pepperで予約する
+                        </a>
+                        <a href="tel:0448198004" class="bg-amber-400 text-stone-900 font-semibold px-8 py-3 rounded-full shadow-lg hover:bg-amber-300 transition-colors">
+                            044-819-8004 に電話
+                        </a>
+                    </div>
+                    <p class="text-sm text-white/70" data-animate="static">受付時間: 11:00-16:00 / 18:00-23:00 (定休日: 月曜日)</p>
+                </div>
+            </div>
+        </section>
+
         <!-- Accessセクション -->
         <section id="access" class="py-20 md:py-32 bg-stone-50 overflow-hidden">
             <div class="container mx-auto px-6">
-                <div class="grid md:grid-cols-2 gap-12 items-center">
-                    <div class="gsap-fade-up">
-                        <h2 class="text-3xl md:text-4xl font-bold mb-6">Access/アクセス</h2>
-                        <div class="space-y-4 text-gray-600">
-                            <p><i class="fas fa-map-marker-alt w-6"></i> 〒214-0014 神奈川県川崎市多摩区登戸２５１２ 稲田第3ビル 2F</p>
-                            <p><i class="fas fa-clock w-6"></i> Open(昼): 11:00 - 16:00</p>
-                            <p><i class="fas fa-clock w-6"></i> Open(夜): 18:00 - 23:00</p>
-                            <p> 定休日:水曜日</p>
-                            <p><i class="fas fa-phone w-6"></i> Tel: 044-819-8004 </p>
-                            <p><i class="fas fa-train w-6"></i> JR向ヶ丘遊園駅 北口より徒歩3分</p>
-                        </div>
-                    </div>
-                    <div class="gsap-fade-up h-80 md:h-96 rounded-lg overflow-hidden shadow-xl" data-gsap-delay="0.2">
-                        <!-- Google Mapsの埋め込み -->
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl md:text-4xl font-bold">Access</h2>
+                    <p class="text-gray-500 mt-2 gsap-fade-up" data-gsap-delay="0.1" data-animate="static">アクセス</p>
+                </div>
+                <!-- md以上でrelativeにし、はみ出しの基準点とする -->
+                <div class="md:relative md:flex md:justify-start">
+                    <!-- マップのコンテナ -->
+                    <div class="h-[400px] md:h-[500px] w-full md:w-10/12 rounded-lg shadow-2xl overflow-hidden gsap-fade-up" data-animate="static">
                         <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2293.4245521263424!2d139.56603063694567!3d35.61805896932246!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6018f1c0fd21ccbf%3A0xb5430b8fd88f7a34!2zQ2FmZe-8hkJhcnUgRW5rYSjjgqvjg5Xjgqcm44OQ44OrIOOCqOODs-OCqyk!5e0!3m2!1sja!2sjp!4v1756204285727!5m2!1sja!2sjp" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    </div>
+
+                    <!-- 説明文パネル (md以上でabsolute配置し、右下にはみ出す) -->
+                    <div class="w-full mt-[-4rem] md:mt-0 md:absolute md:bottom-0 md:right-0 md:w-2/3 lg:w-1/2 md:mb-[-4rem]">
+                        <div class="bg-white/80 backdrop-blur-md p-8 md:p-10 rounded-lg shadow-xl gsap-fade-up" data-gsap-delay="0.3" data-animate="static">
+                            <h3 class="text-2xl font-bold mb-6">店舗情報</h3>
+                            <div class="space-y-4 text-gray-700">
+                                <p><i class="fas fa-map-marker-alt w-6 text-stone-600"></i> 〒214-0014 神奈川県川崎市多摩区登戸２５１２ 稲田第3ビル 2F</p>
+                                <p><i class="fas fa-clock w-6 text-stone-600"></i> Open(昼): 11:00 - 16:00</p>
+                                <p><i class="fas fa-clock w-6 text-stone-600"></i> Open(夜): 18:00 - 23:00</p>
+                                <p><i class="fas fa-calendar-times w-6 text-stone-600"></i> 定休日: 水曜日</p>
+                                <p><i class="fas fa-phone w-6 text-stone-600"></i> Tel: 044-819-8004 </p>
+                                <p><i class="fas fa-train w-6 text-stone-600"></i> JR向ヶ丘遊園駅 北口より徒歩3分</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -289,8 +367,8 @@
         <section id="news" class="py-20 md:py-32 bg-white overflow-hidden">
             <div class="container mx-auto px-6">
                 <div class="text-center mb-16">
-                    <h2 class="text-3xl md:text-4xl font-bold gsap-fade-up">News</h2>
-                    <p class="text-gray-500 mt-2 gsap-fade-up" data-gsap-delay="0.1">お知らせ</p>
+                    <h2 class="text-3xl md:text-4xl font-bold gsap-fade-up" data-animate="static">News</h2>
+                    <p class="text-gray-500 mt-2 gsap-fade-up" data-gsap-delay="0.1" data-animate="static">お知らせ</p>
                 </div>
 
                 <div class="max-w-4xl mx-auto" id="news-list">
@@ -308,6 +386,10 @@
                 <a href="#" class="text-xl hover:text-gray-400 transition-colors"><i class="fab fa-twitter"></i></a>
                 <a href="#" class="text-xl hover:text-gray-400 transition-colors"><i class="fab fa-facebook-f"></i></a>
             </div>
+            <a href="https://www.hotpepper.jp/strJ004421212/yoyaku/?vos=othpporgzzzzx00000001" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 bg-amber-500 text-stone-900 px-6 py-3 rounded-full font-semibold hover:bg-amber-400 transition-colors mb-6">
+                <i class="fas fa-calendar-check"></i>
+                Hot Pepperで予約する
+            </a>
             <p class="text-sm text-gray-400">&copy; 2025 Cafe and Baru enka All Rights Reserved.</p>
         </div>
     </footer>
@@ -321,26 +403,11 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
 
+
     <script>
         window.addEventListener('load', () => {
-            // --- ヒーローテキストを分割 ---
-            function splitText(selector) {
-                const elem = document.querySelector(selector);
-                if (!elem) return;
-                const text = elem.textContent; // innerTextからtextContentに変更
-                elem.innerHTML = '';
-                for (let i = 0; i < text.length; i++) {
-                    const char = text[i] === ' ' ? '&nbsp;' : text[i];
-                    elem.innerHTML += `<span class="gsap-char">${char}</span>`;
-                }
-            }
-            splitText('#hero-title');
-            splitText('#hero-subtitle');
-
-
             gsap.registerPlugin(ScrollTrigger);
 
-            // --- ローディング & 初期表示アニメーション ---
             const loader = document.getElementById('loader');
             const timeline = gsap.timeline();
 
@@ -348,50 +415,59 @@
                 .to(loader, { opacity: 0, duration: 0.8, ease: "power1.inOut" })
                 .set(loader, { display: "none" })
                 .to(["#header", "main", "footer"], { opacity: 1, duration: 1, ease: 'power1.inOut' }, "-=0.5")
-                .from(".gsap-char", {
-                    y: 30,
-                    opacity: 0,
-                    stagger: 0.03,
-                    duration: 0.8,
-                    ease: "power2.out"
-                }, "-=0.8")
-                .to(".gsap-fade-in", {
-                    opacity: 1,
-                    duration: 1,
-                    ease: 'power2.out'
-                }, "-=0.5");
+                .from("#hero-title", { y: 30, opacity: 0, duration: 0.8, ease: "power2.out" }, "-=0.8")
+                .from("#hero-subtitle", { y: 20, opacity: 0, duration: 0.8, ease: "power2.out" }, "-=0.6")
+                .to(".gsap-fade-in", { opacity: 1, duration: 1, ease: 'power2.out' }, "-=0.5");
 
-            // --- スクロールトリガーアニメーションのセットアップ関数 ---
+            gsap.to(".hero-bg", {
+                scrollTrigger: {
+                    trigger: "main",
+                    start: "top top",
+                    end: "bottom top",
+                    scrub: true
+                },
+                yPercent: 25,
+                ease: "none"
+            });
+
             function setupScrollTriggers() {
                 const fadeUpElements = document.querySelectorAll('.gsap-fade-up');
+
                 fadeUpElements.forEach(el => {
+                    if (el.dataset.animate === "static") {
+                        el.style.opacity = 1;
+                        el.style.transform = 'none';
+                        return;
+                    }
+                    if (el.dataset.scrollAnimated === "true") return;
+                    el.dataset.scrollAnimated = "true";
+
                     const delay = parseFloat(el.dataset.gsapDelay) || 0;
                     gsap.fromTo(el,
                         { opacity: 0, y: 50 },
                         {
                             opacity: 1,
                             y: 0,
-                            duration: 1,
-                            delay: delay,
-                            ease: 'power2.out',
+                            duration: 1.1,
+                            delay,
+                            ease: 'power3.out',
                             scrollTrigger: {
                                 trigger: el,
-                                start: 'top 85%',
+                                start: 'top 90%',
                                 toggleActions: 'play none none none',
                             }
                         }
                     );
                 });
-                // ScrollTriggerに新しい要素を認識させる
+
                 ScrollTrigger.refresh();
             }
 
-            // --- News Section Dynamic Loading ---
+            setupScrollTriggers();
+
             fetch('news.json')
                 .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok ' + response.statusText);
-                    }
+                    if (!response.ok) { throw new Error('Network response was not ok ' + response.statusText); }
                     return response.json();
                 })
                 .then(newsItems => {
@@ -400,13 +476,11 @@
 
                     newsItems.forEach(item => {
                         const imageHtml = item.image
-                            ? `<div class="md:w-1/3 lg:w-1/4">
-                                   <img src="${item.image}" alt="${item.alt}" class="w-full rounded-lg object-cover aspect-video shadow-md">
-                               </div>`
-                            : '<div class="hidden md:block md:w-1/3 lg:w-1/4"></div>'; // 画像がない場合はスペースを確保
+                            ? `<div class="md:w-1/3 lg:w-1/4"><img src="${item.image}" alt="${item.alt}" class="w-full rounded-lg object-cover aspect-video shadow-md"></div>`
+                            : '<div class="hidden md:block md:w-1/3 lg:w-1/4"></div>';
 
                         const newsItemHtml = `
-                            <div class="gsap-fade-up flex flex-col md:flex-row gap-6 border-b border-gray-200 py-8 last:border-b-0">
+                            <div class="gsap-fade-up flex flex-col md:flex-row gap-6 border-b border-gray-200 py-8 last:border-b-0" data-animate="static">
                                 ${imageHtml}
                                 <div class="flex-1">
                                     <p class="text-sm text-gray-500 mb-2">
@@ -416,23 +490,20 @@
                                     <h3 class="text-xl font-bold mb-2">${item.title}</h3>
                                     <p class="text-gray-600 leading-relaxed">${item.content}</p>
                                 </div>
-                            </div>
-                        `;
+                            </div>`;
                         newsList.innerHTML += newsItemHtml;
                     });
                 })
                 .catch(error => {
                     console.error('お知らせの読み込みに失敗しました:', error);
                     const newsList = document.getElementById('news-list');
-                    if(newsList) newsList.innerHTML = '<p class="text-center text-red-500">お知らせの読み込みに失敗しました。</p>';
+                    if(newsList) newsList.innerHTML = '<div class="bg-red-50 border border-red-100 text-red-700 px-6 py-4 rounded-lg text-center"><i class="fas fa-info-circle mr-2"></i>お知らせの読み込みに失敗しました。</div>';
                 })
                 .finally(() => {
-                    // お知らせの読み込み成否に関わらず、アニメーションをセットアップ
                     setupScrollTriggers();
                 });
 
 
-            // --- ヘッダーの背景色変更 ---
             const header = document.getElementById('header');
             window.addEventListener('scroll', () => {
                 if (window.scrollY > 50) {
@@ -442,27 +513,22 @@
                 }
             });
 
-            // --- モバイルメニューのトグル ---
+
             const mobileMenuButton = document.getElementById('mobile-menu-button');
             const mobileMenu = document.getElementById('mobile-menu');
             let isMenuOpen = false;
-
-            // メニューの初期状態をGSAPでセット
             gsap.set(mobileMenu, { yPercent: -100, autoAlpha: 0 });
-
             mobileMenuButton.addEventListener('click', () => {
                 isMenuOpen = !isMenuOpen;
                 gsap.to(mobileMenu, {
                     yPercent: isMenuOpen ? 0 : -100,
-                    autoAlpha: isMenuOpen ? 1 : 0, // autoAlphaはvisibilityとopacityを同時に扱います
+                    autoAlpha: isMenuOpen ? 1 : 0,
                     duration: 0.4,
                     ease: 'power2.out'
                 });
             });
 
-            // --- Back to Top Button ---
             const backToTopButton = document.getElementById('back-to-top-button');
-
             window.addEventListener('scroll', () => {
                 if (window.scrollY > 400) {
                     backToTopButton.classList.add('scale-100');
@@ -470,13 +536,9 @@
                     backToTopButton.classList.remove('scale-100');
                 }
             });
-
             backToTopButton.addEventListener('click', (e) => {
                 e.preventDefault();
-                window.scrollTo({
-                    top: 0,
-                    behavior: 'smooth'
-                });
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             });
         });
 
