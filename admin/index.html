@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>enka News Admin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-stone-50 text-stone-900 min-h-screen">
+    <div class="max-w-5xl mx-auto px-4 py-10 space-y-8">
+        <header class="flex items-center justify-between gap-4">
+            <div>
+                <p class="text-sm uppercase tracking-[0.2em] text-stone-500">Admin</p>
+                <h1 class="text-3xl font-bold">News Manager</h1>
+                <p class="text-sm text-stone-600 mt-1">Firebase Auth + Firestore。Googleログイン後にニュースを追加・編集・削除できます。</p>
+            </div>
+            <div class="text-right space-y-2">
+                <button id="login-btn" class="px-4 py-2 rounded-full bg-stone-900 text-white hover:bg-stone-700 transition">Googleでログイン</button>
+                <button id="logout-btn" class="px-4 py-2 rounded-full bg-stone-200 text-stone-800 hover:bg-stone-300 transition hidden">ログアウト</button>
+                <div id="user-info" class="text-sm text-stone-600"></div>
+            </div>
+        </header>
+
+        <!-- ログイン後にだけ表示する領域 -->
+        <div id="admin-content" class="hidden space-y-8">
+            <section class="bg-white/80 backdrop-blur border border-stone-200 rounded-2xl shadow p-6 space-y-4">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-xl font-semibold">ニュース編集</h2>
+                    <span id="admin-badge" class="px-3 py-1 rounded-full text-xs font-semibold bg-stone-200 text-stone-700">未ログイン</span>
+                </div>
+            <form id="news-form" class="grid md:grid-cols-2 gap-4">
+                <input type="hidden" id="news-id">
+                <label class="text-sm space-y-1 col-span-2">
+                    <span>タイトル</span>
+                    <input id="news-title" type="text" required class="w-full rounded border border-stone-300 px-3 py-2">
+                </label>
+                <label class="text-sm space-y-1">
+                    <span>表示日付 (画面用)</span>
+                    <input id="news-date" type="text" placeholder="2025.09.28" required class="w-full rounded border border-stone-300 px-3 py-2">
+                </label>
+                <label class="text-sm space-y-1">
+                    <span>datetime (ISO)</span>
+                    <input id="news-datetime" type="date" required class="w-full rounded border border-stone-300 px-3 py-2">
+                </label>
+                <label class="text-sm space-y-1">
+                    <span>カテゴリ名</span>
+                    <input id="news-category" type="text" placeholder="お知らせ" required class="w-full rounded border border-stone-300 px-3 py-2">
+                </label>
+                <label class="text-sm space-y-1">
+                    <span>カテゴリカラー (Tailwindクラス)</span>
+                    <input id="news-category-color" type="text" placeholder="bg-stone-500" required class="w-full rounded border border-stone-300 px-3 py-2">
+                </label>
+                <label class="text-sm space-y-1 col-span-2">
+                    <span>本文</span>
+                    <textarea id="news-content" rows="4" required class="w-full rounded border border-stone-300 px-3 py-2"></textarea>
+                </label>
+                <label class="text-sm space-y-1">
+                    <span>画像URL (任意)</span>
+                    <input id="news-image" type="url" placeholder="https://..." class="w-full rounded border border-stone-300 px-3 py-2">
+                </label>
+                <label class="text-sm space-y-1">
+                    <span>画像alt (任意)</span>
+                    <input id="news-alt" type="text" class="w-full rounded border border-stone-300 px-3 py-2">
+                </label>
+                <div class="col-span-2 flex gap-3">
+                    <button type="submit" class="px-4 py-2 rounded bg-stone-900 text-white hover:bg-stone-700 transition" id="save-btn">保存</button>
+                    <button type="button" class="px-4 py-2 rounded bg-stone-200 text-stone-800 hover:bg-stone-300 transition hidden" id="cancel-btn">キャンセル</button>
+                </div>
+                <p id="form-status" class="col-span-2 text-sm text-stone-600"></p>
+            </form>
+            </section>
+
+            <section class="bg-white/80 backdrop-blur border border-stone-200 rounded-2xl shadow p-6 space-y-4">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-xl font-semibold">ニュース一覧</h2>
+                    <button id="reload-btn" class="px-3 py-2 rounded bg-stone-900 text-white hover:bg-stone-700 transition text-sm">再読込</button>
+                </div>
+                <div id="news-list" class="divide-y divide-stone-200 bg-stone-50/60 rounded-xl border border-stone-200"></div>
+            </section>
+
+            <section class="bg-white/80 backdrop-blur border border-stone-200 rounded-2xl shadow p-6 space-y-3 text-sm text-stone-700">
+                <h2 class="text-lg font-semibold">推奨 Firestore ルール</h2>
+                <pre class="bg-stone-900 text-stone-100 p-4 rounded-lg overflow-x-auto text-xs leading-relaxed"><code>rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /admins/{email} {
+      allow read: if request.auth != null;
+      allow write: if request.auth.token.email == email;
+    }
+    match /news/{docId} {
+      allow read: if true;
+      allow write: if get(/databases/$(database)/documents/admins/$(request.auth.token.email)).data.active == true;
+    }
+  }
+}</code></pre>
+                <p>まず <code>admins</code> コレクションに <code>igarin0208@gmail.com</code> のドキュメントを作成し、<code>{ active: true }</code> を入れてください。</p>
+            </section>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { getFirestore, collection, doc, getDoc, getDocs, addDoc, updateDoc, deleteDoc, setDoc, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+        // --- 必ずあなたの Firebase 設定に書き換えてください ---
+        const firebaseConfig = {
+            apiKey: "AIzaSyCpKJ5PuXPLXubvvXzRimZj9YnQ_1jsikc",
+            authDomain: "enka-a3819.firebaseapp.com",
+            projectId: "enka-a3819",
+            storageBucket: "enka-a3819.firebasestorage.app",
+            messagingSenderId: "443017242406",
+            appId: "1:443017242406:web:c09fcbd620295312bcc3e7",
+            measurementId: "G-EGEKEVL665"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const provider = new GoogleAuthProvider();
+
+        const allowedFallbackAdmins = ["igarin0208@gmail.com"];
+
+        const els = {
+            loginBtn: document.getElementById("login-btn"),
+            logoutBtn: document.getElementById("logout-btn"),
+            userInfo: document.getElementById("user-info"),
+            adminContent: document.getElementById("admin-content"),
+            adminBadge: document.getElementById("admin-badge"),
+            newsList: document.getElementById("news-list"),
+            newsForm: document.getElementById("news-form"),
+            newsId: document.getElementById("news-id"),
+            newsTitle: document.getElementById("news-title"),
+            newsDate: document.getElementById("news-date"),
+            newsDatetime: document.getElementById("news-datetime"),
+            newsCategory: document.getElementById("news-category"),
+            newsCategoryColor: document.getElementById("news-category-color"),
+            newsContent: document.getElementById("news-content"),
+            newsImage: document.getElementById("news-image"),
+            newsAlt: document.getElementById("news-alt"),
+            formStatus: document.getElementById("form-status"),
+            cancelBtn: document.getElementById("cancel-btn"),
+            reloadBtn: document.getElementById("reload-btn"),
+            saveBtn: document.getElementById("save-btn")
+        };
+
+        let currentUser = null;
+        let isAdmin = false;
+
+        const NEWS_COLLECTION = "news";
+        const ADMIN_COLLECTION = "admins";
+
+        function setStatus(msg, variant = "neutral") {
+            const colors = {
+                neutral: "text-stone-600",
+                success: "text-green-700",
+                error: "text-red-700"
+            };
+            els.formStatus.className = `col-span-2 text-sm ${colors[variant] || colors.neutral}`;
+            els.formStatus.textContent = msg;
+        }
+
+        function renderNews(items) {
+            if (!els.newsList) return;
+            if (!items.length) {
+                els.newsList.innerHTML = '<div class="p-4 text-center text-stone-500">まだお知らせがありません。</div>';
+                return;
+            }
+            els.newsList.innerHTML = items.map(item => {
+                const imageHtml = item.image ? `<div class="w-full md:w-1/4"><img src="${item.image}" alt="${item.alt || ''}" class="w-full rounded-lg object-cover aspect-video"></div>` : "";
+                return `
+                    <div class="p-4 flex flex-col md:flex-row gap-4">
+                        ${imageHtml}
+                        <div class="flex-1">
+                            <p class="text-xs text-stone-500 mb-1">
+                                <time datetime="${item.datetime || ""}">${item.date || ""}</time>
+                                <span class="ml-3 inline-block px-2 py-1 rounded text-white text-[11px] ${item.category_color || "bg-stone-500"}">${item.category || ""}</span>
+                            </p>
+                            <h3 class="text-lg font-semibold mb-1">${item.title || ""}</h3>
+                            <p class="text-sm text-stone-700 leading-relaxed">${item.content || ""}</p>
+                            <div class="mt-3 flex gap-2">
+                                <button data-id="${item.id}" class="edit-btn px-3 py-1 rounded bg-stone-900 text-white text-sm hover:bg-stone-700">編集</button>
+                                <button data-id="${item.id}" class="delete-btn px-3 py-1 rounded bg-red-100 text-red-700 text-sm hover:bg-red-200">削除</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join("");
+        }
+
+        async function loadNews() {
+            if (!isAdmin && !currentUser) {
+                els.newsList.innerHTML = '<div class="p-4 text-center text-stone-500">ログインしてください。</div>';
+                return;
+            }
+            els.newsList.innerHTML = '<div class="p-4 text-center text-stone-500">読み込み中...</div>';
+            try {
+                const q = query(collection(db, NEWS_COLLECTION), orderBy("datetime", "desc"));
+                const snap = await getDocs(q);
+                const items = snap.docs.map(docSnap => ({ id: docSnap.id, ...docSnap.data() }));
+                renderNews(items);
+                attachRowHandlers();
+            } catch (err) {
+                console.error("News load failed", err);
+                els.newsList.innerHTML = '<div class="p-4 text-center text-red-700">読み込みに失敗しました。</div>';
+            }
+        }
+
+        async function checkAdmin(user) {
+            if (!user) return false;
+            try {
+                const ref = doc(db, ADMIN_COLLECTION, user.email);
+                const snap = await getDoc(ref);
+                if (snap.exists() && snap.data().active === true) return true;
+            } catch (err) {
+                console.warn("admin check fallback", err);
+            }
+            return allowedFallbackAdmins.includes(user.email);
+        }
+
+        function fillForm(item) {
+            els.newsId.value = item?.id || "";
+            els.newsTitle.value = item?.title || "";
+            els.newsDate.value = item?.date || "";
+            els.newsDatetime.value = item?.datetime ? item.datetime.split("T")[0] : "";
+            els.newsCategory.value = item?.category || "";
+            els.newsCategoryColor.value = item?.category_color || "bg-stone-500";
+            els.newsContent.value = item?.content || "";
+            els.newsImage.value = item?.image || "";
+            els.newsAlt.value = item?.alt || "";
+            if (item?.id) {
+                els.saveBtn.textContent = "更新";
+                els.cancelBtn.classList.remove("hidden");
+            } else {
+                els.saveBtn.textContent = "追加";
+                els.cancelBtn.classList.add("hidden");
+            }
+        }
+
+        function clearForm() {
+            fillForm({});
+            setStatus("");
+        }
+
+        function attachRowHandlers() {
+            document.querySelectorAll(".edit-btn").forEach(btn => {
+                btn.addEventListener("click", async () => {
+                    const id = btn.dataset.id;
+                    const snap = await getDoc(doc(db, NEWS_COLLECTION, id));
+                    if (!snap.exists()) return;
+                    fillForm({ id, ...snap.data() });
+                    window.scrollTo({ top: 0, behavior: "smooth" });
+                });
+            });
+            document.querySelectorAll(".delete-btn").forEach(btn => {
+                btn.addEventListener("click", async () => {
+                    if (!confirm("削除しますか？")) return;
+                    try {
+                        await deleteDoc(doc(db, NEWS_COLLECTION, btn.dataset.id));
+                        setStatus("削除しました", "success");
+                        loadNews();
+                    } catch (err) {
+                        console.error(err);
+                        setStatus("削除に失敗しました", "error");
+                    }
+                });
+            });
+        }
+
+        els.newsForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            if (!isAdmin) {
+                setStatus("権限がありません。", "error");
+                return;
+            }
+            const payload = {
+                title: els.newsTitle.value.trim(),
+                date: els.newsDate.value.trim(),
+                datetime: els.newsDatetime.value,
+                category: els.newsCategory.value.trim(),
+                category_color: els.newsCategoryColor.value.trim() || "bg-stone-500",
+                content: els.newsContent.value.trim(),
+                image: els.newsImage.value.trim() || null,
+                alt: els.newsAlt.value.trim() || "",
+                updatedAt: serverTimestamp()
+            };
+            if (!payload.title || !payload.date || !payload.datetime || !payload.category || !payload.content) {
+                setStatus("必須項目を入力してください。", "error");
+                return;
+            }
+            try {
+                if (els.newsId.value) {
+                    await updateDoc(doc(db, NEWS_COLLECTION, els.newsId.value), payload);
+                    setStatus("更新しました", "success");
+                } else {
+                    await addDoc(collection(db, NEWS_COLLECTION), payload);
+                    setStatus("追加しました", "success");
+                }
+                clearForm();
+                loadNews();
+            } catch (err) {
+                console.error(err);
+                setStatus("保存に失敗しました", "error");
+            }
+        });
+
+        els.cancelBtn.addEventListener("click", clearForm);
+        els.reloadBtn.addEventListener("click", loadNews);
+
+        els.loginBtn.addEventListener("click", async () => {
+            try {
+                await signInWithPopup(auth, provider);
+            } catch (err) {
+                console.error(err);
+                alert("ログインに失敗しました");
+            }
+        });
+
+        els.logoutBtn.addEventListener("click", async () => {
+            await signOut(auth);
+        });
+
+        onAuthStateChanged(auth, async (user) => {
+            currentUser = user;
+            isAdmin = await checkAdmin(user);
+            els.userInfo.textContent = user ? `${user.displayName || user.email}` : "未ログイン";
+            els.adminBadge.textContent = isAdmin ? "管理者" : "閲覧のみ";
+            els.adminBadge.className = `px-3 py-1 rounded-full text-xs font-semibold ${isAdmin ? "bg-green-100 text-green-700" : "bg-stone-200 text-stone-700"}`;
+            els.loginBtn.classList.toggle("hidden", !!user);
+            els.logoutBtn.classList.toggle("hidden", !user);
+            // 管理者パネルの表示/非表示を制御
+            els.adminContent.classList.toggle("hidden", !isAdmin);
+            if (user) {
+                loadNews();
+            } else {
+                els.newsList.innerHTML = '<div class="p-4 text-center text-stone-500">ログインしてください。</div>';
+            }
+        });
+    </script>
+</body>
+</html>
