@@ -162,6 +162,14 @@
             <div class="hero-content text-center bg-black bg-opacity-10 p-10 rounded-lg backdrop-blur-sm">
                 <h1 id="hero-title" class="text-5xl md:text-7xl font-bold tracking-wider">A moment of peace.</h1>
                 <p id="hero-subtitle" class="mt-4 text-lg md:text-xl text-white/90">一杯のコーヒーがもたらす、心安らぐひとときを。</p>
+                <!-- 最新のお知らせ（最上位1件だけ表示） -->
+                <div id="hero-latest-news" class="mt-6 inline-flex items-start gap-3 px-4 py-3 rounded-lg bg-white/15 backdrop-blur-sm border border-white/20 text-left shadow-lg max-w-xl">
+                    <div class="flex-shrink-0 text-amber-300"><i class="fas fa-bell"></i></div>
+                    <div class="space-y-1 text-sm md:text-base">
+                        <p class="uppercase tracking-[0.2em] text-white/70 text-xs md:text-[13px]">最新のお知らせ</p>
+                        <div class="text-white/90" id="hero-latest-news-body">読み込み中...</div>
+                    </div>
+                </div>
                 <div class="mt-8 flex flex-col md:flex-row items-center justify-center gap-4">
                     <a href="https://www.hotpepper.jp/strJ004421212/yoyaku/?vos=othpporgzzzzx00000001" target="_blank" rel="noopener noreferrer" class="bg-amber-500 text-stone-900 font-semibold px-8 py-3 rounded-full shadow-lg hover:bg-amber-400 transition-colors">
                         Hot Pepperで予約する
@@ -531,6 +539,28 @@
         const db = getFirestore(app);
         const newsListEl = document.getElementById("news-list");
 
+        function renderLatest(items) {
+            const target = document.getElementById("hero-latest-news-body");
+            if (!target) return;
+            if (!items.length) {
+                target.textContent = "お知らせはまだありません。";
+                return;
+            }
+            const item = items[0];
+            const date = item.date || item.datetime || "";
+            const categoryClass = item.category_color || "bg-amber-500";
+            target.innerHTML = `
+                <div class="flex items-center gap-2">
+                    <span class="inline-flex items-center gap-1 px-2 py-[2px] rounded-full text-xs font-semibold text-white ${categoryClass}">
+                        ${item.category || "お知らせ"}
+                    </span>
+                    <time class="text-white/70 text-xs" datetime="${item.datetime || ""}">${date}</time>
+                </div>
+                <div class="font-semibold">${item.title || ""}</div>
+                <div class="text-white/80 text-sm">${item.content || ""}</div>
+            `;
+        }
+
         function renderNews(items) {
             if (!newsListEl) return;
             if (!items.length) {
@@ -563,6 +593,7 @@
                 const q = query(collection(db, "news"), orderBy("datetime", "desc"));
                 const snap = await getDocs(q);
                 const items = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                renderLatest(items);
                 renderNews(items);
             } catch (err) {
                 console.error("Firestoreからのお知らせ読み込みに失敗:", err);
@@ -577,6 +608,7 @@
                 const res = await fetch("news.json");
                 if (!res.ok) throw new Error("local json load failed");
                 const items = await res.json();
+                renderLatest(items);
                 renderNews(items);
             } catch (err) {
                 console.error("ローカルJSONの読み込みも失敗:", err);
