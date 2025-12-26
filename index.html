@@ -51,11 +51,22 @@
             display: inline-block;
         }
 
-        /* --- ヒーローセクションの背景画像 --- */
-        .hero-bg {
-            background-image: url('./images/hero.jpg');
+        /* --- ヒーローセクションの背景画像（スライドショー） --- */
+        .hero-slider {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+        }
+        .hero-bg-slide {
+            position: absolute;
+            inset: 0;
             background-size: cover;
             background-position: center;
+            opacity: 0;
+            transition: opacity 1.4s ease-in-out;
+        }
+        .hero-bg-slide.is-active {
+            opacity: 1;
         }
         .hero-overlay {
             position: absolute;
@@ -115,6 +126,78 @@
             transform: translateY(-10px);
             box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
         }
+
+        /* ギャラリー */
+        /* ギャラリー（横スクロール＋左右ナビ） */
+        .gallery-wrapper { position: relative; }
+        .gallery-viewport {
+            overflow: hidden;
+        }
+        .gallery-rail {
+            display: flex;
+            gap: 1.25rem;
+            transition: transform 0.5s ease;
+            will-change: transform;
+            padding: 0 0.25rem;
+        }
+        .gallery-card {
+            flex: 0 0 calc((100% - 2.5rem) / 3); /* 3枚表示、gap 1.25rem *2 */
+            overflow: hidden;
+            border-radius: 16px;
+            position: relative;
+            aspect-ratio: 1 / 1;
+            box-shadow: 0 15px 25px -10px rgba(0,0,0,0.25);
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+        .gallery-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+        .gallery-card:hover img {
+            transform: scale(1.05);
+        }
+        .gallery-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 0.9rem 1rem;
+            background: linear-gradient(180deg, transparent, rgba(0,0,0,0.6));
+            color: #fff;
+            font-weight: 600;
+            letter-spacing: 0.03em;
+        }
+        .gallery-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0,0,0,0.6);
+            color: #fff;
+            width: 44px;
+            height: 44px;
+            border-radius: 999px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.2s ease;
+            box-shadow: 0 10px 25px -10px rgba(0,0,0,0.45);
+            z-index: 10;
+            backdrop-filter: blur(6px);
+            font-size: 14px;
+        }
+        .gallery-nav:hover {
+            background: rgba(255,255,255,0.2);
+        }
+        .gallery-nav.disabled {
+            opacity: 0.35;
+            pointer-events: none;
+        }
+        .gallery-nav.left { left: 8px; }
+        .gallery-nav.right { right: 8px; }
     </style>
 </head>
 <body class="antialiased">
@@ -157,7 +240,14 @@
 
     <main>
         <!-- ヒーローセクション -->
-        <section class="h-screen flex items-center justify-center text-white hero-bg relative overflow-hidden">
+        <section class="h-screen flex items-center justify-center text-white relative overflow-hidden">
+            <div class="hero-slider hero-bg">
+                <div class="hero-bg-slide is-active" style="background-image: url('./images/hero.jpg');"></div>
+                <div class="hero-bg-slide" style="background-image: url('./images/大量の写真/店舗写真/LINE_ALBUM_2025.7.7_250707_1.jpg');"></div>
+                <div class="hero-bg-slide" style="background-image: url('./images/大量の写真/店舗写真/LINE_ALBUM_2025.7.7_250707_10.jpg');"></div>
+                <div class="hero-bg-slide" style="background-image: url('./images/大量の写真/店舗写真/LINE_ALBUM_2025.7.7_250707_15.jpg');"></div>
+                <div class="hero-bg-slide" style="background-image: url('./images/大量の写真/店舗写真/LINE_ALBUM_2025.7.7_250707_30.jpg');"></div>
+            </div>
             <div class="hero-overlay"></div>
             <div class="hero-content text-center bg-black bg-opacity-10 p-10 rounded-lg backdrop-blur-sm">
                 <h1 id="hero-title" class="text-5xl md:text-7xl font-bold tracking-wider">A moment of peace.</h1>
@@ -209,7 +299,7 @@
                     <!-- 画像のコンテナ: スマホでは幅いっぱい、下マージンを追加 -->
                     <div class="w-full md:w-9/12 gsap-fade-up mb-8 md:mb-0">
                         <div class="relative pt-[56.25%] rounded-lg shadow-2xl overflow-hidden">
-                            <img src="./images/mini-hero.jpg" alt="カフェの内装" class="absolute inset-0 w-full h-full object-cover">
+                            <img src="./images/大量の写真/店舗写真/LINE_ALBUM_2025.7.7_250707_1.jpg" alt="店内の落ち着いたテーブル席" class="absolute inset-0 w-full h-full object-cover">
                         </div>
                     </div>
 
@@ -280,7 +370,7 @@
                 <div class="grid md:grid-cols-3 gap-8">
                     <!-- Menu Card 1 -->
                     <div class="bg-white rounded-lg shadow-lg overflow-hidden menu-card gsap-fade-up" data-gsap-delay="0.2" data-animate="static">
-                        <img src="https://images.unsplash.com/photo-1551024709-8f23befc6f87?q=80&w=2814&auto=format&fit=crop" alt="パニーニ" class="w-full h-64 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/600x400/e2e8f0/4a5568?text=Panini';">
+                        <img src="./images/大量の写真/Food・Drink/パニーニ.png" alt="パニーニ" class="w-full h-64 object-cover">
                         <div class="p-6">
                             <h3 class="text-2xl font-bold mb-2">燻製ベーコンとチーズのパニーニ</h3>
                             <p class="text-gray-600 mb-4">
@@ -290,7 +380,7 @@
                     </div>
                     <!-- Menu Card 2 -->
                     <div class="bg-white rounded-lg shadow-lg overflow-hidden menu-card gsap-fade-up" data-gsap-delay="0.3" data-animate="static">
-                        <img src="https://images.unsplash.com/photo-1621996346565-e326b20f5413?q=80&w=2940&auto=format&fit=crop" alt="ニョッキ" class="w-full h-64 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/600x400/e2e8f0/4a5568?text=Gnocchi';">
+                        <img src="./images/大量の写真/Food・Drink/チーズソースのニョッキ.png" alt="チーズソースのニョッキ" class="w-full h-64 object-cover">
                         <div class="p-6">
                             <h3 class="text-2xl font-bold mb-2">チーズソースのニョッキ</h3>
                             <p class="text-gray-600 mb-4">
@@ -300,7 +390,7 @@
                     </div>
                     <!-- Menu Card 3 -->
                     <div class="bg-white rounded-lg shadow-lg overflow-hidden menu-card gsap-fade-up" data-gsap-delay="0.4" data-animate="static">
-                        <img src="https://images.unsplash.com/photo-1514432324607-a07d7b3f7393?q=80&w=2787&auto=format&fit=crop" alt="ハンドドリップコーヒー" class="w-full h-64 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/600x400/e2e8f0/4a5568?text=Hand+Drip+Coffee';">
+                        <img src="./images/大量の写真/Food・Drink/ハンドドリップコーヒー.png" alt="ハンドドリップコーヒー" class="w-full h-64 object-cover">
                         <div class="p-6">
                             <h3 class="text-2xl font-bold mb-2">ハンドドリップコーヒー</h3>
                             <p class="text-gray-600 mb-4">
@@ -317,9 +407,60 @@
             </div>
         </section>
 
+        <!-- Galleryセクション -->
+        <section id="gallery" class="py-16 md:py-24 bg-stone-900 text-white overflow-hidden">
+            <div class="container mx-auto px-6 space-y-10">
+                <div class="text-center">
+                    <p class="text-sm uppercase tracking-[0.3em] text-white/60">Gallery</p>
+                    <h2 class="text-3xl md:text-4xl font-bold mt-2">enkaの空気を写真で</h2>
+                    <p class="text-white/70 mt-3">店内の雰囲気やドリンクの彩りをそのままお届けします。</p>
+                </div>
+                <div class="gallery-wrapper">
+                    <div class="gallery-viewport">
+                        <div class="gallery-nav left" id="gallery-prev" aria-label="前の写真">
+                            <i class="fas fa-chevron-left"></i>
+                        </div>
+                        <div class="gallery-nav right" id="gallery-next" aria-label="次の写真">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                        <div class="gallery-rail" id="gallery-rail" aria-live="polite">
+                            <figure class="gallery-card">
+                                <img src="./images/大量の写真/店舗写真/LINE_ALBUM_2025.7.7_250707_1.jpg" alt="木の温もりあるカウンターとテーブル席">
+                                <figcaption class="gallery-caption">店内の落ち着いた夕景</figcaption>
+                            </figure>
+                            <figure class="gallery-card">
+                                <img src="./images/大量の写真/店舗写真/LINE_ALBUM_2025.7.7_250707_10.jpg" alt="壁に取り付けられたドリッパーホルダー">
+                                <figcaption class="gallery-caption">ハンドドリップの道具たち</figcaption>
+                            </figure>
+                            <figure class="gallery-card">
+                                <img src="./images/大量の写真/店舗写真/LINE_ALBUM_2025.7.7_250707_15.jpg" alt="窓際のテーブル席と柔らかな照明">
+                                <figcaption class="gallery-caption">窓際のテーブル席</figcaption>
+                            </figure>
+                            <figure class="gallery-card">
+                                <img src="./images/大量の写真/店舗写真/IMG_4477.JPG" alt="壁面の装飾とドリッパーのディスプレイ">
+                                <figcaption class="gallery-caption">季節のウォールデコ</figcaption>
+                            </figure>
+                            <figure class="gallery-card">
+                                <img src="./images/大量の写真/Food・Drink/IMG_4374.JPG" alt="バニラアイスがのったメロンクリームソーダ">
+                                <figcaption class="gallery-caption">メロンクリームソーダ</figcaption>
+                            </figure>
+                            <figure class="gallery-card">
+                                <img src="./images/大量の写真/店舗写真/IMG_4380.JPG" alt="店内カウンター越しの備品ディスプレイ">
+                                <figcaption class="gallery-caption">カウンター周りの備品</figcaption>
+                            </figure>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- CTA セクション -->
-        <section id="reservation-cta" class="py-16 md:py-24 bg-gradient-to-r from-stone-900 via-stone-800 to-stone-600 text-white overflow-hidden">
-            <div class="container mx-auto px-6">
+        <section id="reservation-cta" class="relative py-16 md:py-24 bg-gradient-to-r from-stone-900 via-stone-800 to-stone-600 text-white overflow-hidden">
+            <div class="absolute inset-0 opacity-40 pointer-events-none">
+                <video class="w-full h-full object-cover" src="./images/大量の写真/Food・Drink/IMG_6215.mp4" autoplay muted loop playsinline></video>
+                <div class="absolute inset-0 bg-gradient-to-r from-stone-900/80 via-stone-900/60 to-stone-700/70"></div>
+            </div>
+            <div class="container mx-auto px-6 relative">
                 <div class="max-w-4xl mx-auto text-center space-y-6">
                     <p class="text-sm uppercase tracking-[0.3em] text-white/70">Reservation</p>
                     <h2 class="text-3xl md:text-4xl font-bold gsap-fade-up">夜のバルタイムも、お昼のカフェも。</h2>
@@ -444,6 +585,18 @@
                 ease: "none"
             });
 
+            // Heroスライドショー（フェード）
+            const heroSlides = Array.from(document.querySelectorAll('.hero-bg-slide'));
+            let heroSlideIndex = 0;
+            if (heroSlides.length > 1) {
+                setInterval(() => {
+                    const next = (heroSlideIndex + 1) % heroSlides.length;
+                    heroSlides[heroSlideIndex].classList.remove('is-active');
+                    heroSlides[next].classList.add('is-active');
+                    heroSlideIndex = next;
+                }, 6500);
+            }
+
             function setupScrollTriggers() {
                 const fadeUpElements = document.querySelectorAll('.gsap-fade-up');
 
@@ -479,6 +632,36 @@
 
             setupScrollTriggers();
             // News loading is handled by Firebase module script (see bottom).
+            // Gallery horizontal scroll with buttons
+            const galleryRail = document.getElementById('gallery-rail');
+            const prevBtn = document.getElementById('gallery-prev');
+            const nextBtn = document.getElementById('gallery-next');
+            const galleryCards = Array.from(document.querySelectorAll('#gallery-rail .gallery-card'));
+            const visibleCount = 3;
+            let galleryIndex = 0;
+            const getGap = () => {
+                if (!galleryRail) return 0;
+                const style = window.getComputedStyle(galleryRail);
+                return parseFloat(style.columnGap || style.gap || '20');
+            };
+            const getCardWidth = () => galleryCards[0]?.getBoundingClientRect().width || 0;
+
+            function updateGallery(offsetIndex = galleryIndex) {
+                if (!galleryRail) return;
+                const gap = getGap();
+                const w = getCardWidth();
+                const maxIndex = Math.max(0, galleryCards.length - visibleCount);
+                galleryIndex = Math.max(0, Math.min(offsetIndex, maxIndex));
+                const offset = (w + gap) * galleryIndex;
+                galleryRail.style.transform = `translateX(-${offset}px)`;
+                prevBtn?.classList.toggle('disabled', galleryIndex === 0);
+                nextBtn?.classList.toggle('disabled', galleryIndex >= maxIndex);
+            }
+            prevBtn?.addEventListener('click', () => updateGallery(galleryIndex - 1));
+            nextBtn?.addEventListener('click', () => updateGallery(galleryIndex + 1));
+            window.addEventListener('resize', () => updateGallery(galleryIndex));
+            setTimeout(() => updateGallery(0), 400);
+
             const header = document.getElementById('header');
             window.addEventListener('scroll', () => {
                 if (window.scrollY > 50) {
