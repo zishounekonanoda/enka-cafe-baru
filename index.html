@@ -243,10 +243,10 @@
         <section class="h-screen flex items-center justify-center text-white relative overflow-hidden">
             <div class="hero-slider hero-bg">
                 <div class="hero-bg-slide is-active" style="background-image: url('./images/hero.jpg');"></div>
-                <div class="hero-bg-slide" style="background-image: url('./images/大量の写真/店舗写真/LINE_ALBUM_2025.7.7_250707_1.jpg');"></div>
-                <div class="hero-bg-slide" style="background-image: url('./images/大量の写真/店舗写真/LINE_ALBUM_2025.7.7_250707_10.jpg');"></div>
-                <div class="hero-bg-slide" style="background-image: url('./images/大量の写真/店舗写真/LINE_ALBUM_2025.7.7_250707_15.jpg');"></div>
-                <div class="hero-bg-slide" style="background-image: url('./images/大量の写真/店舗写真/LINE_ALBUM_2025.7.7_250707_30.jpg');"></div>
+                <div class="hero-bg-slide" data-bg="./images/大量の写真/店舗写真/LINE_ALBUM_2025.7.7_250707_1.jpg"></div>
+                <div class="hero-bg-slide" data-bg="./images/大量の写真/店舗写真/LINE_ALBUM_2025.7.7_250707_10.jpg"></div>
+                <div class="hero-bg-slide" data-bg="./images/大量の写真/店舗写真/LINE_ALBUM_2025.7.7_250707_15.jpg"></div>
+                <div class="hero-bg-slide" data-bg="./images/大量の写真/店舗写真/LINE_ALBUM_2025.7.7_250707_30.jpg"></div>
             </div>
             <div class="hero-overlay"></div>
             <div class="hero-content text-center bg-black bg-opacity-10 p-10 rounded-lg backdrop-blur-sm">
@@ -299,7 +299,7 @@
                     <!-- 画像のコンテナ: スマホでは幅いっぱい、下マージンを追加 -->
                     <div class="w-full md:w-9/12 gsap-fade-up mb-8 md:mb-0">
                         <div class="relative pt-[56.25%] rounded-lg shadow-2xl overflow-hidden">
-                            <img src="./images/大量の写真/店舗写真/LINE_ALBUM_2025.7.7_250707_1.jpg" alt="店内の落ち着いたテーブル席" class="absolute inset-0 w-full h-full object-cover">
+                            <img src="./images/大量の写真/店舗写真/LINE_ALBUM_2025.7.7_250707_1.jpg" alt="店内の落ち着いたテーブル席" class="absolute inset-0 w-full h-full object-cover" loading="lazy">
                         </div>
                     </div>
 
@@ -370,7 +370,7 @@
                 <div class="grid md:grid-cols-3 gap-8">
                     <!-- Menu Card 1 -->
                     <div class="bg-white rounded-lg shadow-lg overflow-hidden menu-card gsap-fade-up" data-gsap-delay="0.2" data-animate="static">
-                        <img src="./images/大量の写真/Food・Drink/パニーニ.png" alt="パニーニ" class="w-full h-64 object-cover">
+                        <img src="./images/大量の写真/Food・Drink/パニーニ.png" alt="パニーニ" class="w-full h-64 object-cover" loading="lazy">
                         <div class="p-6">
                             <h3 class="text-2xl font-bold mb-2">燻製ベーコンとチーズのパニーニ</h3>
                             <p class="text-gray-600 mb-4">
@@ -380,7 +380,7 @@
                     </div>
                     <!-- Menu Card 2 -->
                     <div class="bg-white rounded-lg shadow-lg overflow-hidden menu-card gsap-fade-up" data-gsap-delay="0.3" data-animate="static">
-                        <img src="./images/大量の写真/Food・Drink/チーズソースのニョッキ.png" alt="チーズソースのニョッキ" class="w-full h-64 object-cover">
+                        <img src="./images/大量の写真/Food・Drink/チーズソースのニョッキ.png" alt="チーズソースのニョッキ" class="w-full h-64 object-cover" loading="lazy">
                         <div class="p-6">
                             <h3 class="text-2xl font-bold mb-2">チーズソースのニョッキ</h3>
                             <p class="text-gray-600 mb-4">
@@ -390,7 +390,7 @@
                     </div>
                     <!-- Menu Card 3 -->
                     <div class="bg-white rounded-lg shadow-lg overflow-hidden menu-card gsap-fade-up" data-gsap-delay="0.4" data-animate="static">
-                        <img src="./images/大量の写真/Food・Drink/ハンドドリップコーヒー.png" alt="ハンドドリップコーヒー" class="w-full h-64 object-cover">
+                        <img src="./images/大量の写真/Food・Drink/ハンドドリップコーヒー.png" alt="ハンドドリップコーヒー" class="w-full h-64 object-cover" loading="lazy">
                         <div class="p-6">
                             <h3 class="text-2xl font-bold mb-2">ハンドドリップコーヒー</h3>
                             <p class="text-gray-600 mb-4">
@@ -425,27 +425,27 @@
                         </div>
                         <div class="gallery-rail" id="gallery-rail" aria-live="polite">
                             <figure class="gallery-card">
-                                <img src="./images/大量の写真/店舗写真/LINE_ALBUM_2025.7.7_250707_1.jpg" alt="木の温もりあるカウンターとテーブル席">
+                                <img src="./images/大量の写真/店舗写真/LINE_ALBUM_2025.7.7_250707_1.jpg" alt="木の温もりあるカウンターとテーブル席" loading="lazy">
                                 <figcaption class="gallery-caption">店内の落ち着いた夕景</figcaption>
                             </figure>
                             <figure class="gallery-card">
-                                <img src="./images/大量の写真/店舗写真/LINE_ALBUM_2025.7.7_250707_10.jpg" alt="壁に取り付けられたドリッパーホルダー">
+                                <img src="./images/大量の写真/店舗写真/LINE_ALBUM_2025.7.7_250707_10.jpg" alt="壁に取り付けられたドリッパーホルダー" loading="lazy">
                                 <figcaption class="gallery-caption">ハンドドリップの道具たち</figcaption>
                             </figure>
                             <figure class="gallery-card">
-                                <img src="./images/大量の写真/店舗写真/LINE_ALBUM_2025.7.7_250707_15.jpg" alt="窓際のテーブル席と柔らかな照明">
+                                <img src="./images/大量の写真/店舗写真/LINE_ALBUM_2025.7.7_250707_15.jpg" alt="窓際のテーブル席と柔らかな照明" loading="lazy">
                                 <figcaption class="gallery-caption">窓際のテーブル席</figcaption>
                             </figure>
                             <figure class="gallery-card">
-                                <img src="./images/大量の写真/店舗写真/IMG_4477.JPG" alt="壁面の装飾とドリッパーのディスプレイ">
+                                <img src="./images/大量の写真/店舗写真/IMG_4477.JPG" alt="壁面の装飾とドリッパーのディスプレイ" loading="lazy">
                                 <figcaption class="gallery-caption">季節のウォールデコ</figcaption>
                             </figure>
                             <figure class="gallery-card">
-                                <img src="./images/大量の写真/Food・Drink/IMG_4374.JPG" alt="バニラアイスがのったメロンクリームソーダ">
+                                <img src="./images/大量の写真/Food・Drink/IMG_4374.JPG" alt="バニラアイスがのったメロンクリームソーダ" loading="lazy">
                                 <figcaption class="gallery-caption">メロンクリームソーダ</figcaption>
                             </figure>
                             <figure class="gallery-card">
-                                <img src="./images/大量の写真/店舗写真/IMG_4380.JPG" alt="店内カウンター越しの備品ディスプレイ">
+                                <img src="./images/大量の写真/店舗写真/IMG_4380.JPG" alt="店内カウンター越しの備品ディスプレイ" loading="lazy">
                                 <figcaption class="gallery-caption">カウンター周りの備品</figcaption>
                             </figure>
                         </div>
@@ -588,6 +588,15 @@
             // Heroスライドショー（フェード）
             const heroSlides = Array.from(document.querySelectorAll('.hero-bg-slide'));
             let heroSlideIndex = 0;
+            // 後段スライドの背景を遅延セット（ネットワーク負荷軽減）
+            heroSlides.forEach((slide, idx) => {
+                const bg = slide.dataset.bg;
+                if (bg) {
+                    setTimeout(() => {
+                        slide.style.backgroundImage = `url('${bg}')`;
+                    }, 400 * idx);
+                }
+            });
             if (heroSlides.length > 1) {
                 setInterval(() => {
                     const next = (heroSlideIndex + 1) % heroSlides.length;
