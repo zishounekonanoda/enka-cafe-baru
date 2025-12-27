@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://enka-baru-cafe.com/sitemap.xml
+Sitemap: https://enka-cafe-baru.com/sitemap.xml
