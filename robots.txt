@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://enka-baru-cafe.com/sitemap.xml
