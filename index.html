@@ -294,7 +294,17 @@
                         <div class="text-white/90" id="hero-latest-news-body">読み込み中...</div>
                     </div>
                 </div>
-                <div class="mt-8 flex flex-col md:flex-row items-center justify-center gap-4">
+                <div id="hero-primary-actions" class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
+                    <a href="menu.html" class="inline-flex items-center justify-center gap-2 bg-white text-stone-900 font-bold px-9 py-3 rounded-full shadow-xl hover:bg-amber-100 transition-all duration-300 transform hover:-translate-y-1">
+                        <i class="fas fa-book-open"></i>
+                        メニューを見る
+                    </a>
+                    <a href="#access" class="inline-flex items-center justify-center gap-2 bg-stone-900/70 border border-white/70 text-white font-semibold px-9 py-3 rounded-full shadow-lg hover:bg-stone-900 transition-all duration-300 transform hover:-translate-y-1">
+                        <i class="fas fa-location-dot"></i>
+                        アクセス
+                    </a>
+                </div>
+                <div class="mt-4 flex flex-col md:flex-row items-center justify-center gap-4">
                     <a href="https://www.hotpepper.jp/strJ004421212/yoyaku/?vos=othpporgzzzzx00000001" target="_blank" rel="noopener noreferrer" class="bg-amber-500 text-stone-900 font-semibold px-8 py-3 rounded-full shadow-lg hover:bg-amber-400 transition-colors">
                         Hot Pepperで予約する
                     </a>
@@ -615,6 +625,7 @@
                 .to(["#header", "main", "footer"], { opacity: 1, duration: 1, ease: 'power1.inOut' }, "-=0.5")
                 .from("#hero-title", { y: 30, opacity: 0, duration: 0.8, ease: "power2.out" }, "-=0.8")
                 .from("#hero-subtitle", { y: 20, opacity: 0, duration: 0.8, ease: "power2.out" }, "-=0.6")
+                .from("#hero-primary-actions", { y: 18, opacity: 0, duration: 0.7, ease: "power2.out" }, "-=0.45")
                 .to(".gsap-fade-in", { opacity: 1, duration: 1, ease: 'power2.out' }, "-=0.5");
 
             gsap.to(".hero-bg", {
