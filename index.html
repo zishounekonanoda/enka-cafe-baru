@@ -121,10 +121,14 @@
         }
 
         /* ヘッダーの背景がスクロールで変わるスタイル */
+        #header {
+            color: #fff;
+        }
         .header-scrolled {
             background-color: rgba(248, 248, 244, 0.9);
             backdrop-filter: blur(10px);
             box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            color: #1f1a17;
         }
 
         /* --- ローディングアニメーション --- */
@@ -309,6 +313,7 @@
             </div>
             <div class="hero-overlay"></div>
             <div class="hero-content text-center bg-black bg-opacity-10 p-10 rounded-lg backdrop-blur-sm">
+                <p id="hero-brand" class="mb-3 text-2xl md:text-3xl font-semibold tracking-[0.32em] uppercase text-white/95">Enka</p>
                 <h1 id="hero-title" class="text-5xl md:text-7xl font-bold tracking-wider">A moment of peace.</h1>
                 <p id="hero-subtitle" class="mt-4 text-lg md:text-xl text-white/90">向ヶ丘駅から徒歩3分に佇む、燻製のお店</p>
                 <!-- 最新のお知らせ（最上位1件だけ表示） -->
@@ -657,6 +662,7 @@
                 .to(loader, { opacity: 0, duration: 0.8, ease: "power1.inOut" })
                 .set(loader, { display: "none" })
                 .to(["#header", "main", "footer"], { opacity: 1, duration: 1, ease: 'power1.inOut' }, "-=0.5")
+                .from("#hero-brand", { y: 18, opacity: 0, duration: 0.7, ease: "power2.out" }, "-=0.85")
                 .from("#hero-title", { y: 30, opacity: 0, duration: 0.8, ease: "power2.out" }, "-=0.8")
                 .from("#hero-subtitle", { y: 20, opacity: 0, duration: 0.8, ease: "power2.out" }, "-=0.6")
                 .from("#hero-primary-actions", { y: 18, opacity: 0, duration: 0.7, ease: "power2.out" }, "-=0.45")
