@@ -128,11 +128,6 @@
         }
 
         /* --- ローディングアニメーション --- */
-        @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
         #loader {
             background-color: #fff;
             transition: opacity 0.5s ease-out;
@@ -141,7 +136,28 @@
         #loader img {
             width: 12rem; /* 192px */
             height: 12rem; /* 192px */
-            animation: spin 1.5s linear infinite;
+        }
+        .loader-inner {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.25rem;
+        }
+        .loader-track {
+            width: min(18rem, 58vw);
+            height: 4px;
+            overflow: hidden;
+            border-radius: 999px;
+            background: #e7ded2;
+        }
+        .loader-bar {
+            width: 100%;
+            height: 100%;
+            border-radius: inherit;
+            background: linear-gradient(90deg, #8b6f47, #c49a55);
+            transform: scaleX(0);
+            transform-origin: left center;
+            transition: transform 0.7s cubic-bezier(0.65, 0, 0.35, 1);
         }
 
         /* --- コンテンツの初期状態 --- */
@@ -238,7 +254,12 @@
 
     <!-- ローディング画面 -->
     <div id="loader" class="fixed inset-0 z-[100] flex items-center justify-center">
-        <img src="./images/load.png" alt="Loading...">
+        <div class="loader-inner" aria-label="Loading">
+            <img src="./images/load.png" alt="Loading...">
+            <div class="loader-track" aria-hidden="true">
+                <div id="loader-bar" class="loader-bar"></div>
+            </div>
+        </div>
     </div>
 
     <!-- ヘッダー -->
@@ -617,9 +638,18 @@
             gsap.registerPlugin(ScrollTrigger);
 
             const loader = document.getElementById('loader');
+            const loaderBar = document.getElementById('loader-bar');
             const timeline = gsap.timeline();
 
+            if (loaderBar) {
+                loaderBar.style.transform = 'scaleX(0.18)';
+                requestAnimationFrame(() => {
+                    loaderBar.style.transform = 'scaleX(0.9)';
+                });
+            }
+
             timeline
+                .to(loaderBar, { scaleX: 1, transformOrigin: "left center", duration: 0.45, ease: "power2.inOut" })
                 .to(loader, { opacity: 0, duration: 0.8, ease: "power1.inOut" })
                 .set(loader, { display: "none" })
                 .to(["#header", "main", "footer"], { opacity: 1, duration: 1, ease: 'power1.inOut' }, "-=0.5")
