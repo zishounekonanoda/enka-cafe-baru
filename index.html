@@ -52,7 +52,7 @@
     <style>
         /* --- ローカルフォントの読み込み設定 --- */
         @font-face {
-            font-family: 'YourLocalFontName'; /* CSSで指定するためのフォント名 */
+            font-family: 'EnkaLocalFont';
             src: url('./fonts/59314.ttf') format('truetype'); /* TTF形式のフォント */
             font-weight: normal;
             font-style: normal;
@@ -60,14 +60,25 @@
         }
 
         /* カスタムスタイル */
+        html,
         body {
-            font-family: 'YourLocalFontName', 'Inter', 'Noto Serif JP', sans-serif;
+            font-family: 'EnkaLocalFont', 'YourLocalFontName', sans-serif !important;
             background-color: #F8F8F4; /* やや温かみのある白 */
             color: #1a1a1a;
         }
+        button,
+        input,
+        textarea,
+        select {
+            font-family: 'EnkaLocalFont', 'YourLocalFontName', sans-serif !important;
+        }
 
-        /* GSAPでアニメーションさせる要素の初期状態 */
+        /* JSが失敗してもコンテンツが消えないよう、初期状態は表示にする */
         .gsap-fade-up {
+            opacity: 1;
+            transform: none;
+        }
+        .js-gsap-ready .gsap-fade-up:not([data-animate="static"]) {
             opacity: 0;
             transform: translateY(40px);
         }
@@ -76,6 +87,9 @@
             transform: none;
         }
         .gsap-fade-in {
+            opacity: 1;
+        }
+        .js-gsap-ready .gsap-fade-in {
             opacity: 0;
         }
         /* 文字アニメーション用の基本スタイル */
@@ -701,6 +715,13 @@
 
     <script>
         let pageRevealed = false;
+        function revealAnimatedContent() {
+            document.querySelectorAll('.gsap-fade-up, .gsap-fade-in').forEach(el => {
+                el.style.opacity = '1';
+                el.style.transform = 'none';
+            });
+        }
+
         function revealPageFallback() {
             if (pageRevealed) return;
             pageRevealed = true;
@@ -720,15 +741,137 @@
                 el.style.opacity = '1';
                 el.style.transform = 'none';
             });
+            revealAnimatedContent();
         }
 
         setTimeout(revealPageFallback, 3500);
 
+        function initCoreInteractions() {
+            if (window.__enkaCoreInitialized) return;
+            window.__enkaCoreInitialized = true;
+
+            const heroSlides = Array.from(document.querySelectorAll('.hero-bg-slide'));
+            let heroSlideIndex = 0;
+            heroSlides.forEach((slide, idx) => {
+                const bg = slide.dataset.bg;
+                if (bg) {
+                    setTimeout(() => {
+                        slide.style.backgroundImage = `url('${bg}')`;
+                    }, 300 * idx);
+                }
+            });
+            if (heroSlides.length > 1) {
+                setInterval(() => {
+                    const next = (heroSlideIndex + 1) % heroSlides.length;
+                    heroSlides[heroSlideIndex].classList.remove('is-active');
+                    heroSlides[next].classList.add('is-active');
+                    heroSlideIndex = next;
+                }, 6500);
+            }
+
+            const reservationVideo = document.getElementById('reservation-video');
+            if (reservationVideo?.dataset.src) {
+                const loadReservationVideo = () => {
+                    if (reservationVideo.src) return;
+                    reservationVideo.src = reservationVideo.dataset.src;
+                    reservationVideo.load();
+                    reservationVideo.play().catch(() => {});
+                };
+                if ('IntersectionObserver' in window) {
+                    const videoObserver = new IntersectionObserver((entries, observer) => {
+                        if (entries.some(entry => entry.isIntersecting)) {
+                            loadReservationVideo();
+                            observer.disconnect();
+                        }
+                    }, { rootMargin: '360px 0px' });
+                    videoObserver.observe(reservationVideo);
+                } else {
+                    loadReservationVideo();
+                }
+            }
+
+            const galleryRail = document.getElementById('gallery-rail');
+            const prevBtn = document.getElementById('gallery-prev');
+            const nextBtn = document.getElementById('gallery-next');
+            const galleryCards = Array.from(document.querySelectorAll('#gallery-rail .gallery-card'));
+            const visibleCount = 3;
+            let galleryIndex = 0;
+            const getGap = () => {
+                if (!galleryRail) return 0;
+                const style = window.getComputedStyle(galleryRail);
+                return parseFloat(style.columnGap || style.gap || '20');
+            };
+            const getCardWidth = () => galleryCards[0]?.getBoundingClientRect().width || 0;
+            const updateGallery = (offsetIndex = galleryIndex) => {
+                if (!galleryRail) return;
+                const gap = getGap();
+                const w = getCardWidth();
+                const maxIndex = Math.max(0, galleryCards.length - visibleCount);
+                galleryIndex = Math.max(0, Math.min(offsetIndex, maxIndex));
+                galleryRail.style.transform = `translateX(-${(w + gap) * galleryIndex}px)`;
+                prevBtn?.classList.toggle('disabled', galleryIndex === 0);
+                nextBtn?.classList.toggle('disabled', galleryIndex >= maxIndex);
+            };
+            prevBtn?.addEventListener('click', () => updateGallery(galleryIndex - 1));
+            nextBtn?.addEventListener('click', () => updateGallery(galleryIndex + 1));
+            window.addEventListener('resize', () => updateGallery(galleryIndex));
+            setTimeout(() => updateGallery(0), 400);
+
+            const header = document.getElementById('header');
+            const updateHeader = () => {
+                if (!header) return;
+                header.classList.toggle('header-scrolled', window.scrollY > 50);
+            };
+            updateHeader();
+            window.addEventListener('scroll', updateHeader, { passive: true });
+
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            let isMenuOpen = false;
+            if (mobileMenu) {
+                mobileMenu.style.opacity = '0';
+                mobileMenu.style.transform = 'translateY(-100%)';
+                mobileMenu.style.pointerEvents = 'none';
+            }
+            mobileMenuButton?.addEventListener('click', () => {
+                isMenuOpen = !isMenuOpen;
+                if (!mobileMenu) return;
+                if (window.gsap) {
+                    gsap.to(mobileMenu, {
+                        yPercent: isMenuOpen ? 0 : -100,
+                        autoAlpha: isMenuOpen ? 1 : 0,
+                        duration: 0.4,
+                        ease: 'power2.out'
+                    });
+                } else {
+                    mobileMenu.style.opacity = isMenuOpen ? '1' : '0';
+                    mobileMenu.style.transform = isMenuOpen ? 'translateY(0)' : 'translateY(-100%)';
+                    mobileMenu.style.pointerEvents = isMenuOpen ? 'auto' : 'none';
+                }
+            });
+
+            const backToTopButton = document.getElementById('back-to-top-button');
+            const updateBackToTop = () => {
+                backToTopButton?.classList.toggle('scale-100', window.scrollY > 400);
+            };
+            updateBackToTop();
+            window.addEventListener('scroll', updateBackToTop, { passive: true });
+            backToTopButton?.addEventListener('click', (e) => {
+                e.preventDefault();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', initCoreInteractions);
+
         window.addEventListener('load', () => {
+            initCoreInteractions();
             if (!window.gsap || !window.ScrollTrigger) {
                 revealPageFallback();
                 return;
             }
+
+            document.documentElement.classList.add('js-gsap-ready');
 
             gsap.registerPlugin(ScrollTrigger);
 
@@ -766,48 +909,6 @@
                 ease: "none"
             });
 
-            // Heroスライドショー（フェード）
-            const heroSlides = Array.from(document.querySelectorAll('.hero-bg-slide'));
-            let heroSlideIndex = 0;
-            // 後段スライドの背景を遅延セット（ネットワーク負荷軽減）
-            heroSlides.forEach((slide, idx) => {
-                const bg = slide.dataset.bg;
-                if (bg) {
-                    setTimeout(() => {
-                        slide.style.backgroundImage = `url('${bg}')`;
-                    }, 400 * idx);
-                }
-            });
-            if (heroSlides.length > 1) {
-                setInterval(() => {
-                    const next = (heroSlideIndex + 1) % heroSlides.length;
-                    heroSlides[heroSlideIndex].classList.remove('is-active');
-                    heroSlides[next].classList.add('is-active');
-                    heroSlideIndex = next;
-                }, 6500);
-            }
-
-            const reservationVideo = document.getElementById('reservation-video');
-            if (reservationVideo?.dataset.src) {
-                const loadReservationVideo = () => {
-                    if (reservationVideo.src) return;
-                    reservationVideo.src = reservationVideo.dataset.src;
-                    reservationVideo.load();
-                    reservationVideo.play().catch(() => {});
-                };
-                if ('IntersectionObserver' in window) {
-                    const videoObserver = new IntersectionObserver((entries, observer) => {
-                        if (entries.some(entry => entry.isIntersecting)) {
-                            loadReservationVideo();
-                            observer.disconnect();
-                        }
-                    }, { rootMargin: '360px 0px' });
-                    videoObserver.observe(reservationVideo);
-                } else {
-                    loadReservationVideo();
-                }
-            }
-
             function setupScrollTriggers() {
                 const fadeUpElements = document.querySelectorAll('.gsap-fade-up');
 
@@ -843,74 +944,55 @@
 
             setupScrollTriggers();
             // News loading is handled by Firebase module script (see bottom).
-            // Gallery horizontal scroll with buttons
-            const galleryRail = document.getElementById('gallery-rail');
-            const prevBtn = document.getElementById('gallery-prev');
-            const nextBtn = document.getElementById('gallery-next');
-            const galleryCards = Array.from(document.querySelectorAll('#gallery-rail .gallery-card'));
-            const visibleCount = 3;
-            let galleryIndex = 0;
-            const getGap = () => {
-                if (!galleryRail) return 0;
-                const style = window.getComputedStyle(galleryRail);
-                return parseFloat(style.columnGap || style.gap || '20');
-            };
-            const getCardWidth = () => galleryCards[0]?.getBoundingClientRect().width || 0;
-
-            function updateGallery(offsetIndex = galleryIndex) {
-                if (!galleryRail) return;
-                const gap = getGap();
-                const w = getCardWidth();
-                const maxIndex = Math.max(0, galleryCards.length - visibleCount);
-                galleryIndex = Math.max(0, Math.min(offsetIndex, maxIndex));
-                const offset = (w + gap) * galleryIndex;
-                galleryRail.style.transform = `translateX(-${offset}px)`;
-                prevBtn?.classList.toggle('disabled', galleryIndex === 0);
-                nextBtn?.classList.toggle('disabled', galleryIndex >= maxIndex);
-            }
-            prevBtn?.addEventListener('click', () => updateGallery(galleryIndex - 1));
-            nextBtn?.addEventListener('click', () => updateGallery(galleryIndex + 1));
-            window.addEventListener('resize', () => updateGallery(galleryIndex));
-            setTimeout(() => updateGallery(0), 400);
-
-            const header = document.getElementById('header');
-            window.addEventListener('scroll', () => {
-                if (window.scrollY > 50) {
-                    header.classList.add('header-scrolled');
-                } else {
-                    header.classList.remove('header-scrolled');
-                }
-            });
-
-
-            const mobileMenuButton = document.getElementById('mobile-menu-button');
-            const mobileMenu = document.getElementById('mobile-menu');
-            let isMenuOpen = false;
-            gsap.set(mobileMenu, { yPercent: -100, autoAlpha: 0 });
-            mobileMenuButton.addEventListener('click', () => {
-                isMenuOpen = !isMenuOpen;
-                gsap.to(mobileMenu, {
-                    yPercent: isMenuOpen ? 0 : -100,
-                    autoAlpha: isMenuOpen ? 1 : 0,
-                    duration: 0.4,
-                    ease: 'power2.out'
-                });
-            });
-
-            const backToTopButton = document.getElementById('back-to-top-button');
-            window.addEventListener('scroll', () => {
-                if (window.scrollY > 400) {
-                    backToTopButton.classList.add('scale-100');
-                } else {
-                    backToTopButton.classList.remove('scale-100');
-                }
-            });
-            backToTopButton.addEventListener('click', (e) => {
-                e.preventDefault();
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            });
         });
 
+    </script>
+
+    <script>
+        async function loadLocalNewsFallback() {
+            const newsListEl = document.getElementById("news-list");
+            const latestEl = document.getElementById("hero-latest-news-body");
+            if (!newsListEl && !latestEl) return;
+            try {
+                const res = await fetch("news.json", { cache: "no-store" });
+                if (!res.ok) throw new Error("news.json load failed");
+                const items = await res.json();
+                if (!Array.isArray(items) || !items.length) return;
+                if (latestEl && (!latestEl.dataset.loaded || latestEl.textContent.includes("読み込み"))) {
+                    const item = items[0];
+                    latestEl.dataset.loaded = "true";
+                    latestEl.innerHTML = `
+                        <div class="flex items-center gap-2">
+                            <span class="inline-flex items-center gap-1 px-2 py-[2px] rounded-full text-xs font-semibold text-white ${item.category_color || "bg-stone-500"}">${item.category || "お知らせ"}</span>
+                            <time class="text-white/70 text-xs" datetime="${item.datetime || ""}">${item.date || item.datetime || ""}</time>
+                        </div>
+                        <div class="font-semibold">${item.title || ""}</div>
+                        <div class="text-white/80 text-sm">${item.content || ""}</div>
+                    `;
+                }
+                if (newsListEl && (!newsListEl.dataset.loaded || newsListEl.textContent.includes("読み込み") || newsListEl.textContent.includes("まだお知らせ"))) {
+                    newsListEl.dataset.loaded = "true";
+                    newsListEl.innerHTML = items.map(item => `
+                        <div class="flex flex-col md:flex-row gap-6 border-b border-gray-200 py-8 last:border-b-0">
+                            ${item.image ? `<div class="md:w-1/3 lg:w-1/4"><img src="${item.image}" alt="${item.alt || ""}" class="w-full rounded-lg object-cover aspect-video shadow-md" loading="lazy" decoding="async"></div>` : '<div class="hidden md:block md:w-1/3 lg:w-1/4"></div>'}
+                            <div class="flex-1">
+                                <p class="text-sm text-gray-500 mb-2">
+                                    <time datetime="${item.datetime || ""}">${item.date || ""}</time>
+                                    <span class="ml-4 inline-block ${item.category_color || "bg-stone-500"} text-white text-xs font-semibold px-2 py-1 rounded">${item.category || ""}</span>
+                                </p>
+                                <h3 class="text-xl font-bold mb-2">${item.title || ""}</h3>
+                                <p class="text-gray-600 leading-relaxed">${item.content || ""}</p>
+                            </div>
+                        </div>`).join("");
+                }
+                revealAnimatedContent?.();
+            } catch (err) {
+                console.error("ローカルJSONのお知らせ読み込みに失敗:", err);
+            }
+        }
+        document.addEventListener("DOMContentLoaded", () => {
+            setTimeout(loadLocalNewsFallback, 1200);
+        });
     </script>
 
     <!-- News loader (Firebase + fallback to local JSON) -->
@@ -940,6 +1022,7 @@
                 target.textContent = "お知らせはまだありません。";
                 return;
             }
+            target.dataset.loaded = "true";
             const item = items[0];
             const date = item.date || item.datetime || "";
             const categoryClass = item.category_color || "bg-amber-500";
@@ -961,6 +1044,7 @@
                 newsListEl.innerHTML = '<div class="text-center text-gray-500">まだお知らせがありません。</div>';
                 return;
             }
+            newsListEl.dataset.loaded = "true";
             newsListEl.innerHTML = items.map(item => {
                 const imageHtml = item.image
                     ? `<div class="md:w-1/3 lg:w-1/4"><img src="${item.image}" alt="${item.alt || ""}" class="w-full rounded-lg object-cover aspect-video shadow-md"></div>`
@@ -987,6 +1071,10 @@
                 const q = query(collection(db, "news"), orderBy("datetime", "desc"));
                 const snap = await getDocs(q);
                 const items = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                if (!items.length) {
+                    await loadNewsFromLocalJson();
+                    return;
+                }
                 renderLatest(items);
                 renderNews(items);
             } catch (err) {
