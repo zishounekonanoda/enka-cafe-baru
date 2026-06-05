@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Menu - enka - カフェ・バル</title>
+    <title>メニュー - enka - カフェ・バル</title>
     <meta name="description" content="enkaのランチ・ドルチェ・ディナー・ドリンク・アルコールメニュー一覧。向ヶ丘遊園駅徒歩3分、燻製料理とコーヒーを楽しめるカフェ＆バル。">
     <link rel="canonical" href="https://enka-cafe-baru.com/menu.html">
     <meta property="og:type" content="website">
-    <meta property="og:title" content="Menu - enka - カフェ・バル">
+    <meta property="og:title" content="メニュー - enka - カフェ・バル">
     <meta property="og:description" content="ランチ・ドルチェ・ディナー・ドリンク・アルコールの最新メニュー。向ヶ丘遊園駅徒歩3分の燻製カフェ＆バル『enka』。">
     <meta property="og:url" content="https://enka-cafe-baru.com/menu.html">
     <meta property="og:image" content="https://enka-cafe-baru.com/images/hero.jpg">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Menu - enka - カフェ・バル">
+    <meta name="twitter:title" content="メニュー - enka - カフェ・バル">
     <meta name="twitter:description" content="ランチ・ドルチェ・ディナー・ドリンク・アルコールの最新メニュー。">
     <script type="application/ld+json">
     {
@@ -21,7 +21,7 @@
       "name": "enka メニュー",
       "inLanguage": "ja",
       "url": "https://enka-cafe-baru.com/menu.html",
-      "hasMenuSection": ["Lunch", "Dolce", "Drink", "Alcohol", "Dinner", "Takeaway"]
+      "hasMenuSection": ["ランチ", "スイーツ", "ドリンク", "アルコール", "ディナー", "テイクアウト"]
     }
     </script>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -98,7 +98,7 @@
             box-shadow: 0 0 14px rgba(138, 84, 31, 0.38);
         }
         main {
-            opacity: 0;
+            opacity: 1;
             transition: opacity 0.6s ease;
         }
         main.content-visible {
@@ -125,30 +125,37 @@
                 </div>
             </a>
             <nav class="hidden md:flex space-x-6 text-sm tracking-wide">
-                <a href="#lunch" class="hover:text-amber-200">Lunch</a>
-                <a href="#dolce" class="hover:text-amber-200">Dolce</a>
-                <a href="#drink" class="hover:text-amber-200">Drink</a>
-                <a href="#alcohol" class="hover:text-amber-200">Alcohol</a>
-                <a href="#dinner" class="hover:text-amber-200">Dinner</a>
-                <a href="#takeaway" class="hover:text-amber-200">Takeaway</a>
+                <a href="#lunch" class="hover:text-amber-200">ランチ</a>
+                <a href="#dolce" class="hover:text-amber-200">スイーツ</a>
+                <a href="#drink" class="hover:text-amber-200">ドリンク</a>
+                <a href="#alcohol" class="hover:text-amber-200">お酒</a>
+                <a href="#dinner" class="hover:text-amber-200">ディナー</a>
+                <a href="#takeaway" class="hover:text-amber-200">テイクアウト</a>
             </nav>
         </div>
     </header>
 
     <main class="max-w-6xl mx-auto px-6 py-10 space-y-10">
+        <section class="section-card bg-white/90">
+            <p class="text-sm text-amber-700 font-semibold tracking-wide">enka メニュー</p>
+            <h1 class="text-3xl md:text-4xl font-bold mt-2">ランチから夜のバル、テイクアウトまで</h1>
+            <p class="text-gray-600 mt-4 leading-relaxed">時間帯ごとに選びやすいよう、日本語中心の見出しに整理しています。ドリンク・スイーツ・アルコールは昼夜共通です。</p>
+            <p class="text-xs text-gray-500 mt-3">※表示価格は税込です。仕入れ状況により内容が変わる場合があります。</p>
+        </section>
+
         <!-- Lunch -->
         <section id="lunch" class="section-card space-y-6">
             <div class="flex items-center space-x-3">
                 <i class="fa-solid fa-sun text-amber-700"></i>
                 <div>
-                    <p class="text-sm text-amber-700 font-semibold">11:00〜16:00 (L.O. 15:30)</p>
-                    <h2 class="text-2xl md:text-3xl font-bold">Lunch Menu</h2>
+                    <p class="text-sm text-amber-700 font-semibold">11:00〜16:00（ラストオーダー 15:30）</p>
+                    <h2 class="text-2xl md:text-3xl font-bold">ランチメニュー</h2>
                 </div>
             </div>
 
             <div class="grid md:grid-cols-2 gap-6">
                 <div class="section-card border border-amber-100">
-                    <h3 class="text-xl font-semibold mb-3">PANINI</h3>
+                    <h3 class="text-xl font-semibold mb-3">パニーニ</h3>
                     <div class="space-y-2">
                         <div class="grid-item"><span>燻製 鴨肉のロースト</span><span class="price">¥1080（ハーフサイズ ¥600）</span></div>
                         <div class="grid-item"><span>自家製燻製チーズとベーコン</span><span class="price">¥1120（ハーフサイズ ¥650）</span></div>
@@ -160,7 +167,7 @@
                 </div>
 
                 <div class="section-card border border-amber-100">
-                    <h3 class="text-xl font-semibold mb-3">GNOCCHI</h3>
+                    <h3 class="text-xl font-semibold mb-3">ニョッキ</h3>
                     <div class="space-y-2">
                         <div class="grid-item"><span>セミドライトマトのニョッキ</span><span class="price">¥1080</span></div>
                         <div class="grid-item"><span>チーズソースのニョッキ</span><span class="price">¥1180</span></div>
@@ -176,14 +183,14 @@
 
             <div class="grid md:grid-cols-3 gap-6">
                 <div class="section-card border border-amber-100">
-                    <h3 class="text-lg font-semibold mb-3">SALAD</h3>
+                    <h3 class="text-lg font-semibold mb-3">サラダ</h3>
                     <div class="space-y-2">
                         <div class="grid-item"><span>燻製ベーコンのシーザーサラダ（約2人前）</span><span class="price">¥1000</span></div>
                         <div class="grid-item"><span>気まぐれサラダ（約2人前）</span><span class="price">¥800</span></div>
                     </div>
                 </div>
                 <div class="section-card border border-amber-100">
-                    <h3 class="text-lg font-semibold mb-3">SIDE</h3>
+                    <h3 class="text-lg font-semibold mb-3">サイドメニュー</h3>
                     <div class="space-y-2">
                         <div class="grid-item"><span>燻製ポテトチップス</span><span class="price">¥470</span></div>
                         <div class="grid-item"><span>大人の駄菓子 ～瞬間燻製～</span><span class="price">¥470</span></div>
@@ -196,7 +203,7 @@
                     <h3 class="text-lg font-semibold mb-3">セットドリンク</h3>
                     <ul class="space-y-1 text-sm">
                         <li>コカ・コーラ / ジンジャーエール / メロンソーダ / リンゴジュース</li>
-                        <li>ウーロン茶 / 紅茶（Hot・Ice） / コーヒー（Hot・Ice）</li>
+                        <li>ウーロン茶 / 紅茶（ホット・アイス） / コーヒー（ホット・アイス）</li>
                     </ul>
                 </div>
             </div>
@@ -208,7 +215,7 @@
                 <i class="fa-solid fa-ice-cream text-pink-600"></i>
                 <div>
                     <p class="text-sm text-pink-600 font-semibold">昼夜共通</p>
-                    <h2 class="text-2xl md:text-3xl font-bold">Dolce Menu</h2>
+                    <h2 class="text-2xl md:text-3xl font-bold">スイーツメニュー</h2>
                 </div>
             </div>
 
@@ -239,13 +246,13 @@
                     </div>
                     <div class="mt-4">
                         <h4 class="text-sm font-semibold mb-1">セットドリンク</h4>
-                        <p class="text-sm">コーラ / ジンジャーエール / メロンソーダ / リンゴジュース / ウーロン茶 / 紅茶（Hot・Ice） / コーヒー（Hot・Ice）</p>
+                        <p class="text-sm">コーラ / ジンジャーエール / メロンソーダ / リンゴジュース / ウーロン茶 / 紅茶（ホット・アイス） / コーヒー（ホット・アイス）</p>
                     </div>
                 </div>
             </div>
 
             <div class="section-card border border-pink-100">
-                <h3 class="text-lg font-semibold mb-3">ICE CREAM FLOAT</h3>
+                <h3 class="text-lg font-semibold mb-3">フロート</h3>
                 <div class="grid md:grid-cols-2 gap-3 text-base">
                     <div class="grid-item"><span>クリームソーダ</span><span class="price">¥750</span></div>
                     <div class="grid-item"><span>コーラフロート</span><span class="price">¥750</span></div>
@@ -261,13 +268,13 @@
                 <i class="fa-solid fa-mug-saucer text-amber-700"></i>
                 <div>
                     <p class="text-sm text-amber-700 font-semibold">昼夜共通</p>
-                    <h2 class="text-2xl md:text-3xl font-bold">Drink Menu</h2>
+                    <h2 class="text-2xl md:text-3xl font-bold">ドリンクメニュー</h2>
                 </div>
             </div>
 
             <div class="grid md:grid-cols-2 gap-6">
                 <div class="section-card border border-amber-100">
-                    <h3 class="text-lg font-semibold mb-3">HOT COFFEE</h3>
+                    <h3 class="text-lg font-semibold mb-3">ホットコーヒー</h3>
                     <div class="space-y-2">
                         <div class="grid-item"><span>ホットコーヒー</span><span class="price">¥550</span></div>
                         <div class="grid-item"><span>アメリカーノ</span><span class="price">¥550</span></div>
@@ -279,7 +286,7 @@
                 </div>
 
                 <div class="section-card border border-amber-100">
-                    <h3 class="text-lg font-semibold mb-3">TEA・COCOA</h3>
+                    <h3 class="text-lg font-semibold mb-3">紅茶・ココア</h3>
                     <div class="space-y-2">
                         <div class="grid-item"><span>紅茶</span><span class="price">¥650</span></div>
                         <div class="grid-item"><span>ローズヒップティー</span><span class="price">¥700</span></div>
@@ -290,7 +297,7 @@
             </div>
 
             <div class="section-card border border-amber-100">
-                <h3 class="text-lg font-semibold mb-3">HAND DRIP COFFEE</h3>
+                <h3 class="text-lg font-semibold mb-3">ハンドドリップコーヒー</h3>
                 <div class="grid md:grid-cols-2 gap-6 text-base">
                     <div class="space-y-3">
                         <div>
@@ -313,7 +320,7 @@
             </div>
 
             <div class="section-card border border-amber-100">
-                <h3 class="text-lg font-semibold mb-3">COLD</h3>
+                <h3 class="text-lg font-semibold mb-3">冷たいドリンク</h3>
                 <div class="grid md:grid-cols-2 gap-4 text-base">
                     <div class="space-y-2">
                         <div class="grid-item"><span>ハンドドリップ アイスコーヒー</span><span class="price">¥730</span></div>
@@ -344,7 +351,7 @@
                 <i class="fa-solid fa-wine-glass text-purple-600"></i>
                 <div>
                     <p class="text-sm text-purple-600 font-semibold">昼夜共通</p>
-                    <h2 class="text-2xl md:text-3xl font-bold">Alcohol Menu</h2>
+                    <h2 class="text-2xl md:text-3xl font-bold">アルコールメニュー</h2>
                 </div>
             </div>
 
@@ -421,14 +428,14 @@
             <div class="flex items-center space-x-3">
                 <i class="fa-solid fa-utensils text-emerald-700"></i>
                 <div>
-                    <p class="text-sm text-emerald-700 font-semibold">18:00〜23:00 (L.O. Food 22:00, Drink 22:30)</p>
-                    <h2 class="text-2xl md:text-3xl font-bold">Dinner Menu</h2>
+                    <p class="text-sm text-emerald-700 font-semibold">18:00〜23:00（料理ラストオーダー 22:00、ドリンクラストオーダー 22:30）</p>
+                    <h2 class="text-2xl md:text-3xl font-bold">ディナーメニュー</h2>
                 </div>
             </div>
 
             <div class="grid md:grid-cols-2 gap-6">
                 <div class="section-card border border-emerald-100">
-                    <h3 class="text-lg font-semibold mb-3">MAIN</h3>
+                    <h3 class="text-lg font-semibold mb-3">メイン料理</h3>
                     <div class="space-y-2">
                         <div class="grid-item"><span>牛肉100％ 店内仕込みバルダンゴ（チーズクリームソース）</span><span class="price">¥1540</span></div>
                         <div class="grid-item"><span>鴨肉のコンフィ</span><span class="price">¥1730</span></div>
@@ -436,7 +443,7 @@
                     </div>
                 </div>
                 <div class="section-card border border-emerald-100">
-                    <h3 class="text-lg font-semibold mb-3">SMOKE</h3>
+                    <h3 class="text-lg font-semibold mb-3">燻製料理</h3>
                     <div class="space-y-2">
                         <div class="grid-item"><span>日替わり 燻製盛り合わせ</span><span class="price">¥1530</span></div>
                         <div class="grid-item"><span>燻製盛り合わせ ハーフサイズ</span><span class="price">¥890</span></div>
@@ -453,21 +460,21 @@
 
             <div class="grid md:grid-cols-2 gap-6">
                 <div class="section-card border border-emerald-100">
-                    <h3 class="text-lg font-semibold mb-3">GNOCCHI</h3>
+                    <h3 class="text-lg font-semibold mb-3">ニョッキ</h3>
                     <div class="space-y-2">
                         <div class="grid-item"><span>セミドライトマトのニョッキ</span><span class="price">¥1260</span></div>
                         <div class="grid-item"><span>チーズソースのニョッキ</span><span class="price">¥1320</span></div>
                     </div>
                 </div>
                 <div class="section-card border border-emerald-100">
-                    <h3 class="text-lg font-semibold mb-3">AJILLO</h3>
+                    <h3 class="text-lg font-semibold mb-3">アヒージョ</h3>
                     <div class="space-y-2">
                         <div class="grid-item"><span>ベーコンのアヒージョ</span><span class="price">¥650</span></div>
                         <div class="grid-item"><span>砂肝のアヒージョ</span><span class="price">¥650</span></div>
                         <div class="grid-item"><span>あさりアヒージョ</span><span class="price">¥600</span></div>
                     </div>
                     <div class="mt-4 space-y-2">
-                        <h4 class="text-sm font-semibold">TOPPING</h4>
+                        <h4 class="text-sm font-semibold">追加具材</h4>
                         <div class="grid md:grid-cols-2 gap-2 text-sm">
                             <div class="grid-item"><span>燻製チーズ</span><span class="price">¥250</span></div>
                             <div class="grid-item"><span>エビ</span><span class="price">¥250</span></div>
@@ -476,21 +483,21 @@
                             <div class="grid-item"><span>ブロッコリー</span><span class="price">¥200</span></div>
                         </div>
                     </div>
-                    <p class="text-xs text-gray-500 mt-2">MAIN 1種類、TOPPING 2〜3種類をお選びください。アヒージョにバケットはついておりません。</p>
+                    <p class="text-xs text-gray-500 mt-2">メインを1種類、追加具材を2〜3種類お選びください。アヒージョにバケットはついておりません。</p>
                     <p class="text-xs text-gray-500 mt-1">例: あさり+キノコ+ブロッコリー ¥1000〜 / ベーコン+ジャガイモ+ブロッコリー ¥1050〜 / 砂肝+エビ+ブロッコリー ¥1100〜</p>
                 </div>
             </div>
 
             <div class="grid md:grid-cols-2 gap-6">
                 <div class="section-card border border-emerald-100">
-                    <h3 class="text-lg font-semibold mb-3">SALAD</h3>
+                    <h3 class="text-lg font-semibold mb-3">サラダ</h3>
                     <div class="space-y-2">
                         <div class="grid-item"><span>燻製ベーコンのシーザーサラダ（2〜3人前）</span><span class="price">¥1170</span></div>
                         <div class="grid-item"><span>気まぐれサラダ（2〜3人前）</span><span class="price">¥890</span></div>
                     </div>
                 </div>
                 <div class="section-card border border-emerald-100">
-                    <h3 class="text-lg font-semibold mb-3">SIDE</h3>
+                    <h3 class="text-lg font-semibold mb-3">サイドメニュー</h3>
                     <div class="space-y-2">
                         <div class="grid-item"><span>枝豆のペペロン炒め</span><span class="price">¥720</span></div>
                         <div class="grid-item"><span>枝豆のペペロン炒め 辛口</span><span class="price">¥720</span></div>
@@ -509,13 +516,13 @@
                 <i class="fa-solid fa-bag-shopping text-orange-700"></i>
                 <div>
                     <p class="text-sm text-orange-700 font-semibold">11:00〜15:30</p>
-                    <h2 class="text-2xl md:text-3xl font-bold">Takeaway Menu</h2>
+                    <h2 class="text-2xl md:text-3xl font-bold">テイクアウトメニュー</h2>
                 </div>
             </div>
 
             <div class="grid md:grid-cols-2 gap-6">
                 <div class="section-card border border-orange-100">
-                    <h3 class="text-lg font-semibold mb-3">PANINI</h3>
+                    <h3 class="text-lg font-semibold mb-3">パニーニ</h3>
                     <div class="space-y-2">
                         <div class="grid-item"><span>燻製 鴨肉のロースト</span><span class="price">¥1100（ハーフサイズ ¥620）</span></div>
                         <div class="grid-item"><span>自家製燻製チーズとベーコン</span><span class="price">¥1140（ハーフサイズ ¥670）</span></div>
@@ -525,13 +532,13 @@
                     </div>
                     <div class="mt-4 space-y-1 text-sm text-gray-700">
                         <div class="grid-item"><span>セットドリンク</span><span class="price">+¥400</span></div>
-                        <p>コカ・コーラ / ジンジャーエール / ウーロン茶 / コーヒー（Hot・Ice） / メロンソーダ / リンゴジュース / 紅茶（Hot・Ice +¥50）</p>
+                        <p>コカ・コーラ / ジンジャーエール / ウーロン茶 / コーヒー（ホット・アイス） / メロンソーダ / リンゴジュース / 紅茶（ホット・アイス +¥50）</p>
                     </div>
                     <p class="text-xs text-gray-500 mt-2">テイクアウトはご注文をいただいてからお作りするため、少々お時間をいただく場合がございます。</p>
                 </div>
 
                 <div class="section-card border border-orange-100">
-                    <h3 class="text-lg font-semibold mb-3">Drink</h3>
+                    <h3 class="text-lg font-semibold mb-3">ドリンク</h3>
                     <div class="space-y-2">
                         <div class="grid-item"><span>ホットコーヒー</span><span class="price">¥580</span></div>
                         <div class="grid-item"><span>アイスコーヒー</span><span class="price">¥580</span></div>
@@ -557,7 +564,7 @@
         </div>
     </footer>
     <script>
-        window.addEventListener('load', () => {
+        function showMenuContent() {
             const loader = document.getElementById('loader');
             const loaderBar = document.getElementById('loader-bar');
             const main = document.querySelector('main');
@@ -573,10 +580,26 @@
                 if (loaderBar) {
                     loaderBar.style.transform = 'scaleX(1)';
                 }
-                loader.classList.add('fade-out');
-                main.classList.add('content-visible');
+                if (loader) {
+                    loader.classList.add('fade-out');
+                    loader.style.opacity = '0';
+                    loader.style.visibility = 'hidden';
+                    setTimeout(() => {
+                        loader.style.display = 'none';
+                    }, 650);
+                }
+                main?.classList.add('content-visible');
             }, 650);
-        });
+        }
+
+        window.addEventListener('load', showMenuContent);
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => {
+                setTimeout(showMenuContent, 1200);
+            });
+        } else {
+            setTimeout(showMenuContent, 1200);
+        }
     </script>
 </body>
 </html>
