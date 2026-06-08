@@ -20,6 +20,9 @@
     <meta name="twitter:title" content="enka - カフェ・バル | 向ヶ丘の燻製カフェ＆バル">
     <meta name="twitter:description" content="向ヶ丘遊園駅徒歩3分、登戸駅徒歩6分。燻製料理とハンドドリップコーヒーのカフェ＆バル。">
     <link rel="preload" as="image" href="./images/hero.jpg">
+    <script>
+        document.documentElement.classList.add('js-animations-pending');
+    </script>
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -79,6 +82,7 @@
             opacity: 1;
             transform: none;
         }
+        .js-animations-pending .gsap-fade-up:not([data-animate="static"]),
         .js-gsap-ready .gsap-fade-up:not([data-animate="static"]) {
             opacity: 0;
             transform: translateY(40px);
@@ -90,6 +94,7 @@
         .gsap-fade-in {
             opacity: 1;
         }
+        .js-animations-pending .gsap-fade-in,
         .js-gsap-ready .gsap-fade-in {
             opacity: 0;
         }
@@ -157,9 +162,11 @@
             transform: translateY(-2px);
         }
         .quick-strip {
-            margin-top: -3.5rem;
             position: relative;
             z-index: 3;
+            padding-top: 2rem;
+            padding-bottom: 1.25rem;
+            background: linear-gradient(180deg, rgba(249, 245, 237, 0.96), rgba(249, 245, 237, 0));
         }
 
         /* --- ヒーローセクションの背景画像（スライドショー） --- */
@@ -432,7 +439,7 @@
 
     <main>
         <!-- ヒーローセクション -->
-        <section class="min-h-[92svh] flex items-center text-white relative overflow-hidden pt-24 pb-16">
+        <section class="min-h-[100svh] flex items-center text-white relative overflow-hidden pt-24 pb-24">
             <div class="hero-slider hero-bg">
                 <div class="hero-bg-slide is-active" style="background-image: url('./images/hero.jpg');"></div>
                 <div class="hero-bg-slide" data-bg="./images/大量の写真/店舗写真/LINE_ALBUM_2025.7.7_250707_1.jpg"></div>
@@ -815,8 +822,16 @@
 
     <script>
         let pageRevealed = false;
-        function revealAnimatedContent() {
-            document.querySelectorAll('.gsap-fade-up, .gsap-fade-in').forEach(el => {
+        function revealAnimatedContent(forceReveal = false) {
+            const selector = forceReveal
+                ? '.gsap-fade-up, .gsap-fade-in'
+                : '.gsap-fade-up[data-animate="static"], .gsap-fade-in[data-animate="static"]';
+
+            if (forceReveal) {
+                document.documentElement.classList.remove('js-animations-pending', 'js-gsap-ready');
+            }
+
+            document.querySelectorAll(selector).forEach(el => {
                 el.style.opacity = '1';
                 el.style.transform = 'none';
             });
@@ -841,7 +856,7 @@
                 el.style.opacity = '1';
                 el.style.transform = 'none';
             });
-            revealAnimatedContent();
+            revealAnimatedContent(true);
         }
 
         setTimeout(revealPageFallback, 3500);
