@@ -63,8 +63,9 @@
         html,
         body {
             font-family: 'EnkaLocalFont', 'YourLocalFontName', sans-serif !important;
-            background-color: #F8F8F4; /* やや温かみのある白 */
-            color: #1a1a1a;
+            background:
+                linear-gradient(180deg, #f9f5ed 0%, #f6f1e8 42%, #fffaf2 100%);
+            color: #201915;
         }
         button,
         input,
@@ -96,6 +97,70 @@
         .gsap-char {
             display: inline-block;
         }
+        :root {
+            --enka-ink: #201915;
+            --enka-muted: #6c5d50;
+            --enka-paper: #fffaf2;
+            --enka-card: rgba(255, 252, 246, 0.88);
+            --enka-brown: #4d2f1c;
+            --enka-amber: #c9842f;
+            --enka-line: rgba(77, 47, 28, 0.14);
+        }
+        .section-kicker {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            color: var(--enka-amber);
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 0.16em;
+        }
+        .section-title {
+            color: var(--enka-ink);
+            letter-spacing: 0.02em;
+            line-height: 1.25;
+        }
+        .section-copy {
+            color: var(--enka-muted);
+            line-height: 1.9;
+        }
+        .surface-card {
+            background: var(--enka-card);
+            border: 1px solid var(--enka-line);
+            border-radius: 8px;
+            box-shadow: 0 22px 55px rgba(53, 35, 20, 0.09);
+        }
+        .btn-primary,
+        .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.55rem;
+            border-radius: 999px;
+            min-height: 3rem;
+            padding: 0.8rem 1.45rem;
+            font-weight: 700;
+            transition: transform 0.22s ease, box-shadow 0.22s ease, background 0.22s ease;
+        }
+        .btn-primary {
+            background: #fff;
+            color: var(--enka-ink);
+            box-shadow: 0 14px 36px rgba(0,0,0,0.2);
+        }
+        .btn-secondary {
+            border: 1px solid rgba(255,255,255,0.74);
+            color: #fff;
+            background: rgba(0,0,0,0.26);
+        }
+        .btn-primary:hover,
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+        }
+        .quick-strip {
+            margin-top: -3.5rem;
+            position: relative;
+            z-index: 3;
+        }
 
         /* --- ヒーローセクションの背景画像（スライドショー） --- */
         .hero-slider {
@@ -118,8 +183,8 @@
             position: absolute;
             inset: 0;
             background:
-                linear-gradient(90deg, rgba(8, 8, 8, 0.84), rgba(31, 24, 18, 0.58) 45%, rgba(31, 24, 18, 0.24)),
-                linear-gradient(180deg, rgba(8, 8, 8, 0.34), rgba(8, 8, 8, 0.62));
+                linear-gradient(90deg, rgba(10, 8, 6, 0.9), rgba(41, 29, 19, 0.64) 48%, rgba(41, 29, 19, 0.28)),
+                linear-gradient(180deg, rgba(10, 8, 6, 0.22), rgba(10, 8, 6, 0.72));
             pointer-events: none;
             z-index: 0;
         }
@@ -165,9 +230,9 @@
             color: #fff;
         }
         .header-scrolled {
-            background-color: rgba(248, 248, 244, 0.9);
+            background-color: rgba(255, 250, 242, 0.92);
             backdrop-filter: blur(10px);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            box-shadow: 0 12px 34px rgba(53, 35, 20, 0.08);
             color: #1f1a17;
         }
         .header-scrolled .header-link,
@@ -220,6 +285,8 @@
 
         /* Featured Menu カードのスタイル */
         .menu-card {
+            border: 1px solid var(--enka-line);
+            border-radius: 8px;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
         .menu-card:hover {
@@ -334,12 +401,12 @@
                 <span>enka</span>
             </a>
             <nav class="hidden md:flex space-x-8 items-center">
-                <a href="#" class="header-link hover:text-gray-500 transition-colors">Home</a>
-                <a href="#about" class="header-link hover:text-gray-500 transition-colors">About</a>
-                <a href="#concept" class="header-link hover:text-gray-500 transition-colors">Concept</a>
-                <a href="menu.html" class="header-link hover:text-gray-500 transition-colors">Menu</a>
-                <a href="#access" class="header-link hover:text-gray-500 transition-colors">Access</a>
-                <a href="https://www.hotpepper.jp/strJ004421212/yoyaku/?vos=othpporgzzzzx00000001" target="_blank" rel="noopener noreferrer" class="bg-amber-500 text-stone-900 px-5 py-2 rounded-full font-semibold hover:bg-amber-400 transition-colors">Reserve</a>
+                <a href="#" class="header-link hover:text-amber-600 transition-colors">トップ</a>
+                <a href="#about" class="header-link hover:text-amber-600 transition-colors">お店について</a>
+                <a href="#concept" class="header-link hover:text-amber-600 transition-colors">こだわり</a>
+                <a href="menu.html" class="header-link hover:text-amber-600 transition-colors">メニュー</a>
+                <a href="#access" class="header-link hover:text-amber-600 transition-colors">アクセス</a>
+                <a href="https://www.hotpepper.jp/strJ004421212/yoyaku/?vos=othpporgzzzzx00000001" target="_blank" rel="noopener noreferrer" class="bg-amber-500 text-stone-900 px-5 py-2 rounded-full font-semibold hover:bg-amber-400 transition-colors">予約する</a>
             </nav>
             <button id="mobile-menu-button" class="md:hidden text-2xl z-50">
                 <i class="fas fa-bars"></i>
@@ -349,12 +416,12 @@
 
     <!-- モバイルメニュー -->
     <div id="mobile-menu" class="md:hidden bg-white/90 backdrop-blur-md fixed top-0 left-0 right-0 shadow-lg pt-[64px] z-40">
-        <a href="#" class="block text-center py-3 hover:bg-gray-100">Home</a>
-        <a href="#about" class="block text-center py-3 hover:bg-gray-100">About</a>
-        <a href="#concept" class="block text-center py-3 hover:bg-gray-100">Concept</a>
-        <a href="menu.html" class="block text-center py-3 hover:bg-gray-100">Menu</a>
-        <a href="#access" class="block text-center py-3 hover:bg-gray-100">Access</a>
-        <a href="https://www.hotpepper.jp/strJ004421212/yoyaku/?vos=othpporgzzzzx00000001" target="_blank" rel="noopener noreferrer" class="block text-center py-3 hover:bg-gray-100">Reserve (Hot Pepper)</a>
+        <a href="#" class="block text-center py-3 hover:bg-gray-100">トップ</a>
+        <a href="#about" class="block text-center py-3 hover:bg-gray-100">お店について</a>
+        <a href="#concept" class="block text-center py-3 hover:bg-gray-100">こだわり</a>
+        <a href="menu.html" class="block text-center py-3 hover:bg-gray-100">メニュー</a>
+        <a href="#access" class="block text-center py-3 hover:bg-gray-100">アクセス</a>
+        <a href="https://www.hotpepper.jp/strJ004421212/yoyaku/?vos=othpporgzzzzx00000001" target="_blank" rel="noopener noreferrer" class="block text-center py-3 hover:bg-gray-100">予約する</a>
     </div>
 
     <main>
@@ -372,7 +439,7 @@
                 <div class="max-w-3xl">
                     <p id="hero-brand" class="mb-4 text-2xl md:text-3xl font-semibold tracking-[0.32em] uppercase text-white/95">Enka</p>
                     <h1 id="hero-title" class="text-5xl md:text-7xl font-bold tracking-wider leading-tight">A moment of peace.</h1>
-                    <p id="hero-subtitle" class="mt-5 max-w-2xl text-base sm:text-lg md:text-2xl text-white/90 leading-relaxed">向ヶ丘遊園駅から徒歩3分、登戸駅から徒歩6分。燻製とコーヒーのお店</p>
+                    <p id="hero-subtitle" class="mt-5 max-w-3xl text-base sm:text-lg md:text-2xl text-white/90 leading-relaxed">向ヶ丘遊園駅から徒歩3分、登戸駅から徒歩6分。燻製とコーヒーのお店</p>
                     <div class="mt-6 flex flex-wrap gap-3 text-sm md:text-base text-white/90">
                         <span class="hero-fact"><i class="fas fa-train mr-2 text-amber-300"></i>向ヶ丘遊園 北口 徒歩3分</span>
                         <span class="hero-fact"><i class="fas fa-train mr-2 text-amber-300"></i>登戸駅 徒歩6分</span>
@@ -389,11 +456,11 @@
                     </div>
                 </div>
                 <div id="hero-primary-actions" class="mt-8 flex flex-col sm:flex-row items-start gap-4">
-                    <a href="menu.html" class="inline-flex items-center justify-center gap-2 bg-white text-stone-900 font-bold px-9 py-3 rounded-full shadow-xl hover:bg-amber-100 transition-all duration-300 transform hover:-translate-y-1">
+                    <a href="menu.html" class="btn-primary">
                         <i class="fas fa-book-open"></i>
                         メニューを見る
                     </a>
-                    <a href="#access" class="inline-flex items-center justify-center gap-2 bg-stone-900/70 border border-white/70 text-white font-semibold px-9 py-3 rounded-full shadow-lg hover:bg-stone-900 transition-all duration-300 transform hover:-translate-y-1">
+                    <a href="#access" class="btn-secondary">
                         <i class="fas fa-location-dot"></i>
                         アクセス
                     </a>
@@ -419,6 +486,23 @@
             </div>
         </section>
 
+        <section class="quick-strip px-6">
+            <div class="container mx-auto grid md:grid-cols-3 gap-4">
+                <a href="menu.html" class="surface-card p-5 flex items-center gap-4 hover:-translate-y-1 transition-transform">
+                    <span class="w-11 h-11 rounded-full bg-amber-100 text-amber-800 flex items-center justify-center"><i class="fas fa-utensils"></i></span>
+                    <span><span class="block font-bold">メニューを見る</span><span class="block text-sm text-stone-500 mt-1">ランチ、ドリンク、夜のバルまで</span></span>
+                </a>
+                <a href="https://www.hotpepper.jp/strJ004421212/yoyaku/?vos=othpporgzzzzx00000001" target="_blank" rel="noopener noreferrer" class="surface-card p-5 flex items-center gap-4 hover:-translate-y-1 transition-transform">
+                    <span class="w-11 h-11 rounded-full bg-amber-100 text-amber-800 flex items-center justify-center"><i class="fas fa-calendar-check"></i></span>
+                    <span><span class="block font-bold">席を予約する</span><span class="block text-sm text-stone-500 mt-1">少人数利用もお気軽に</span></span>
+                </a>
+                <a href="#access" class="surface-card p-5 flex items-center gap-4 hover:-translate-y-1 transition-transform">
+                    <span class="w-11 h-11 rounded-full bg-amber-100 text-amber-800 flex items-center justify-center"><i class="fas fa-train"></i></span>
+                    <span><span class="block font-bold">駅からの行き方</span><span class="block text-sm text-stone-500 mt-1">向ヶ丘遊園3分、登戸6分</span></span>
+                </a>
+            </div>
+        </section>
+
         <!-- Aboutセクション -->
         <section id="about" class="py-20 md:py-32 overflow-hidden">
             <div class="container mx-auto px-6">
@@ -433,13 +517,14 @@
 
                     <!-- 説明文パネル: スマホでは通常のブロック、md以上でabsolute配置 -->
                     <div class="w-full md:absolute md:bottom-0 md:right-0 md:w-7/12 lg:w-1/2 gsap-fade-up md:mb-[-4rem]" data-gsap-delay="0.2">
-                        <div class="bg-white/80 backdrop-blur-md p-8 md:p-10 rounded-lg shadow-xl">
-                            <h2 class="text-3xl md:text-4xl font-bold mb-6">About enka</h2>
-                            <p class="text-gray-600 leading-relaxed mb-4">
+                         <div class="surface-card backdrop-blur-md p-8 md:p-10">
+                             <p class="section-kicker mb-3">ABOUT</p>
+                             <h2 class="section-title text-3xl md:text-4xl font-bold mb-6">駅近にある、静かな余白。</h2>
+                             <p class="section-copy mb-4">
                                 「enka」は、都会の喧騒から少し離れた場所に佇む、あなたのための隠れ家です。
                                 厳選された特別なコーヒーと、燻製の素材を活かした手作りパニーニやニョッキなどをお楽しみいただけます。
                             </p>
-                            <p class="text-gray-600 leading-relaxed">
+                             <p class="section-copy">
                                 ミニマルで洗練された空間で、読書をしたり、友人と語らったり、あるいはただ静かに物思いにふけったり。
                                 思い思いの「余白」の時間をお過ごしください。
                             </p>
@@ -450,35 +535,36 @@
         </section>
 
         <!-- Conceptセクション (新規追加) -->
-        <section id="concept" class="py-20 md:py-32 bg-stone-50 overflow-hidden">
+        <section id="concept" class="py-20 md:py-32 bg-[#f3eadf] overflow-hidden">
             <div class="container mx-auto px-6">
                 <div class="text-center mb-16">
-                    <h2 class="text-3xl md:text-4xl font-bold gsap-fade-up">Our Concept</h2>
-                    <p class="text-gray-500 mt-2 gsap-fade-up" data-gsap-delay="0.1">私たちが大切にする3つのこと</p>
+                    <p class="section-kicker justify-center gsap-fade-up">CONCEPT</p>
+                    <h2 class="section-title text-3xl md:text-4xl font-bold gsap-fade-up mt-3">enkaが大切にしていること</h2>
+                    <p class="section-copy mt-3 gsap-fade-up" data-gsap-delay="0.1">コーヒー、燻製、居心地。小さなお店だからこそ、ひとつずつ丁寧に。</p>
                 </div>
                 <div class="grid md:grid-cols-3 gap-12 text-center">
                     <div class="gsap-fade-up" data-gsap-delay="0.2">
-                        <div class="bg-white/70 backdrop-blur-sm p-8 rounded-lg shadow-lg h-full transition-all duration-300 hover:shadow-xl hover:bg-white/80">
+                        <div class="surface-card p-8 h-full transition-all duration-300 hover:shadow-xl">
                             <div class="text-5xl text-amber-700 mb-4"><i class="fas fa-coffee"></i></div>
-                            <h3 class="text-2xl font-bold mb-3">Specialty Coffee</h3>
+                            <h3 class="text-2xl font-bold mb-3">一杯ずつ淹れるコーヒー</h3>
                             <p class="text-gray-600 leading-relaxed">
                                 世界中から厳選した豆を、一杯ずつ丁寧にハンドドリップ。豆の個性が際立つ、格別な味わいをお届けします。
                             </p>
                         </div>
                     </div>
                     <div class="gsap-fade-up" data-gsap-delay="0.3">
-                        <div class="bg-white/70 backdrop-blur-sm p-8 rounded-lg shadow-lg h-full transition-all duration-300 hover:shadow-xl hover:bg-white/80">
+                        <div class="surface-card p-8 h-full transition-all duration-300 hover:shadow-xl">
                             <div class="text-5xl text-orange-900 mb-4"><i class="fas fa-cloud-meatball"></i></div>
-                            <h3 class="text-2xl font-bold mb-3">Smoked Cuisine</h3>
+                            <h3 class="text-2xl font-bold mb-3">香りを楽しむ燻製料理</h3>
                             <p class="text-gray-600 leading-relaxed">
                                 食材の旨味を最大限に引き出す、こだわりの燻製料理。パニーニやニョッキなど、独創的なメニューをご用意しています。
                             </p>
                         </div>
                     </div>
                     <div class="gsap-fade-up" data-gsap-delay="0.4">
-                        <div class="bg-white/70 backdrop-blur-sm p-8 rounded-lg shadow-lg h-full transition-all duration-300 hover:shadow-xl hover:bg-white/80">
+                        <div class="surface-card p-8 h-full transition-all duration-300 hover:shadow-xl">
                             <div class="text-5xl text-stone-500 mb-4"><i class="fas fa-couch"></i></div>
-                            <h3 class="text-2xl font-bold mb-3">Comfortable Space</h3>
+                            <h3 class="text-2xl font-bold mb-3">ふっと落ち着く空間</h3>
                             <p class="text-gray-600 leading-relaxed">
                                 ミニマルで洗練された、居心地の良い空間。おひとりで、または大切な人と、心安らぐ時間をお過ごしください。
                             </p>
@@ -492,15 +578,16 @@
         <section id="featured-menu" class="py-20 md:py-32 overflow-hidden">
             <div class="container mx-auto px-6">
                 <div class="text-center mb-16">
-                    <h2 class="text-3xl md:text-4xl font-bold gsap-fade-up" data-animate="static">Featured Menu</h2>
-                    <p class="text-gray-500 mt-2 gsap-fade-up" data-gsap-delay="0.1" data-animate="static">おすすめのメニュー</p>
+                    <p class="section-kicker justify-center gsap-fade-up" data-animate="static">RECOMMEND</p>
+                    <h2 class="section-title text-3xl md:text-4xl font-bold gsap-fade-up mt-3" data-animate="static">はじめての方にもおすすめ</h2>
+                    <p class="section-copy mt-3 gsap-fade-up" data-gsap-delay="0.1" data-animate="static">お店の個性が伝わりやすい定番メニューです。</p>
                 </div>
                 <div class="grid md:grid-cols-3 gap-8">
                     <!-- Menu Card 1 -->
                     <div class="bg-white rounded-lg shadow-lg overflow-hidden menu-card gsap-fade-up" data-gsap-delay="0.2">
                         <img src="./images/大量の写真/Food・Drink/パニーニ.jpg" alt="パニーニ" class="w-full h-64 object-cover" loading="lazy" decoding="async">
                         <div class="p-6">
-                            <span class="menu-card-badge mb-4"><i class="fas fa-fire"></i> Lunch</span>
+                            <span class="menu-card-badge mb-4"><i class="fas fa-fire"></i> ランチ</span>
                             <h3 class="text-2xl font-bold mb-2">燻製ベーコンとチーズのパニーニ</h3>
                             <p class="text-gray-600 mb-4">
                                 香り高い燻製ベーコンととろけるチーズの組み合わせが絶妙な、当店自慢のパニーニです。
@@ -511,7 +598,7 @@
                     <div class="bg-white rounded-lg shadow-lg overflow-hidden menu-card gsap-fade-up" data-gsap-delay="0.3">
                         <img src="./images/大量の写真/Food・Drink/チーズソースのニョッキ.jpg" alt="チーズソースのニョッキ" class="w-full h-64 object-cover" loading="lazy" decoding="async">
                         <div class="p-6">
-                            <span class="menu-card-badge mb-4"><i class="fas fa-utensils"></i> Food</span>
+                            <span class="menu-card-badge mb-4"><i class="fas fa-utensils"></i> フード</span>
                             <h3 class="text-2xl font-bold mb-2">チーズソースのニョッキ</h3>
                             <p class="text-gray-600 mb-4">
                                 もちもちの自家製ニョッキに、濃厚なチーズソースをたっぷりと絡めました。
@@ -522,7 +609,7 @@
                     <div class="bg-white rounded-lg shadow-lg overflow-hidden menu-card gsap-fade-up" data-gsap-delay="0.4">
                         <img src="./images/大量の写真/Food・Drink/ハンドドリップコーヒー.jpg" alt="ハンドドリップコーヒー" class="w-full h-64 object-cover" loading="lazy" decoding="async">
                         <div class="p-6">
-                            <span class="menu-card-badge mb-4"><i class="fas fa-mug-hot"></i> Coffee</span>
+                            <span class="menu-card-badge mb-4"><i class="fas fa-mug-hot"></i> コーヒー</span>
                             <h3 class="text-2xl font-bold mb-2">ハンドドリップコーヒー</h3>
                             <p class="text-gray-600 mb-4">
                                 厳選されたスペシャルティコーヒー豆の個性を最大限に引き出した、至極の一杯。
@@ -531,7 +618,8 @@
                     </div>
                 </div>
                 <div class="text-center mt-16 gsap-fade-up">
-                    <a href="menu.html" class="bg-stone-800 text-white px-8 py-3 rounded-full text-lg hover:bg-stone-700 transition-all duration-300 transform hover:scale-105">
+                    <a href="menu.html" class="inline-flex items-center justify-center gap-2 bg-stone-900 text-white px-8 py-3 rounded-full text-lg hover:bg-stone-700 transition-all duration-300 transform hover:-translate-y-1">
+                        <i class="fas fa-book-open"></i>
                         すべてのメニューを見る
                     </a>
                 </div>
@@ -539,10 +627,10 @@
         </section>
 
         <!-- Galleryセクション -->
-        <section id="gallery" class="py-16 md:py-24 bg-stone-900 text-white overflow-hidden">
+        <section id="gallery" class="py-16 md:py-24 bg-[#211813] text-white overflow-hidden">
             <div class="container mx-auto px-6 space-y-10">
                 <div class="text-center">
-                    <p class="text-sm uppercase tracking-[0.3em] text-white/60">Gallery</p>
+                    <p class="text-sm uppercase tracking-[0.3em] text-white/60">GALLERY</p>
                     <h2 class="text-3xl md:text-4xl font-bold mt-2">enkaの空気を写真で</h2>
                     <p class="text-white/70 mt-3">店内の雰囲気やドリンクの彩りをそのままお届けします。</p>
                 </div>
@@ -599,30 +687,31 @@
             </div>
             <div class="container mx-auto px-6 relative">
                 <div class="max-w-4xl mx-auto text-center space-y-6">
-                    <p class="text-sm uppercase tracking-[0.3em] text-white/70">Reservation</p>
+                    <p class="text-sm uppercase tracking-[0.3em] text-white/70">RESERVATION</p>
                     <h2 class="text-3xl md:text-4xl font-bold gsap-fade-up">夜のバルタイムも、お昼のカフェも。</h2>
                     <p class="text-lg text-white/80 gsap-fade-up" data-gsap-delay="0.1">
                         少人数の貸切やイベント利用も歓迎です。ご希望の時間を下のボタンからお知らせください。スタッフが丁寧にご案内いたします。
                     </p>
                     <div class="flex flex-col md:flex-row items-center justify-center gap-4 gsap-fade-up" data-gsap-delay="0.2">
                         <a href="https://www.hotpepper.jp/strJ004421212/yoyaku/?vos=othpporgzzzzx00000001" target="_blank" rel="noopener noreferrer" class="bg-white text-stone-900 font-semibold px-8 py-3 rounded-full shadow-lg hover:bg-stone-200 transition-colors">
-                            Hot Pepperで予約する
+                            Webで予約する
                         </a>
                         <a href="tel:0448198004" class="bg-amber-400 text-stone-900 font-semibold px-8 py-3 rounded-full shadow-lg hover:bg-amber-300 transition-colors">
                             044-819-8004 に電話
                         </a>
                     </div>
-                    <p class="text-sm text-white/70" data-animate="static">受付時間: 11:00-16:00 / 18:00-23:00 (定休日: 水曜日・不定休)</p>
+                    <p class="text-sm text-white/70" data-animate="static">受付時間: 11:00-16:00 / 18:00-23:00（定休日: 水曜日・不定休）</p>
                 </div>
             </div>
         </section>
 
         <!-- Accessセクション -->
-        <section id="access" class="py-20 md:py-32 bg-stone-50 overflow-hidden">
+        <section id="access" class="py-20 md:py-32 bg-[#f3eadf] overflow-hidden">
             <div class="container mx-auto px-6">
                 <div class="text-center mb-16">
-                    <h2 class="text-3xl md:text-4xl font-bold">Access</h2>
-                    <p class="text-gray-500 mt-2 gsap-fade-up" data-gsap-delay="0.1" data-animate="static">アクセス</p>
+                    <p class="section-kicker justify-center" data-animate="static">ACCESS</p>
+                    <h2 class="section-title text-3xl md:text-4xl font-bold mt-3">店舗情報・アクセス</h2>
+                    <p class="section-copy mt-3 gsap-fade-up" data-gsap-delay="0.1" data-animate="static">向ヶ丘遊園駅から徒歩3分、登戸駅から徒歩6分。お近くまで来たら地図をご確認ください。</p>
                     <div class="mt-6 flex flex-col md:flex-row items-center justify-center gap-3 text-sm md:text-base text-stone-700 gsap-fade-up" data-animate="static">
                         <span class="inline-flex items-center gap-2"><i class="fas fa-train text-stone-500"></i> 小田急線 向ヶ丘遊園駅 北口 徒歩3分</span>
                         <span class="hidden md:inline text-stone-300">/</span>
@@ -642,12 +731,12 @@
 
                     <!-- 説明文パネル (md以上でabsolute配置し、右下にはみ出す) -->
                     <div class="w-full mt-[-4rem] md:mt-0 md:absolute md:bottom-0 md:right-0 md:w-2/3 lg:w-1/2 md:mb-[-4rem]">
-                        <div class="bg-white/80 backdrop-blur-md p-8 md:p-10 rounded-lg shadow-xl gsap-fade-up" data-gsap-delay="0.3" data-animate="static">
+                        <div class="surface-card backdrop-blur-md p-8 md:p-10 gsap-fade-up" data-gsap-delay="0.3" data-animate="static">
                             <h3 class="text-2xl font-bold mb-6">店舗情報</h3>
                             <div class="space-y-4 text-gray-700">
                                 <p><i class="fas fa-map-marker-alt w-6 text-stone-600"></i> 〒214-0014 神奈川県川崎市多摩区登戸２５１２ 稲田第3ビル 2F</p>
-                                <p><i class="fas fa-clock w-6 text-stone-600"></i> Open(昼): 11:00 - 16:00</p>
-                                <p><i class="fas fa-clock w-6 text-stone-600"></i> Open(夜): 18:00 - 23:00</p>
+                                <p><i class="fas fa-clock w-6 text-stone-600"></i> 昼営業: 11:00 - 16:00</p>
+                                <p><i class="fas fa-clock w-6 text-stone-600"></i> 夜営業: 18:00 - 23:00</p>
                                 <p><i class="fas fa-calendar-times w-6 text-stone-600"></i> 定休日: 水曜日・不定休</p>
                                 <p><i class="fas fa-phone w-6 text-stone-600"></i> Tel: 044-819-8004 </p>
                                 <p><i class="fas fa-train w-6 text-stone-600"></i> 小田急線 向ヶ丘遊園駅 北口より徒歩3分</p>
@@ -672,8 +761,9 @@
         <section id="news" class="py-20 md:py-32 bg-white overflow-hidden">
             <div class="container mx-auto px-6">
                 <div class="text-center mb-16">
-                    <h2 class="text-3xl md:text-4xl font-bold gsap-fade-up" data-animate="static">News</h2>
-                    <p class="text-gray-500 mt-2 gsap-fade-up" data-gsap-delay="0.1" data-animate="static">お知らせ</p>
+                    <p class="section-kicker justify-center gsap-fade-up" data-animate="static">NEWS</p>
+                    <h2 class="section-title text-3xl md:text-4xl font-bold gsap-fade-up mt-3" data-animate="static">お知らせ</h2>
+                    <p class="section-copy mt-3 gsap-fade-up" data-gsap-delay="0.1" data-animate="static">季節限定メニューや営業情報はこちらでご案内します。</p>
                 </div>
 
                 <div class="max-w-4xl mx-auto" id="news-list">

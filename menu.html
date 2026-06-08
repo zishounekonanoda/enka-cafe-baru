@@ -28,30 +28,81 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @font-face {
-            font-family: 'YourLocalFontName';
+            font-family: 'EnkaLocalFont';
             src: url('./fonts/59314.ttf') format('truetype');
             font-weight: normal;
             font-style: normal;
             font-display: swap;
         }
+        :root {
+            --enka-ink: #201915;
+            --enka-muted: #6c5d50;
+            --enka-paper: #fffaf2;
+            --enka-card: rgba(255, 252, 246, 0.92);
+            --enka-brown: #4d2f1c;
+            --enka-amber: #c9842f;
+            --enka-line: rgba(77, 47, 28, 0.14);
+        }
+        html {
+            scroll-behavior: smooth;
+        }
         body {
-            font-family: 'YourLocalFontName', 'Inter', 'Noto Serif JP', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-            background: #f7f4ec;
-            color: #1f1a17;
+            font-family: 'EnkaLocalFont', 'YourLocalFontName', sans-serif;
+            background:
+                radial-gradient(circle at top left, rgba(201, 132, 47, 0.14), transparent 34rem),
+                linear-gradient(180deg, #f9f5ed 0%, #f6f1e8 48%, #fffaf2 100%);
+            color: var(--enka-ink);
         }
         .section-card {
-            background: #ffffff;
-            border-radius: 12px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+            background: var(--enka-card);
+            border: 1px solid var(--enka-line);
+            border-radius: 8px;
+            box-shadow: 0 18px 48px rgba(53, 35, 20, 0.08);
             padding: 1.5rem;
+        }
+        .menu-page-header {
+            background: linear-gradient(135deg, #2a1d16, #5b3519);
+        }
+        .menu-nav a {
+            border: 1px solid rgba(255,255,255,0.18);
+            border-radius: 999px;
+            padding: 0.48rem 0.82rem;
+            background: rgba(255,255,255,0.08);
+            transition: background 0.2s ease, color 0.2s ease;
+        }
+        .menu-nav a:hover {
+            background: #fffaf2;
+            color: #4d2f1c;
+        }
+        .menu-hero {
+            background:
+                linear-gradient(120deg, rgba(32,25,21,0.88), rgba(77,47,28,0.72)),
+                url('./images/mini-hero.jpg') center/cover;
+            color: #fff;
+        }
+        .section-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            color: var(--enka-amber);
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 0.14em;
+        }
+        .menu-section-title {
+            line-height: 1.25;
+            letter-spacing: 0.02em;
         }
         .grid-item {
             display: flex;
             justify-content: space-between;
             gap: 1rem;
+            align-items: baseline;
         }
         .price {
             white-space: nowrap;
+            color: #5b3519;
+            font-weight: 700;
         }
         #loader {
             position: fixed;
@@ -115,8 +166,8 @@
             </div>
         </div>
     </div>
-    <header class="bg-amber-800 text-white shadow-lg">
-        <div class="max-w-6xl mx-auto px-6 py-5 flex items-center justify-between">
+    <header class="menu-page-header text-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between gap-6">
             <a href="index.html" class="flex items-center space-x-3">
                 <img src="./images/load.png" alt="enka logo" class="h-10 w-10">
                 <div>
@@ -124,7 +175,7 @@
                     <p class="text-xl font-semibold">enka</p>
                 </div>
             </a>
-            <nav class="hidden md:flex space-x-6 text-sm tracking-wide">
+            <nav class="menu-nav hidden md:flex gap-2 text-sm tracking-wide">
                 <a href="#lunch" class="hover:text-amber-200">ランチ</a>
                 <a href="#dolce" class="hover:text-amber-200">スイーツ</a>
                 <a href="#drink" class="hover:text-amber-200">ドリンク</a>
@@ -136,11 +187,19 @@
     </header>
 
     <main class="max-w-6xl mx-auto px-6 py-10 space-y-10">
-        <section class="section-card bg-white/90">
-            <p class="text-sm text-amber-700 font-semibold tracking-wide">enka メニュー</p>
-            <h1 class="text-3xl md:text-4xl font-bold mt-2">ランチから夜のバル、テイクアウトまで</h1>
-            <p class="text-gray-600 mt-4 leading-relaxed">ランチはパニーニやニョッキを中心に、夜は燻製料理とお酒もお楽しみいただけます。ドリンク・スイーツ・アルコールは昼夜共通です。</p>
-            <p class="text-xs text-gray-500 mt-3">※表示価格は税込です。仕入れ状況により内容が変わる場合があります。</p>
+        <section class="menu-hero section-card overflow-hidden">
+            <div class="max-w-3xl">
+                <p class="text-sm text-amber-200 font-semibold tracking-[0.18em]">ENKA MENU</p>
+                <h1 class="text-3xl md:text-5xl font-bold mt-3 leading-tight">ランチも、夜のバルも、テイクアウトも</h1>
+                <p class="text-white/82 mt-5 leading-relaxed">ランチはパニーニやニョッキを中心に、夜は燻製料理とお酒もお楽しみいただけます。ドリンク・スイーツ・アルコールは昼夜共通です。</p>
+                <p class="text-xs text-white/65 mt-4">※表示価格は税込です。仕入れ状況により内容が変わる場合があります。</p>
+            </div>
+            <div class="mt-8 flex flex-wrap gap-3 text-sm">
+                <a href="#lunch" class="rounded-full bg-white text-stone-900 px-4 py-2 font-semibold">ランチ</a>
+                <a href="#drink" class="rounded-full bg-white/12 border border-white/25 px-4 py-2">ドリンク</a>
+                <a href="#dinner" class="rounded-full bg-white/12 border border-white/25 px-4 py-2">ディナー</a>
+                <a href="#takeaway" class="rounded-full bg-white/12 border border-white/25 px-4 py-2">テイクアウト</a>
+            </div>
         </section>
 
         <!-- Lunch -->
@@ -148,8 +207,8 @@
             <div class="flex items-center space-x-3">
                 <i class="fa-solid fa-sun text-amber-700"></i>
                 <div>
-                    <p class="text-sm text-amber-700 font-semibold">11:00〜16:00（ラストオーダー 15:30）</p>
-                    <h2 class="text-2xl md:text-3xl font-bold">ランチメニュー</h2>
+                    <p class="section-label">11:00〜16:00（ラストオーダー 15:30）</p>
+                    <h2 class="menu-section-title text-2xl md:text-3xl font-bold">ランチメニュー</h2>
                 </div>
             </div>
 
@@ -214,8 +273,8 @@
             <div class="flex items-center space-x-3">
                 <i class="fa-solid fa-ice-cream text-pink-600"></i>
                 <div>
-                    <p class="text-sm text-pink-600 font-semibold">昼夜共通</p>
-                    <h2 class="text-2xl md:text-3xl font-bold">スイーツメニュー</h2>
+                    <p class="section-label">昼夜共通</p>
+                    <h2 class="menu-section-title text-2xl md:text-3xl font-bold">スイーツメニュー</h2>
                 </div>
             </div>
 
@@ -267,8 +326,8 @@
             <div class="flex items-center space-x-3">
                 <i class="fa-solid fa-mug-saucer text-amber-700"></i>
                 <div>
-                    <p class="text-sm text-amber-700 font-semibold">昼夜共通</p>
-                    <h2 class="text-2xl md:text-3xl font-bold">ドリンクメニュー</h2>
+                    <p class="section-label">昼夜共通</p>
+                    <h2 class="menu-section-title text-2xl md:text-3xl font-bold">ドリンクメニュー</h2>
                 </div>
             </div>
 
@@ -350,8 +409,8 @@
             <div class="flex items-center space-x-3">
                 <i class="fa-solid fa-wine-glass text-purple-600"></i>
                 <div>
-                    <p class="text-sm text-purple-600 font-semibold">昼夜共通</p>
-                    <h2 class="text-2xl md:text-3xl font-bold">アルコールメニュー</h2>
+                    <p class="section-label">昼夜共通</p>
+                    <h2 class="menu-section-title text-2xl md:text-3xl font-bold">アルコールメニュー</h2>
                 </div>
             </div>
 
@@ -428,8 +487,8 @@
             <div class="flex items-center space-x-3">
                 <i class="fa-solid fa-utensils text-emerald-700"></i>
                 <div>
-                    <p class="text-sm text-emerald-700 font-semibold">18:00〜23:00（料理ラストオーダー 22:00、ドリンクラストオーダー 22:30）</p>
-                    <h2 class="text-2xl md:text-3xl font-bold">ディナーメニュー</h2>
+                    <p class="section-label">18:00〜23:00（料理ラストオーダー 22:00、ドリンクラストオーダー 22:30）</p>
+                    <h2 class="menu-section-title text-2xl md:text-3xl font-bold">ディナーメニュー</h2>
                 </div>
             </div>
 
@@ -515,8 +574,8 @@
             <div class="flex items-center space-x-3">
                 <i class="fa-solid fa-bag-shopping text-orange-700"></i>
                 <div>
-                    <p class="text-sm text-orange-700 font-semibold">11:00〜15:30</p>
-                    <h2 class="text-2xl md:text-3xl font-bold">テイクアウトメニュー</h2>
+                    <p class="section-label">11:00〜15:30</p>
+                    <h2 class="menu-section-title text-2xl md:text-3xl font-bold">テイクアウトメニュー</h2>
                 </div>
             </div>
 
