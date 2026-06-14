@@ -164,39 +164,6 @@
                 <div id="menu-editor-list" class="space-y-4"></div>
             </section>
 
-            <section class="bg-white/80 backdrop-blur border border-stone-200 rounded-2xl shadow p-6 space-y-3 text-sm text-stone-700">
-                <h2 class="text-lg font-semibold">Firestore ルール</h2>
-                <pre class="bg-stone-900 text-stone-100 p-4 rounded-lg overflow-x-auto text-xs leading-relaxed"><code>rules_version = '2';
-service cloud.firestore {
-  match /databases/{database}/documents {
-    function signedIn() {
-      return request.auth != null;
-    }
-
-    function isAdmin() {
-      return signedIn()
-        && exists(/databases/$(database)/documents/admins/$(request.auth.uid))
-        && get(/databases/$(database)/documents/admins/$(request.auth.uid)).data.active == true;
-    }
-
-    match /admins/{uid} {
-      allow get: if signedIn() && request.auth.uid == uid;
-      allow list, create, update, delete: if false;
-    }
-
-    match /news/{docId} {
-      allow read: if true;
-      allow create, update, delete: if isAdmin();
-    }
-
-    match /menus/{docId} {
-      allow read: if true;
-      allow create, update, delete: if isAdmin();
-    }
-  }
-}</code></pre>
-                <p>管理者はFirebase Consoleで <code>admins/{uid}</code> を作成し、<code>active: true</code> を入れて登録します。</p>
-            </section>
         </div>
     </div>
 
