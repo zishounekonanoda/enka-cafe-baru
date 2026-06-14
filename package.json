@@ -1,0 +1,36 @@
+{
+  "name": "enka-cafe-baru",
+  "version": "1.0.0",
+  "description": "Cafe and Baru enka website assets.",
+  "private": true,
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "build": "npm run build:css && npm run build:js && npm run copy:vendor && npm run normalize:built",
+    "build:css": "tailwindcss -i ./src/tailwind.css -o ./assets/css/tailwind.css --minify",
+    "build:js": "esbuild ./src/home-news.js --bundle --minify --format=iife --outfile=./assets/js/home-news.bundle.js && esbuild ./src/admin.js --bundle --minify --format=iife --outfile=./assets/js/admin.bundle.js",
+    "copy:vendor": "node ./scripts/copy-vendor-assets.mjs",
+    "normalize:built": "node ./scripts/normalize-built-assets.mjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zishounekonanoda/enka-cafe-baru.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zishounekonanoda/enka-cafe-baru/issues"
+  },
+  "homepage": "https://github.com/zishounekonanoda/enka-cafe-baru#readme",
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "^6.4.0",
+    "firebase": "^12.14.0",
+    "gsap": "^3.12.2"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.1",
+    "tailwindcss": "^3.4.17"
+  }
+}
