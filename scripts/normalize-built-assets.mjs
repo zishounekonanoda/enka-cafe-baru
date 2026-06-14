@@ -3,6 +3,7 @@ import { readFile, writeFile } from "node:fs/promises";
 const files = [
   "assets/js/admin.bundle.js",
   "assets/js/home-news.bundle.js",
+  "assets/js/menu.bundle.js",
   "assets/js/vendor/ScrollTrigger.min.js",
   "assets/js/vendor/gsap.min.js"
 ];

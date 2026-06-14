@@ -1,6 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "firebase/auth";
-import { getFirestore, collection, doc, getDoc, getDocs, addDoc, updateDoc, deleteDoc, query, orderBy, serverTimestamp } from "firebase/firestore";
+import { getFirestore, collection, doc, getDoc, getDocs, setDoc, addDoc, updateDoc, deleteDoc, query, orderBy, serverTimestamp } from "firebase/firestore";
+import { defaultMenuData } from "./menu-data.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCpKJ5PuXPLXubvvXzRimZj9YnQ_1jsikc",
@@ -37,14 +38,42 @@ const els = {
   formStatus: document.getElementById("form-status"),
   cancelBtn: document.getElementById("cancel-btn"),
   reloadBtn: document.getElementById("reload-btn"),
-  saveBtn: document.getElementById("save-btn")
+  saveBtn: document.getElementById("save-btn"),
+  menuReloadBtn: document.getElementById("menu-reload-btn"),
+  menuSeedBtn: document.getElementById("menu-seed-btn"),
+  menuGroupTabs: document.getElementById("menu-group-tabs"),
+  menuGroupForm: document.getElementById("menu-group-form"),
+  menuGroupTitle: document.getElementById("menu-group-title"),
+  menuGroupNavLabel: document.getElementById("menu-group-nav-label"),
+  menuGroupLabel: document.getElementById("menu-group-label"),
+  menuAddGroupBtn: document.getElementById("menu-add-group-btn"),
+  menuDeleteGroupBtn: document.getElementById("menu-delete-group-btn"),
+  menuSectionForm: document.getElementById("menu-section-form"),
+  menuSectionId: document.getElementById("menu-section-id"),
+  menuSectionTitle: document.getElementById("menu-section-title"),
+  menuSectionNotes: document.getElementById("menu-section-notes"),
+  menuClearSectionBtn: document.getElementById("menu-clear-section-btn"),
+  menuItemForm: document.getElementById("menu-item-form"),
+  menuItemIndex: document.getElementById("menu-item-index"),
+  menuItemSection: document.getElementById("menu-item-section"),
+  menuItemName: document.getElementById("menu-item-name"),
+  menuItemPrice: document.getElementById("menu-item-price"),
+  menuItemNote: document.getElementById("menu-item-note"),
+  menuClearItemBtn: document.getElementById("menu-clear-item-btn"),
+  menuStatus: document.getElementById("menu-status"),
+  menuEditorList: document.getElementById("menu-editor-list")
 };
 
 let currentUser = null;
 let isAdmin = false;
+let menuData = structuredClone(defaultMenuData);
+let activeMenuGroupId = menuData.groups[0]?.id || "";
 
 const NEWS_COLLECTION = "news";
 const ADMIN_COLLECTION = "admins";
+const MENU_COLLECTION = "menus";
+const MENU_DOCUMENT = "current";
+const menuThemeCycle = ["amber", "pink", "purple", "emerald", "orange", "stone"];
 const allowedBadgeClasses = new Set([
   "bg-stone-500",
   "bg-stone-700",
@@ -207,6 +236,241 @@ function attachRowHandlers() {
   });
 }
 
+function safeSlug(value, fallback) {
+  const normalized = String(value ?? "")
+    .trim()
+    .toLowerCase()
+    .replace(/[^\p{Letter}\p{Number}]+/gu, "-")
+    .replace(/^-|-$/g, "");
+  return normalized || fallback;
+}
+
+function uniqueId(base, list) {
+  const existing = new Set(list.map(item => item.id));
+  if (!existing.has(base)) return base;
+  let index = 2;
+  while (existing.has(`${base}-${index}`)) index += 1;
+  return `${base}-${index}`;
+}
+
+function activeMenuGroup() {
+  return menuData.groups.find(group => group.id === activeMenuGroupId) || menuData.groups[0];
+}
+
+function sectionById(group, sectionId) {
+  return group?.sections.find(section => section.id === sectionId);
+}
+
+function setMenuStatus(msg, variant = "neutral") {
+  if (!els.menuStatus) return;
+  const colors = {
+    neutral: "text-stone-600",
+    success: "text-green-700",
+    error: "text-red-700"
+  };
+  els.menuStatus.className = `text-sm ${colors[variant] || colors.neutral}`;
+  els.menuStatus.textContent = msg;
+}
+
+function normalizeMenuData(data) {
+  const groups = Array.isArray(data?.groups) ? data.groups : [];
+  return {
+    groups: groups.map((group, groupIndex) => ({
+      id: safeSlug(group.id, `group-${groupIndex + 1}`),
+      navLabel: String(group.navLabel || group.title || `メニュー${groupIndex + 1}`).trim(),
+      title: String(group.title || group.navLabel || `メニュー${groupIndex + 1}`).trim(),
+      label: String(group.label || "").trim(),
+      icon: group.icon || defaultMenuData.groups[groupIndex]?.icon || "fa-solid fa-utensils text-amber-700",
+      theme: group.theme || menuThemeCycle[groupIndex % menuThemeCycle.length],
+      sections: (Array.isArray(group.sections) ? group.sections : []).map((section, sectionIndex) => ({
+        id: safeSlug(section.id, `section-${sectionIndex + 1}`),
+        title: String(section.title || `セクション${sectionIndex + 1}`).trim(),
+        notes: Array.isArray(section.notes) ? section.notes.map(note => String(note).trim()).filter(Boolean) : [],
+        items: (Array.isArray(section.items) ? section.items : []).map(item => ({
+          name: String(item.name || "").trim(),
+          price: String(item.price || "").trim(),
+          note: String(item.note || "").trim()
+        })).filter(item => item.name)
+      }))
+    })).filter(group => group.title && group.sections)
+  };
+}
+
+async function saveMenuData(successMessage = "メニューを保存しました") {
+  if (!isAdmin) {
+    setMenuStatus("権限がありません。", "error");
+    return;
+  }
+  const payload = {
+    ...normalizeMenuData(menuData),
+    updatedAt: serverTimestamp()
+  };
+  await setDoc(doc(db, MENU_COLLECTION, MENU_DOCUMENT), payload);
+  menuData = normalizeMenuData(payload);
+  setMenuStatus(successMessage, "success");
+  renderMenuEditor();
+}
+
+async function loadMenuEditor() {
+  if (!els.menuEditorList) return;
+  els.menuEditorList.innerHTML = '<div class="p-4 text-center text-stone-500">読み込み中...</div>';
+  try {
+    const snap = await getDoc(doc(db, MENU_COLLECTION, MENU_DOCUMENT));
+    menuData = normalizeMenuData(snap.exists() ? snap.data() : defaultMenuData);
+    activeMenuGroupId = menuData.groups[0]?.id || "";
+    renderMenuEditor();
+    setMenuStatus(snap.exists() ? "メニューを読み込みました" : "初期メニューを表示しています。保存すると公開用データとして登録されます。");
+  } catch (err) {
+    console.error("Menu load failed", err);
+    menuData = normalizeMenuData(defaultMenuData);
+    activeMenuGroupId = menuData.groups[0]?.id || "";
+    renderMenuEditor();
+    setMenuStatus("読み込みに失敗したため、初期メニューを表示しています。", "error");
+  }
+}
+
+function fillGroupForm(group) {
+  if (!group) return;
+  els.menuGroupTitle.value = group.title || "";
+  els.menuGroupNavLabel.value = group.navLabel || group.title || "";
+  els.menuGroupLabel.value = group.label || "";
+}
+
+function clearSectionForm() {
+  els.menuSectionId.value = "";
+  els.menuSectionTitle.value = "";
+  els.menuSectionNotes.value = "";
+}
+
+function clearItemForm() {
+  els.menuItemIndex.value = "";
+  els.menuItemName.value = "";
+  els.menuItemPrice.value = "";
+  els.menuItemNote.value = "";
+}
+
+function renderMenuEditor() {
+  if (!els.menuGroupTabs || !els.menuEditorList) return;
+  if (!menuData.groups.length) {
+    menuData = normalizeMenuData(defaultMenuData);
+    activeMenuGroupId = menuData.groups[0]?.id || "";
+  }
+  const group = activeMenuGroup();
+  activeMenuGroupId = group?.id || "";
+  fillGroupForm(group);
+
+  els.menuGroupTabs.innerHTML = menuData.groups.map(tab => {
+    const active = tab.id === activeMenuGroupId;
+    const cls = active
+      ? "bg-stone-900 text-white border-stone-900"
+      : "bg-white text-stone-700 border-stone-200 hover:bg-stone-100";
+    return `<button type="button" data-group-id="${escapeHtml(tab.id)}" class="menu-tab px-4 py-2 rounded-full border text-sm transition ${cls}">${escapeHtml(tab.navLabel || tab.title)}</button>`;
+  }).join("");
+
+  els.menuItemSection.innerHTML = group.sections.map(section => (
+    `<option value="${escapeHtml(section.id)}">${escapeHtml(section.title)}</option>`
+  )).join("");
+
+  els.menuEditorList.innerHTML = group.sections.map(section => {
+    const items = section.items.map((item, index) => `
+      <div class="flex flex-col gap-2 md:flex-row md:items-start md:justify-between rounded-lg bg-white border border-stone-200 p-3">
+        <div>
+          <div class="font-medium">${escapeHtml(item.name)}</div>
+          <div class="text-sm text-stone-600">${escapeHtml(item.price || "")}${item.note ? ` / ${escapeHtml(item.note)}` : ""}</div>
+        </div>
+        <div class="flex gap-2 shrink-0">
+          <button type="button" data-section-id="${escapeHtml(section.id)}" data-item-index="${index}" class="menu-edit-item px-3 py-1 rounded bg-stone-900 text-white text-sm hover:bg-stone-700">編集</button>
+          <button type="button" data-section-id="${escapeHtml(section.id)}" data-item-index="${index}" class="menu-delete-item px-3 py-1 rounded bg-red-100 text-red-700 text-sm hover:bg-red-200">削除</button>
+        </div>
+      </div>
+    `).join("");
+    const notes = section.notes.length
+      ? `<div class="text-xs text-stone-500 space-y-1">${section.notes.map(note => `<p>${escapeHtml(note)}</p>`).join("")}</div>`
+      : "";
+    return `
+      <div class="rounded-2xl border border-stone-200 bg-stone-50/70 p-4 space-y-3">
+        <div class="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+          <div>
+            <h3 class="text-lg font-semibold">${escapeHtml(section.title)}</h3>
+            ${notes}
+          </div>
+          <div class="flex gap-2">
+            <button type="button" data-section-id="${escapeHtml(section.id)}" class="menu-edit-section px-3 py-1 rounded bg-stone-900 text-white text-sm hover:bg-stone-700">編集</button>
+            <button type="button" data-section-id="${escapeHtml(section.id)}" class="menu-delete-section px-3 py-1 rounded bg-red-100 text-red-700 text-sm hover:bg-red-200">削除</button>
+          </div>
+        </div>
+        <div class="space-y-2">${items || '<div class="text-sm text-stone-500">まだメニューがありません。</div>'}</div>
+      </div>
+    `;
+  }).join("");
+
+  attachMenuHandlers();
+}
+
+function attachMenuHandlers() {
+  document.querySelectorAll(".menu-tab").forEach(btn => {
+    btn.addEventListener("click", () => {
+      activeMenuGroupId = btn.dataset.groupId;
+      clearSectionForm();
+      clearItemForm();
+      renderMenuEditor();
+    });
+  });
+
+  document.querySelectorAll(".menu-edit-section").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const group = activeMenuGroup();
+      const section = sectionById(group, btn.dataset.sectionId);
+      if (!section) return;
+      els.menuSectionId.value = section.id;
+      els.menuSectionTitle.value = section.title;
+      els.menuSectionNotes.value = section.notes.join("\n");
+      els.menuSectionTitle.focus();
+    });
+  });
+
+  document.querySelectorAll(".menu-delete-section").forEach(btn => {
+    btn.addEventListener("click", async () => {
+      const group = activeMenuGroup();
+      const section = sectionById(group, btn.dataset.sectionId);
+      if (!section || !confirm(`「${section.title}」を削除しますか？`)) return;
+      group.sections = group.sections.filter(item => item.id !== section.id);
+      clearSectionForm();
+      clearItemForm();
+      await saveMenuData("セクションを削除しました");
+    });
+  });
+
+  document.querySelectorAll(".menu-edit-item").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const group = activeMenuGroup();
+      const section = sectionById(group, btn.dataset.sectionId);
+      const index = Number(btn.dataset.itemIndex);
+      const item = section?.items[index];
+      if (!item) return;
+      els.menuItemSection.value = section.id;
+      els.menuItemIndex.value = String(index);
+      els.menuItemName.value = item.name;
+      els.menuItemPrice.value = item.price || "";
+      els.menuItemNote.value = item.note || "";
+      els.menuItemName.focus();
+    });
+  });
+
+  document.querySelectorAll(".menu-delete-item").forEach(btn => {
+    btn.addEventListener("click", async () => {
+      const group = activeMenuGroup();
+      const section = sectionById(group, btn.dataset.sectionId);
+      const index = Number(btn.dataset.itemIndex);
+      const item = section?.items[index];
+      if (!item || !confirm(`「${item.name}」を削除しますか？`)) return;
+      section.items.splice(index, 1);
+      clearItemForm();
+      await saveMenuData("メニュー項目を削除しました");
+    });
+  });
+}
+
 els.newsForm.addEventListener("submit", async (e) => {
   e.preventDefault();
   if (!isAdmin) {
@@ -247,6 +511,130 @@ els.newsForm.addEventListener("submit", async (e) => {
 els.cancelBtn.addEventListener("click", clearForm);
 els.reloadBtn.addEventListener("click", loadNews);
 
+els.menuReloadBtn.addEventListener("click", loadMenuEditor);
+
+els.menuSeedBtn.addEventListener("click", async () => {
+  if (!confirm("現在の公開メニューを初期メニューで上書きしますか？")) return;
+  menuData = normalizeMenuData(structuredClone(defaultMenuData));
+  activeMenuGroupId = menuData.groups[0]?.id || "";
+  await saveMenuData("初期メニューを保存しました");
+});
+
+els.menuGroupForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const group = activeMenuGroup();
+  if (!group) return;
+  group.title = els.menuGroupTitle.value.trim();
+  group.navLabel = els.menuGroupNavLabel.value.trim() || group.title;
+  group.label = els.menuGroupLabel.value.trim();
+  if (!group.title || !group.navLabel) {
+    setMenuStatus("大分類の表示名とタブ名を入力してください。", "error");
+    return;
+  }
+  await saveMenuData("大分類を更新しました");
+});
+
+els.menuAddGroupBtn.addEventListener("click", async () => {
+  const title = els.menuGroupTitle.value.trim();
+  const navLabel = els.menuGroupNavLabel.value.trim() || title;
+  if (!title) {
+    setMenuStatus("追加する大分類の表示名を入力してください。", "error");
+    return;
+  }
+  const id = uniqueId(safeSlug(navLabel || title, "menu"), menuData.groups);
+  const group = {
+    id,
+    navLabel,
+    title,
+    label: els.menuGroupLabel.value.trim(),
+    icon: "fa-solid fa-utensils text-amber-700",
+    theme: menuThemeCycle[menuData.groups.length % menuThemeCycle.length],
+    sections: []
+  };
+  menuData.groups.push(group);
+  activeMenuGroupId = id;
+  clearSectionForm();
+  clearItemForm();
+  await saveMenuData("大分類を追加しました");
+});
+
+els.menuDeleteGroupBtn.addEventListener("click", async () => {
+  const group = activeMenuGroup();
+  if (!group || menuData.groups.length <= 1) {
+    setMenuStatus("大分類は1つ以上必要です。", "error");
+    return;
+  }
+  if (!confirm(`「${group.title}」を削除しますか？`)) return;
+  menuData.groups = menuData.groups.filter(item => item.id !== group.id);
+  activeMenuGroupId = menuData.groups[0]?.id || "";
+  clearSectionForm();
+  clearItemForm();
+  await saveMenuData("大分類を削除しました");
+});
+
+els.menuSectionForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const group = activeMenuGroup();
+  if (!group) return;
+  const title = els.menuSectionTitle.value.trim();
+  if (!title) {
+    setMenuStatus("セクション名を入力してください。", "error");
+    return;
+  }
+  const notes = els.menuSectionNotes.value
+    .split(/\r?\n/)
+    .map(note => note.trim())
+    .filter(Boolean);
+  const sectionId = els.menuSectionId.value;
+  const current = sectionId ? sectionById(group, sectionId) : null;
+  if (current) {
+    current.title = title;
+    current.notes = notes;
+  } else {
+    group.sections.push({
+      id: uniqueId(safeSlug(title, "section"), group.sections),
+      title,
+      notes,
+      items: []
+    });
+  }
+  clearSectionForm();
+  await saveMenuData(current ? "セクションを更新しました" : "セクションを追加しました");
+});
+
+els.menuClearSectionBtn.addEventListener("click", clearSectionForm);
+
+els.menuItemForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const group = activeMenuGroup();
+  const section = sectionById(group, els.menuItemSection.value);
+  if (!section) {
+    setMenuStatus("追加先セクションを選択してください。", "error");
+    return;
+  }
+  const item = {
+    name: els.menuItemName.value.trim(),
+    price: els.menuItemPrice.value.trim(),
+    note: els.menuItemNote.value.trim()
+  };
+  if (!item.name) {
+    setMenuStatus("メニュー名を入力してください。", "error");
+    return;
+  }
+  const indexText = els.menuItemIndex.value;
+  const index = indexText === "" ? -1 : Number(indexText);
+  if (index >= 0 && section.items[index]) {
+    section.items[index] = item;
+    await saveMenuData("メニュー項目を更新しました");
+  } else {
+    section.items.push(item);
+    await saveMenuData("メニュー項目を追加しました");
+  }
+  clearItemForm();
+});
+
+els.menuClearItemBtn.addEventListener("click", clearItemForm);
+
 els.loginBtn.addEventListener("click", async () => {
   try {
     await signInWithPopup(auth, provider);
@@ -271,6 +659,7 @@ onAuthStateChanged(auth, async (user) => {
   els.adminContent.classList.toggle("hidden", !isAdmin);
   if (user) {
     loadNews();
+    if (isAdmin) loadMenuEditor();
   } else {
     els.newsList.innerHTML = '<div class="p-4 text-center text-stone-500">ログインしてください。</div>';
   }
