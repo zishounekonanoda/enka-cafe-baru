@@ -82,21 +82,32 @@
             </section>
 
             <section class="bg-white/80 backdrop-blur border border-stone-200 rounded-2xl shadow p-6 space-y-3 text-sm text-stone-700">
-                <h2 class="text-lg font-semibold">推奨 Firestore ルール</h2>
+                <h2 class="text-lg font-semibold">Firestore ルール</h2>
                 <pre class="bg-stone-900 text-stone-100 p-4 rounded-lg overflow-x-auto text-xs leading-relaxed"><code>rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /admins/{email} {
-      allow read: if request.auth != null;
-      allow write: if request.auth.token.email == email;
+    function signedIn() {
+      return request.auth != null;
     }
+
+    function isAdmin() {
+      return signedIn()
+        && exists(/databases/$(database)/documents/admins/$(request.auth.uid))
+        && get(/databases/$(database)/documents/admins/$(request.auth.uid)).data.active == true;
+    }
+
+    match /admins/{uid} {
+      allow get: if signedIn() && request.auth.uid == uid;
+      allow list, create, update, delete: if false;
+    }
+
     match /news/{docId} {
       allow read: if true;
-      allow write: if get(/databases/$(database)/documents/admins/$(request.auth.token.email)).data.active == true;
+      allow create, update, delete: if isAdmin();
     }
   }
 }</code></pre>
-                <p>まず <code>admins</code> コレクションに <code>admin@example.com</code> のドキュメントを作成し、<code>{ active: true }</code> を入れてください。</p>
+                <p>管理者はFirebase Consoleで <code>admins/{uid}</code> を作成し、<code>active: true</code> を入れて登録します。</p>
             </section>
         </div>
     </div>
@@ -104,7 +115,7 @@ service cloud.firestore {
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-        import { getFirestore, collection, doc, getDoc, getDocs, addDoc, updateDoc, deleteDoc, setDoc, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { getFirestore, collection, doc, getDoc, getDocs, addDoc, updateDoc, deleteDoc, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
         // --- 必ずあなたの Firebase 設定に書き換えてください ---
         const firebaseConfig = {
@@ -121,8 +132,6 @@ service cloud.firestore {
         const auth = getAuth(app);
         const db = getFirestore(app);
         const provider = new GoogleAuthProvider();
-
-        const allowedFallbackAdmins = ["admin@example.com"];
 
         const els = {
             loginBtn: document.getElementById("login-btn"),
@@ -152,6 +161,48 @@ service cloud.firestore {
 
         const NEWS_COLLECTION = "news";
         const ADMIN_COLLECTION = "admins";
+        const ALLOWED_BADGE_CLASSES = new Set([
+            "bg-stone-500",
+            "bg-stone-700",
+            "bg-amber-500",
+            "bg-amber-700",
+            "bg-orange-500",
+            "bg-red-500",
+            "bg-red-600",
+            "bg-green-500",
+            "bg-green-600",
+            "bg-blue-500",
+            "bg-blue-600",
+            "bg-purple-500",
+            "bg-pink-500",
+            "bg-teal-500"
+        ]);
+
+        function escapeHtml(value) {
+            return String(value ?? "").replace(/[&<>"']/g, char => ({
+                "&": "&amp;",
+                "<": "&lt;",
+                ">": "&gt;",
+                '"': "&quot;",
+                "'": "&#39;"
+            })[char]);
+        }
+
+        function safeBadgeClass(value) {
+            const className = String(value ?? "").trim();
+            return ALLOWED_BADGE_CLASSES.has(className) ? className : "bg-stone-500";
+        }
+
+        function safeImageUrl(value) {
+            const text = String(value ?? "").trim();
+            if (!text) return "";
+            try {
+                const url = new URL(text, window.location.origin);
+                return ["http:", "https:"].includes(url.protocol) ? url.href : "";
+            } catch {
+                return "";
+            }
+        }
 
         function setStatus(msg, variant = "neutral") {
             const colors = {
@@ -170,20 +221,22 @@ service cloud.firestore {
                 return;
             }
             els.newsList.innerHTML = items.map(item => {
-                const imageHtml = item.image ? `<div class="w-full md:w-1/4"><img src="${item.image}" alt="${item.alt || ''}" class="w-full rounded-lg object-cover aspect-video"></div>` : "";
+                const imageUrl = safeImageUrl(item.image);
+                const imageHtml = imageUrl ? `<div class="w-full md:w-1/4"><img src="${escapeHtml(imageUrl)}" alt="${escapeHtml(item.alt || "")}" class="w-full rounded-lg object-cover aspect-video"></div>` : "";
+                const categoryClass = safeBadgeClass(item.category_color);
                 return `
                     <div class="p-4 flex flex-col md:flex-row gap-4">
                         ${imageHtml}
                         <div class="flex-1">
                             <p class="text-xs text-stone-500 mb-1">
-                                <time datetime="${item.datetime || ""}">${item.date || ""}</time>
-                                <span class="ml-3 inline-block px-2 py-1 rounded text-white text-[11px] ${item.category_color || "bg-stone-500"}">${item.category || ""}</span>
+                                <time datetime="${escapeHtml(item.datetime || "")}">${escapeHtml(item.date || "")}</time>
+                                <span class="ml-3 inline-block px-2 py-1 rounded text-white text-[11px] ${categoryClass}">${escapeHtml(item.category || "")}</span>
                             </p>
-                            <h3 class="text-lg font-semibold mb-1">${item.title || ""}</h3>
-                            <p class="text-sm text-stone-700 leading-relaxed">${item.content || ""}</p>
+                            <h3 class="text-lg font-semibold mb-1">${escapeHtml(item.title || "")}</h3>
+                            <p class="text-sm text-stone-700 leading-relaxed">${escapeHtml(item.content || "")}</p>
                             <div class="mt-3 flex gap-2">
-                                <button data-id="${item.id}" class="edit-btn px-3 py-1 rounded bg-stone-900 text-white text-sm hover:bg-stone-700">編集</button>
-                                <button data-id="${item.id}" class="delete-btn px-3 py-1 rounded bg-red-100 text-red-700 text-sm hover:bg-red-200">削除</button>
+                                <button data-id="${escapeHtml(item.id)}" class="edit-btn px-3 py-1 rounded bg-stone-900 text-white text-sm hover:bg-stone-700">編集</button>
+                                <button data-id="${escapeHtml(item.id)}" class="delete-btn px-3 py-1 rounded bg-red-100 text-red-700 text-sm hover:bg-red-200">削除</button>
                             </div>
                         </div>
                     </div>
@@ -212,13 +265,13 @@ service cloud.firestore {
         async function checkAdmin(user) {
             if (!user) return false;
             try {
-                const ref = doc(db, ADMIN_COLLECTION, user.email);
+                const ref = doc(db, ADMIN_COLLECTION, user.uid);
                 const snap = await getDoc(ref);
-                if (snap.exists() && snap.data().active === true) return true;
+                return snap.exists() && snap.data().active === true;
             } catch (err) {
-                console.warn("admin check fallback", err);
+                console.warn("Admin check failed", err);
+                return false;
             }
-            return allowedFallbackAdmins.includes(user.email);
         }
 
         function fillForm(item) {
@@ -281,7 +334,7 @@ service cloud.firestore {
                 date: els.newsDate.value.trim(),
                 datetime: els.newsDatetime.value,
                 category: els.newsCategory.value.trim(),
-                category_color: els.newsCategoryColor.value.trim() || "bg-stone-500",
+                category_color: safeBadgeClass(els.newsCategoryColor.value),
                 content: els.newsContent.value.trim(),
                 image: els.newsImage.value.trim() || null,
                 alt: els.newsAlt.value.trim() || "",

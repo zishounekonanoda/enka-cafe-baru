@@ -1066,6 +1066,49 @@
     </script>
 
     <script>
+        const ENKA_ALLOWED_BADGE_CLASSES = new Set([
+            "bg-stone-500",
+            "bg-stone-700",
+            "bg-amber-500",
+            "bg-amber-700",
+            "bg-orange-500",
+            "bg-red-500",
+            "bg-red-600",
+            "bg-green-500",
+            "bg-green-600",
+            "bg-blue-500",
+            "bg-blue-600",
+            "bg-purple-500",
+            "bg-pink-500",
+            "bg-teal-500"
+        ]);
+
+        function escapeHtml(value) {
+            return String(value ?? "").replace(/[&<>"']/g, char => ({
+                "&": "&amp;",
+                "<": "&lt;",
+                ">": "&gt;",
+                '"': "&quot;",
+                "'": "&#39;"
+            })[char]);
+        }
+
+        function safeBadgeClass(value) {
+            const className = String(value ?? "").trim();
+            return ENKA_ALLOWED_BADGE_CLASSES.has(className) ? className : "bg-stone-500";
+        }
+
+        function safeImageUrl(value) {
+            const text = String(value ?? "").trim();
+            if (!text) return "";
+            try {
+                const url = new URL(text, window.location.origin);
+                return ["http:", "https:"].includes(url.protocol) ? url.href : "";
+            } catch {
+                return "";
+            }
+        }
+
         async function loadLocalNewsFallback() {
             const newsListEl = document.getElementById("news-list");
             const latestEl = document.getElementById("hero-latest-news-body");
@@ -1077,30 +1120,38 @@
                 if (!Array.isArray(items) || !items.length) return;
                 if (latestEl && (!latestEl.dataset.loaded || latestEl.textContent.includes("読み込み"))) {
                     const item = items[0];
+                    const categoryClass = safeBadgeClass(item.category_color);
                     latestEl.dataset.loaded = "true";
                     latestEl.innerHTML = `
                         <div class="flex items-center gap-2">
-                            <span class="inline-flex items-center gap-1 px-2 py-[2px] rounded-full text-xs font-semibold text-white ${item.category_color || "bg-stone-500"}">${item.category || "お知らせ"}</span>
-                            <time class="text-white/70 text-xs" datetime="${item.datetime || ""}">${item.date || item.datetime || ""}</time>
+                            <span class="inline-flex items-center gap-1 px-2 py-[2px] rounded-full text-xs font-semibold text-white ${categoryClass}">${escapeHtml(item.category || "お知らせ")}</span>
+                            <time class="text-white/70 text-xs" datetime="${escapeHtml(item.datetime || "")}">${escapeHtml(item.date || item.datetime || "")}</time>
                         </div>
-                        <div class="font-semibold">${item.title || ""}</div>
-                        <div class="text-white/80 text-sm">${item.content || ""}</div>
+                        <div class="font-semibold">${escapeHtml(item.title || "")}</div>
+                        <div class="text-white/80 text-sm">${escapeHtml(item.content || "")}</div>
                     `;
                 }
                 if (newsListEl && (!newsListEl.dataset.loaded || newsListEl.textContent.includes("読み込み") || newsListEl.textContent.includes("まだお知らせ"))) {
                     newsListEl.dataset.loaded = "true";
-                    newsListEl.innerHTML = items.map(item => `
+                    newsListEl.innerHTML = items.map(item => {
+                        const imageUrl = safeImageUrl(item.image);
+                        const imageHtml = imageUrl
+                            ? `<div class="md:w-1/3 lg:w-1/4"><img src="${escapeHtml(imageUrl)}" alt="${escapeHtml(item.alt || "")}" class="w-full rounded-lg object-cover aspect-video shadow-md" loading="lazy" decoding="async"></div>`
+                            : '<div class="hidden md:block md:w-1/3 lg:w-1/4"></div>';
+                        const categoryClass = safeBadgeClass(item.category_color);
+                        return `
                         <div class="flex flex-col md:flex-row gap-6 border-b border-gray-200 py-8 last:border-b-0">
-                            ${item.image ? `<div class="md:w-1/3 lg:w-1/4"><img src="${item.image}" alt="${item.alt || ""}" class="w-full rounded-lg object-cover aspect-video shadow-md" loading="lazy" decoding="async"></div>` : '<div class="hidden md:block md:w-1/3 lg:w-1/4"></div>'}
+                            ${imageHtml}
                             <div class="flex-1">
                                 <p class="text-sm text-gray-500 mb-2">
-                                    <time datetime="${item.datetime || ""}">${item.date || ""}</time>
-                                    <span class="ml-4 inline-block ${item.category_color || "bg-stone-500"} text-white text-xs font-semibold px-2 py-1 rounded">${item.category || ""}</span>
+                                    <time datetime="${escapeHtml(item.datetime || "")}">${escapeHtml(item.date || "")}</time>
+                                    <span class="ml-4 inline-block ${categoryClass} text-white text-xs font-semibold px-2 py-1 rounded">${escapeHtml(item.category || "")}</span>
                                 </p>
-                                <h3 class="text-xl font-bold mb-2">${item.title || ""}</h3>
-                                <p class="text-gray-600 leading-relaxed">${item.content || ""}</p>
+                                <h3 class="text-xl font-bold mb-2">${escapeHtml(item.title || "")}</h3>
+                                <p class="text-gray-600 leading-relaxed">${escapeHtml(item.content || "")}</p>
                             </div>
-                        </div>`).join("");
+                        </div>`;
+                    }).join("");
                 }
                 revealAnimatedContent?.();
             } catch (err) {
@@ -1142,16 +1193,16 @@
             target.dataset.loaded = "true";
             const item = items[0];
             const date = item.date || item.datetime || "";
-            const categoryClass = item.category_color || "bg-amber-500";
+            const categoryClass = safeBadgeClass(item.category_color);
             target.innerHTML = `
                 <div class="flex items-center gap-2">
                     <span class="inline-flex items-center gap-1 px-2 py-[2px] rounded-full text-xs font-semibold text-white ${categoryClass}">
-                        ${item.category || "お知らせ"}
+                        ${escapeHtml(item.category || "お知らせ")}
                     </span>
-                    <time class="text-white/70 text-xs" datetime="${item.datetime || ""}">${date}</time>
+                    <time class="text-white/70 text-xs" datetime="${escapeHtml(item.datetime || "")}">${escapeHtml(date)}</time>
                 </div>
-                <div class="font-semibold">${item.title || ""}</div>
-                <div class="text-white/80 text-sm">${item.content || ""}</div>
+                <div class="font-semibold">${escapeHtml(item.title || "")}</div>
+                <div class="text-white/80 text-sm">${escapeHtml(item.content || "")}</div>
             `;
         }
 
@@ -1163,19 +1214,21 @@
             }
             newsListEl.dataset.loaded = "true";
             newsListEl.innerHTML = items.map(item => {
-                const imageHtml = item.image
-                    ? `<div class="md:w-1/3 lg:w-1/4"><img src="${item.image}" alt="${item.alt || ""}" class="w-full rounded-lg object-cover aspect-video shadow-md"></div>`
+                const imageUrl = safeImageUrl(item.image);
+                const imageHtml = imageUrl
+                    ? `<div class="md:w-1/3 lg:w-1/4"><img src="${escapeHtml(imageUrl)}" alt="${escapeHtml(item.alt || "")}" class="w-full rounded-lg object-cover aspect-video shadow-md"></div>`
                     : '<div class="hidden md:block md:w-1/3 lg:w-1/4"></div>';
+                const categoryClass = safeBadgeClass(item.category_color);
                 return `
                     <div class="gsap-fade-up flex flex-col md:flex-row gap-6 border-b border-gray-200 py-8 last:border-b-0" data-animate="static">
                         ${imageHtml}
                         <div class="flex-1">
                             <p class="text-sm text-gray-500 mb-2">
-                                <time datetime="${item.datetime || ""}">${item.date || ""}</time>
-                                <span class="ml-4 inline-block ${item.category_color || "bg-stone-500"} text-white text-xs font-semibold px-2 py-1 rounded">${item.category || ""}</span>
+                                <time datetime="${escapeHtml(item.datetime || "")}">${escapeHtml(item.date || "")}</time>
+                                <span class="ml-4 inline-block ${categoryClass} text-white text-xs font-semibold px-2 py-1 rounded">${escapeHtml(item.category || "")}</span>
                             </p>
-                            <h3 class="text-xl font-bold mb-2">${item.title || ""}</h3>
-                            <p class="text-gray-600 leading-relaxed">${item.content || ""}</p>
+                            <h3 class="text-xl font-bold mb-2">${escapeHtml(item.title || "")}</h3>
+                            <p class="text-gray-600 leading-relaxed">${escapeHtml(item.content || "")}</p>
                         </div>
                     </div>`;
             }).join("");
