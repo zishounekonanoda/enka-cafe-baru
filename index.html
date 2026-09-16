@@ -207,6 +207,9 @@
             padding: 0.55rem 0.9rem;
             white-space: nowrap;
         }
+        @media (max-width: 639px) {
+            #hero-primary-actions a { padding: 0.85rem 1rem; font-size: 0.9rem; }
+        }
         #hero-subtitle,
         #hero-latest-news-body {
             overflow-wrap: anywhere;
@@ -459,15 +462,7 @@
                         <span class="hero-fact"><i class="fas fa-chair mr-2 text-amber-300"></i>全12席</span>
                     </div>
                 </div>
-                <!-- 最新のお知らせ（最上位1件だけ表示） -->
-                <div id="hero-latest-news" class="mt-8 flex items-start gap-3 px-4 py-3 rounded-lg bg-white/15 backdrop-blur-sm border border-white/20 text-left shadow-lg">
-                    <div class="flex-shrink-0 text-amber-300"><i class="fas fa-bell"></i></div>
-                    <div class="space-y-1 text-sm md:text-base">
-                        <p class="uppercase tracking-[0.2em] text-white/70 text-xs md:text-[13px]">最新のお知らせ</p>
-                        <div class="text-white/90" id="hero-latest-news-body">読み込み中...</div>
-                    </div>
-                </div>
-                <div id="hero-primary-actions" class="mt-8 flex flex-col sm:flex-row items-start gap-4">
+                <div id="hero-primary-actions" class="mt-6 flex flex-wrap items-start gap-3">
                     <a href="menu.html" class="btn-primary">
                         <i class="fas fa-book-open"></i>
                         メニューを見る
@@ -487,6 +482,14 @@
                         <i class="fas fa-phone"></i>
                         電話する
                     </a>
+                </div>
+                <!-- 最新のお知らせ（最上位1件だけ表示） -->
+                <div id="hero-latest-news" class="mt-8 flex items-start gap-3 px-4 py-3 rounded-lg bg-white/15 backdrop-blur-sm border border-white/20 text-left shadow-lg">
+                    <div class="flex-shrink-0 text-amber-300"><i class="fas fa-bell"></i></div>
+                    <div class="space-y-1 text-sm md:text-base">
+                        <p class="uppercase tracking-[0.2em] text-white/70 text-xs md:text-[13px]">最新のお知らせ</p>
+                        <div class="text-white/90" id="hero-latest-news-body">読み込み中...</div>
+                    </div>
                 </div>
             </div>
             <!-- Scroll Indicator -->
@@ -1124,7 +1127,7 @@
                             <time class="text-white/70 text-xs" datetime="${escapeHtml(item.datetime || "")}">${escapeHtml(item.date || item.datetime || "")}</time>
                         </div>
                         <div class="font-semibold">${escapeHtml(item.title || "")}</div>
-                        <div class="text-white/80 text-sm">${escapeHtml(item.content || "")}</div>
+                        <a href="#news" class="inline-block text-sm underline underline-offset-4">お知らせを読む</a>
                     `;
                 }
                 if (newsListEl && (!newsListEl.dataset.loaded || newsListEl.textContent.includes("読み込み") || newsListEl.textContent.includes("まだお知らせ"))) {

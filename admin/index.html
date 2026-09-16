@@ -3,19 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>enka News Admin</title>
+    <title>お知らせ・メニュー管理 - enka</title>
     <link rel="icon" type="image/png" href="../images/load.png">
     <link rel="apple-touch-icon" href="../images/load.png">
     <link rel="stylesheet" href="../assets/css/tailwind.css">
     <link rel="stylesheet" href="../assets/fontawesome/css/all.min.css">
+    <style>
+        button:disabled, input:disabled, select:disabled, textarea:disabled {
+            opacity: 0.55;
+            cursor: not-allowed;
+        }
+    </style>
 </head>
 <body class="bg-stone-50 text-stone-900 min-h-screen">
     <div class="max-w-5xl mx-auto px-4 py-10 space-y-8">
         <header class="flex items-center justify-between gap-4">
             <div>
                 <p class="text-sm uppercase tracking-[0.2em] text-stone-500">Admin</p>
-                <h1 class="text-3xl font-bold">News Manager</h1>
-                <p class="text-sm text-stone-600 mt-1">Firebase Auth + Firestore。Googleログイン後にニュースを追加・編集・削除できます。</p>
+                <h1 class="text-3xl font-bold">お知らせ・メニュー管理</h1>
             </div>
             <div class="text-right space-y-2">
                 <button id="login-btn" class="px-4 py-2 rounded-full bg-stone-900 text-white hover:bg-stone-700 transition">Googleでログイン</button>
@@ -160,7 +165,7 @@
                     </form>
                 </div>
 
-                <p id="menu-status" class="text-sm text-stone-600"></p>
+                <p id="menu-status" class="text-sm text-stone-600" role="status" aria-live="polite"></p>
                 <div id="menu-editor-list" class="space-y-4"></div>
             </section>
 

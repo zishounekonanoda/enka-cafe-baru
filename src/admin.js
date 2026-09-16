@@ -1,7 +1,8 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "firebase/auth";
-import { getFirestore, collection, doc, getDoc, getDocs, setDoc, addDoc, updateDoc, deleteDoc, query, orderBy, serverTimestamp } from "firebase/firestore";
+import { getFirestore, collection, doc, getDoc, getDocFromServer, getDocs, runTransaction, addDoc, updateDoc, deleteDoc, query, orderBy, serverTimestamp } from "firebase/firestore";
 import { defaultMenuData } from "./menu-data.js";
+import { createMenuStore, updateMenuItem } from "./menu-store.mjs";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCpKJ5PuXPLXubvvXzRimZj9YnQ_1jsikc",
@@ -68,11 +69,30 @@ let currentUser = null;
 let isAdmin = false;
 let menuData = structuredClone(defaultMenuData);
 let activeMenuGroupId = menuData.groups[0]?.id || "";
+let renderedMenuGroupId = activeMenuGroupId;
+let editingItem = null;
+let menuBusy = false;
+let authVersion = 0;
 
 const NEWS_COLLECTION = "news";
 const ADMIN_COLLECTION = "admins";
 const MENU_COLLECTION = "menus";
 const MENU_DOCUMENT = "current";
+const menuRef = doc(db, MENU_COLLECTION, MENU_DOCUMENT);
+const menuStore = createMenuStore({
+  read: async () => {
+    const snap = await getDocFromServer(menuRef);
+    return snap.exists() ? snap.data() : null;
+  },
+  transact: callback => runTransaction(db, transaction => callback({
+    read: async () => {
+      const snap = await transaction.get(menuRef);
+      return snap.exists() ? snap.data() : null;
+    },
+    write: payload => transaction.set(menuRef, payload)
+  })),
+  stamp: serverTimestamp
+});
 const menuThemeCycle = ["amber", "pink", "purple", "emerald", "orange", "stone"];
 const allowedBadgeClasses = new Set([
   "bg-stone-500",
@@ -297,36 +317,75 @@ function normalizeMenuData(data) {
 }
 
 async function saveMenuData(successMessage = "メニューを保存しました") {
-  if (!isAdmin) {
-    setMenuStatus("権限がありません。", "error");
-    return;
+  if (!isAdmin || !menuStore.ready || menuBusy) return false;
+  const version = authVersion;
+  menuBusy = true;
+  syncMenuControls();
+  setMenuStatus("保存中です…");
+  try {
+    const saved = await menuStore.save(normalizeMenuData(menuData));
+    if (version !== authVersion) return false;
+    menuData = normalizeMenuData(saved);
+    clearSectionForm();
+    clearItemForm();
+    renderMenuEditor();
+    setMenuStatus(successMessage, "success");
+    return true;
+  } catch (error) {
+    if (version !== authVersion) return false;
+    menuData = normalizeMenuData(menuStore.data ?? defaultMenuData);
+    activeMenuGroupId = renderedMenuGroupId;
+    setMenuStatus(error.code === "menu-conflict"
+      ? "別の画面でメニューが更新されました。再読込して最新の内容を確認してから、編集し直してください。"
+      : "保存を確認できませんでした。通信状態を確認して、もう一度保存してください。", "error");
+    return false;
+  } finally {
+    if (version === authVersion) { menuBusy = false; syncMenuControls(); }
   }
-  const payload = {
-    ...normalizeMenuData(menuData),
-    updatedAt: serverTimestamp()
-  };
-  await setDoc(doc(db, MENU_COLLECTION, MENU_DOCUMENT), payload);
-  menuData = normalizeMenuData(payload);
-  setMenuStatus(successMessage, "success");
-  renderMenuEditor();
 }
 
 async function loadMenuEditor() {
-  if (!els.menuEditorList) return;
+  if (!els.menuEditorList || !isAdmin || menuBusy) return;
+  const version = authVersion;
+  menuBusy = true;
+  syncMenuControls();
   els.menuEditorList.innerHTML = '<div class="p-4 text-center text-stone-500">読み込み中...</div>';
   try {
-    const snap = await getDoc(doc(db, MENU_COLLECTION, MENU_DOCUMENT));
-    menuData = normalizeMenuData(snap.exists() ? snap.data() : defaultMenuData);
+    const data = await menuStore.load();
+    if (version !== authVersion) return;
+    menuData = normalizeMenuData(data ?? defaultMenuData);
     activeMenuGroupId = menuData.groups[0]?.id || "";
+    clearSectionForm();
+    clearItemForm();
     renderMenuEditor();
-    setMenuStatus(snap.exists() ? "メニューを読み込みました" : "初期メニューを表示しています。保存すると公開用データとして登録されます。");
+    setMenuStatus(data ? "メニューを読み込みました" : "初期メニューを表示しています。保存すると公開されます。");
   } catch (err) {
-    console.error("Menu load failed", err);
-    menuData = normalizeMenuData(defaultMenuData);
-    activeMenuGroupId = menuData.groups[0]?.id || "";
-    renderMenuEditor();
-    setMenuStatus("読み込みに失敗したため、初期メニューを表示しています。", "error");
+    if (version !== authVersion) return;
+    els.menuEditorList.textContent = "メニューを読み込めませんでした。";
+    setMenuStatus("通信状態を確認して再読込してください。読み込みが完了するまで編集・保存はできません。", "error");
+  } finally {
+    if (version === authVersion) { menuBusy = false; syncMenuControls(); }
   }
+}
+
+function syncMenuControls() {
+  const panel = els.menuGroupForm.closest("section");
+  panel.querySelectorAll("button, input, select, textarea").forEach(control => {
+    control.disabled = !isAdmin || menuBusy || !menuStore.ready;
+  });
+  els.menuReloadBtn.disabled = !isAdmin || menuBusy;
+  els.menuSeedBtn.hidden = menuStore.data !== null || !menuStore.ready;
+}
+
+// Guard the entire editor before handlers can mutate the working copy.
+for (const type of ["click", "submit"]) {
+  els.menuGroupForm.closest("section").addEventListener(type, event => {
+    if (event.target.closest("#menu-reload-btn") && !menuBusy && isAdmin) return;
+    if (!isAdmin || menuBusy || !menuStore.ready) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+    }
+  }, true);
 }
 
 function fillGroupForm(group) {
@@ -343,6 +402,7 @@ function clearSectionForm() {
 }
 
 function clearItemForm() {
+  editingItem = null;
   els.menuItemIndex.value = "";
   els.menuItemName.value = "";
   els.menuItemPrice.value = "";
@@ -351,12 +411,9 @@ function clearItemForm() {
 
 function renderMenuEditor() {
   if (!els.menuGroupTabs || !els.menuEditorList) return;
-  if (!menuData.groups.length) {
-    menuData = normalizeMenuData(defaultMenuData);
-    activeMenuGroupId = menuData.groups[0]?.id || "";
-  }
   const group = activeMenuGroup();
   activeMenuGroupId = group?.id || "";
+  renderedMenuGroupId = activeMenuGroupId;
   fillGroupForm(group);
 
   els.menuGroupTabs.innerHTML = menuData.groups.map(tab => {
@@ -367,11 +424,13 @@ function renderMenuEditor() {
     return `<button type="button" data-group-id="${escapeHtml(tab.id)}" class="menu-tab px-4 py-2 rounded-full border text-sm transition ${cls}">${escapeHtml(tab.navLabel || tab.title)}</button>`;
   }).join("");
 
-  els.menuItemSection.innerHTML = group.sections.map(section => (
+  const selectedSection = els.menuItemSection.value;
+  els.menuItemSection.innerHTML = (group?.sections || []).map(section => (
     `<option value="${escapeHtml(section.id)}">${escapeHtml(section.title)}</option>`
   )).join("");
 
-  els.menuEditorList.innerHTML = group.sections.map(section => {
+  if (group?.sections.some(section => section.id === selectedSection)) els.menuItemSection.value = selectedSection;
+  els.menuEditorList.innerHTML = (group?.sections || []).map(section => {
     const items = section.items.map((item, index) => `
       <div class="flex flex-col gap-2 md:flex-row md:items-start md:justify-between rounded-lg bg-white border border-stone-200 p-3">
         <div>
@@ -448,6 +507,7 @@ function attachMenuHandlers() {
       const index = Number(btn.dataset.itemIndex);
       const item = section?.items[index];
       if (!item) return;
+      editingItem = { groupId: group.id, sectionId: section.id, index };
       els.menuItemSection.value = section.id;
       els.menuItemIndex.value = String(index);
       els.menuItemName.value = item.name;
@@ -514,7 +574,7 @@ els.reloadBtn.addEventListener("click", loadNews);
 els.menuReloadBtn.addEventListener("click", loadMenuEditor);
 
 els.menuSeedBtn.addEventListener("click", async () => {
-  if (!confirm("現在の公開メニューを初期メニューで上書きしますか？")) return;
+  if (menuStore.data !== null || !confirm("初期メニューを公開しますか？")) return;
   menuData = normalizeMenuData(structuredClone(defaultMenuData));
   activeMenuGroupId = menuData.groups[0]?.id || "";
   await saveMenuData("初期メニューを保存しました");
@@ -524,13 +584,13 @@ els.menuGroupForm.addEventListener("submit", async (e) => {
   e.preventDefault();
   const group = activeMenuGroup();
   if (!group) return;
-  group.title = els.menuGroupTitle.value.trim();
-  group.navLabel = els.menuGroupNavLabel.value.trim() || group.title;
-  group.label = els.menuGroupLabel.value.trim();
-  if (!group.title || !group.navLabel) {
+  const title = els.menuGroupTitle.value.trim();
+  const navLabel = els.menuGroupNavLabel.value.trim() || title;
+  if (!title || !navLabel) {
     setMenuStatus("大分類の表示名とタブ名を入力してください。", "error");
     return;
   }
+  Object.assign(group, { title, navLabel, label: els.menuGroupLabel.value.trim() });
   await saveMenuData("大分類を更新しました");
 });
 
@@ -598,7 +658,6 @@ els.menuSectionForm.addEventListener("submit", async (e) => {
       items: []
     });
   }
-  clearSectionForm();
   await saveMenuData(current ? "セクションを更新しました" : "セクションを追加しました");
 });
 
@@ -621,16 +680,12 @@ els.menuItemForm.addEventListener("submit", async (e) => {
     setMenuStatus("メニュー名を入力してください。", "error");
     return;
   }
-  const indexText = els.menuItemIndex.value;
-  const index = indexText === "" ? -1 : Number(indexText);
-  if (index >= 0 && section.items[index]) {
-    section.items[index] = item;
-    await saveMenuData("メニュー項目を更新しました");
-  } else {
-    section.items.push(item);
-    await saveMenuData("メニュー項目を追加しました");
+  try {
+    updateMenuItem(group, editingItem, section.id, item);
+    await saveMenuData(editingItem ? "メニュー項目を更新しました" : "メニュー項目を追加しました");
+  } catch {
+    setMenuStatus("編集対象が見つかりません。再読込してから編集し直してください。", "error");
   }
-  clearItemForm();
 });
 
 els.menuClearItemBtn.addEventListener("click", clearItemForm);
@@ -649,8 +704,18 @@ els.logoutBtn.addEventListener("click", async () => {
 });
 
 onAuthStateChanged(auth, async (user) => {
+  const version = ++authVersion;
   currentUser = user;
-  isAdmin = await checkAdmin(user);
+  isAdmin = false;
+  menuBusy = false;
+  menuStore.reset();
+  clearItemForm();
+  clearSectionForm();
+  els.adminContent.classList.add("hidden");
+  syncMenuControls();
+  const permitted = await checkAdmin(user);
+  if (version !== authVersion) return;
+  isAdmin = permitted;
   els.userInfo.textContent = user ? `${user.displayName || user.email}` : "未ログイン";
   els.adminBadge.textContent = isAdmin ? "管理者" : "閲覧のみ";
   els.adminBadge.className = `px-3 py-1 rounded-full text-xs font-semibold ${isAdmin ? "bg-green-100 text-green-700" : "bg-stone-200 text-stone-700"}`;

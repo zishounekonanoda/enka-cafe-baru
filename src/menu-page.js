@@ -70,7 +70,7 @@ function renderNav(groups) {
     )).join("");
   }
   if (heroLinks) {
-    heroLinks.innerHTML = groups.slice(0, 4).map((group, index) => {
+    heroLinks.innerHTML = groups.map((group, index) => {
       const cls = index === 0
         ? "rounded-full bg-white text-stone-900 px-4 py-2 font-semibold"
         : "rounded-full bg-white/12 border border-white/25 px-4 py-2";

@@ -77,7 +77,7 @@ function renderLatest(items) {
       <time class="text-white/70 text-xs" datetime="${escapeHtml(item.datetime || "")}">${escapeHtml(date)}</time>
     </div>
     <div class="font-semibold">${escapeHtml(item.title || "")}</div>
-    <div class="text-white/80 text-sm">${escapeHtml(item.content || "")}</div>
+    <a href="#news" class="inline-block text-sm underline underline-offset-4">お知らせを読む</a>
   `;
 }
 

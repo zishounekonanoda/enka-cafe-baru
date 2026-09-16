@@ -96,15 +96,26 @@
             letter-spacing: 0.02em;
         }
         .grid-item {
-            display: flex;
-            justify-content: space-between;
-            gap: 1rem;
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+            gap: 0.25rem 1rem;
             align-items: baseline;
         }
         .price {
-            white-space: nowrap;
+            text-align: right;
+            overflow-wrap: anywhere;
             color: #5b3519;
             font-weight: 700;
+        }
+        .grid-item > span:only-child { grid-column: 1 / -1; }
+        .menu-hero h1 span { display: inline-block; }
+        #menu-hero-links a { white-space: nowrap; }
+        #menu-root > section { scroll-margin-top: 7rem; }
+        @media (max-width: 767px) {
+            .grid-item { grid-template-columns: minmax(0, 1fr); }
+            .price { text-align: left; }
+            .grid-item > span { overflow-wrap: anywhere; }
+            .menu-hero h1 { font-size: clamp(1.3rem, 6.4vw, 1.875rem); }
         }
         #loader {
             position: fixed;
@@ -198,7 +209,7 @@
         <section class="menu-hero section-card overflow-hidden">
             <div class="max-w-3xl">
                 <p class="text-sm text-amber-200 font-semibold tracking-[0.18em]">ENKA MENU</p>
-                <h1 class="text-3xl md:text-5xl font-bold mt-3 leading-tight">ランチも、夜のバルも、テイクアウトも</h1>
+                <h1 class="text-3xl md:text-5xl font-bold mt-3 leading-tight"><span>ランチも、</span><span>夜のバルも、</span><span>テイクアウトも</span></h1>
                 <p class="text-white/82 mt-5 leading-relaxed">ランチはパニーニやニョッキを中心に、夜は燻製料理とお酒もお楽しみいただけます。ドリンク・スイーツ・アルコールは昼夜共通です。</p>
                 <p class="text-xs text-white/65 mt-4">※表示価格は税込です。仕入れ状況により内容が変わる場合があります。</p>
             </div>
