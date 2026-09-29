@@ -26,6 +26,21 @@ SOURCES = {
     "dripper": ("店舗写真/LINE_ALBUM_2025.7.7_250707_10.jpg", [720], None),
     "signboard": ("店舗写真/LINE_ALBUM_2025.7.7_250707_30.jpg", [720], None),
     "storefront": ("店舗写真/LINE_ALBUM_2025.7.7_250707_27.jpg", [720], None),
+    "arch": ("店舗写真/LINE_ALBUM_2025.7.7_250707_8.jpg", [720], None),
+    "wood-wall-seats": ("店舗写真/LINE_ALBUM_2025.7.7_250707_47.jpg", [720], None),
+    "wall-deco": ("店舗写真/IMG_4477.JPG", [720], (0.0, 0.2, 1.0, 0.75)),
+    "glasses": ("店舗写真/IMG_4493.JPG", [720], (0.0, 0.1, 1.0, 0.7)),
+    "panini-portrait": ("Food・Drink/期間限定/IMG_4805.JPG", [720], (0.0, 0.25, 1.0, 0.85)),
+}
+
+# ファーストビューのスライド: 名前: (元ファイル, 左右反転するか, PC用の切り抜き中心 (x, y), スマホ用の元ファイル, スマホ用の中心)
+# PC は左側に文字が重なるので、見せたいものが右寄りに写る写真・切り抜きを選んでいる。
+HERO = {
+    "hero-panini": ("Food・Drink/期間限定/IMG_4802.JPG", True, (0.5, 0.5), "Food・Drink/期間限定/IMG_4805.JPG", (0.5, 0.35)),
+    "hero-counter": ("店舗写真/LINE_ALBUM_2025.7.7_250707_11.jpg", False, (0.5, 0.5), None, (0.78, 0.5)),
+    "hero-soda": ("Food・Drink/IMG_4378.JPG", False, (0.5, 0.5), "Food・Drink/IMG_4376.JPG", (0.5, 0.3)),
+    "hero-wood-wall": ("店舗写真/LINE_ALBUM_2025.7.7_250707_47.jpg", False, (0.5, 0.5), None, (0.62, 0.5)),
+    "hero-bar": ("店舗写真/LINE_ALBUM_2025.7.7_250707_4.jpg", False, (0.5, 0.5), None, (0.7, 0.5)),
 }
 
 LOGOS = {
@@ -57,6 +72,17 @@ def main():
         logo.thumbnail((width, width))
         logo.save(OUT / f"{name}.webp", "WEBP", quality=90, method=6)
         logo.save(OUT / f"{name}.png", optimize=True)
+
+    for name, (path, mirror, center, mobile_path, mobile_center) in HERO.items():
+        image = ImageOps.exif_transpose(Image.open(SRC / path)).convert("RGB")
+        if mirror:
+            image = ImageOps.mirror(image)
+        for width in (1280, 1920):
+            ImageOps.fit(image, (width, width * 9 // 16), centering=center).save(
+                OUT / f"{name}-{width}.webp", "WEBP", quality=74, method=6)
+        mobile = ImageOps.exif_transpose(Image.open(SRC / mobile_path)).convert("RGB") if mobile_path else image
+        ImageOps.fit(mobile, (800, 1100), centering=mobile_center).save(
+            OUT / f"{name}-m.webp", "WEBP", quality=74, method=6)
 
     # SNS 共有用 (WebP 非対応のクローラ向けに JPEG)
     og = crop(ImageOps.exif_transpose(Image.open(SRC / SOURCES["roastbeef-panini"][0])).convert("RGB"), (0.0, 0.18, 0.8, 0.82))
