@@ -13,6 +13,9 @@ const HOURS = [
 ];
 const CLOSED_WEEKDAY = 3;
 
+// ファーストビューの写真を切り替える間隔
+const SLIDE_INTERVAL = 6500;
+
 function escapeHtml(value) {
   return String(value ?? "").replace(/[&<>"']/g, char => ({
     "&": "&amp;",
@@ -81,6 +84,22 @@ function newsItemHtml(item) {
     </details>`;
 }
 
+function renderLatestNews(item) {
+  const meta = document.getElementById("hero-news-meta");
+  const title = document.getElementById("hero-news-title");
+  if (!title) return;
+  if (!item) {
+    title.textContent = "お知らせ一覧を見る";
+    return;
+  }
+  if (meta) {
+    meta.innerHTML = `
+      <time datetime="${escapeHtml(item.datetime || "")}">${escapeHtml(item.date || item.datetime || "")}</time>
+      ${item.category ? `<span class="news-tag">${escapeHtml(item.category)}</span>` : ""}`;
+  }
+  title.textContent = item.title || "";
+}
+
 function renderNews(items) {
   const list = document.getElementById("news-list");
   const archive = document.getElementById("news-archive");
@@ -88,9 +107,11 @@ function renderNews(items) {
   if (!list) return;
   if (!items.length) {
     list.innerHTML = '<p class="news-empty">現在お知らせはありません。</p>';
+    renderLatestNews(null);
     return;
   }
   const sorted = [...items].sort((a, b) => String(b.datetime || "").localeCompare(String(a.datetime || "")));
+  renderLatestNews(sorted[0]);
   list.innerHTML = sorted.slice(0, NEWS_VISIBLE).map(item => newsItemHtml(item)).join("");
   const rest = sorted.slice(NEWS_VISIBLE);
   if (archive && more && rest.length) {
@@ -131,6 +152,45 @@ async function loadNews() {
     console.error("news.json の読み込みに失敗:", err);
   }
   return [];
+}
+
+function setupSlideshow() {
+  const slides = [...document.querySelectorAll(".hero-slide")];
+  const dotsBox = document.getElementById("hero-dots");
+  if (slides.length < 2) return;
+  const dots = slides.map((_, index) => {
+    const dot = document.createElement("span");
+    if (index === 0) dot.className = "is-active";
+    dotsBox?.append(dot);
+    return dot;
+  });
+  let current = 0;
+  const loaded = slides.map((_, index) => index === 0);
+
+  // 2枚目以降は最初の表示が終わってから読み込む
+  const loadRest = () => slides.slice(1).forEach((slide, offset) => {
+    const source = slide.querySelector("source[data-srcset]");
+    const img = slide.querySelector("img[data-src]");
+    if (source) source.srcset = source.dataset.srcset;
+    if (!img) return;
+    img.addEventListener("load", () => { loaded[offset + 1] = true; }, { once: true });
+    img.src = img.dataset.src;
+  });
+  if (document.readyState === "complete") loadRest();
+  else window.addEventListener("load", loadRest, { once: true });
+
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  setInterval(() => {
+    if (document.hidden) return;
+    let next = (current + 1) % slides.length;
+    while (!loaded[next] && next !== current) next = (next + 1) % slides.length;
+    if (next === current) return;
+    slides[current].classList.remove("is-active");
+    dots[current].classList.remove("is-active");
+    slides[next].classList.add("is-active");
+    dots[next].classList.add("is-active");
+    current = next;
+  }, SLIDE_INTERVAL);
 }
 
 function setupHeader() {
@@ -189,6 +249,7 @@ function setupReveal() {
 function init() {
   renderOpenStatus();
   setInterval(renderOpenStatus, 60 * 1000);
+  setupSlideshow();
   setupHeader();
   setupMobileNav();
   setupReveal();

@@ -316,38 +316,51 @@ body.nav-open .site-header .logo-dark {
   }
 }
 
-/* ---------- ファーストビュー ---------- */
+/* ---------- ファーストビュー (写真スライドショー + 影) ---------- */
 .hero {
-  display: grid;
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  min-height: 100svh;
+  overflow: hidden;
   background: var(--wood);
   color: #fff;
 }
 
-.hero-photo {
-  position: relative;
-  height: 46svh;
-  min-height: 220px;
-  max-height: 520px;
-  overflow: hidden;
+.hero-slides,
+.hero-slide,
+.hero-shade {
+  position: absolute;
+  inset: 0;
 }
 
-.hero-photo img {
+.hero-slide {
+  opacity: 0;
+  transition: opacity 1.4s ease-in-out;
+}
+
+.hero-slide.is-active {
+  opacity: 1;
+}
+
+.hero-slide img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: 45% 55%;
 }
 
-.hero-photo::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, rgba(34, 22, 15, 0.45) 0%, rgba(34, 22, 15, 0) 30%, rgba(34, 22, 15, 0) 70%, var(--wood) 100%);
+/* 最初のデザインと同じ考え方の影: 文字の下を暗くし、写真の見せたい側は明るく残す */
+.hero-shade {
+  background:
+    linear-gradient(180deg, rgba(10, 8, 6, 0.5) 0%, rgba(10, 8, 6, 0.08) 22%, rgba(20, 14, 10, 0.55) 48%, rgba(20, 14, 10, 0.93) 78%, rgba(20, 14, 10, 0.97) 100%);
 }
 
 .hero-body {
   position: relative;
-  padding: 4px 16px 40px;
+  z-index: 1;
+  padding-top: calc(var(--header-h) + 32svh);
+  padding-bottom: 44px;
+  text-shadow: 0 6px 24px rgba(0, 0, 0, 0.45);
 }
 
 .hero-kicker {
@@ -372,7 +385,7 @@ body.nav-open .site-header .logo-dark {
 
 .hero-lead {
   margin-top: 14px;
-  color: rgba(255, 255, 255, 0.85);
+  color: rgba(255, 255, 255, 0.9);
   font-size: 0.98rem;
   line-height: 1.85;
 }
@@ -385,11 +398,12 @@ body.nav-open .site-header .logo-dark {
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  margin-top: 20px;
+  margin-top: 18px;
   padding: 8px 14px;
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.22);
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.07);
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(8px);
   font-size: 0.88rem;
   line-height: 1.5;
 }
@@ -415,7 +429,8 @@ body.nav-open .site-header .logo-dark {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px;
-  margin-top: 22px;
+  margin-top: 20px;
+  text-shadow: none;
 }
 
 .hero-actions .btn {
@@ -426,8 +441,8 @@ body.nav-open .site-header .logo-dark {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  margin-top: 16px;
-  color: rgba(255, 255, 255, 0.78);
+  margin-top: 14px;
+  color: rgba(255, 255, 255, 0.82);
   font-size: 0.9rem;
   text-decoration: none;
 }
@@ -437,41 +452,151 @@ body.nav-open .site-header .logo-dark {
   text-decoration: underline;
 }
 
+.hero-news {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: center;
+  max-width: 34rem;
+  margin-top: 22px;
+  padding: 12px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(10px);
+  color: #fff;
+  text-decoration: none;
+  text-shadow: none;
+  transition: background-color 0.2s ease;
+}
+
+.hero-news:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.hero-news-bell {
+  color: var(--gold);
+}
+
+.hero-news-body {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.hero-news-label {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+}
+
+.hero-news-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.75rem;
+}
+
+.hero-news-meta:empty {
+  display: none;
+}
+
+.hero-news-meta .news-tag {
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.hero-news-title {
+  overflow: hidden;
+  font-weight: 700;
+  font-size: 0.92rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.hero-news-more {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.hero-dots {
+  position: absolute;
+  right: 16px;
+  bottom: 18px;
+  z-index: 1;
+  display: flex;
+  gap: 6px;
+}
+
+.hero-dots span {
+  width: 18px;
+  height: 3px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.35);
+  transition: background-color 0.3s ease, width 0.3s ease;
+}
+
+.hero-dots span.is-active {
+  width: 30px;
+  background: #fff;
+}
+
 @media (max-height: 700px) and (max-width: 899px) {
-  .hero-photo {
-    height: 38svh;
+  .hero-body {
+    padding-top: calc(var(--header-h) + 18svh);
   }
 }
 
 @media (min-width: 900px) {
   .hero {
-    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
-    min-height: min(100svh, 860px);
+    align-items: center;
+    min-height: min(100svh, 900px);
   }
 
-  .hero-photo {
-    order: 2;
-    height: auto;
-    max-height: none;
-  }
-
-  .hero-photo::after {
-    background: linear-gradient(90deg, var(--wood) 0%, rgba(34, 22, 15, 0) 22%);
-  }
-
-  .hero-title {
-    font-size: clamp(3rem, 4.4vw, 4.4rem);
-    white-space: nowrap;
+  .hero-shade {
+    background:
+      linear-gradient(90deg, rgba(10, 8, 6, 0.9), rgba(41, 29, 19, 0.64) 48%, rgba(41, 29, 19, 0.28)),
+      linear-gradient(180deg, rgba(10, 8, 6, 0.22), rgba(10, 8, 6, 0.72));
   }
 
   .hero-body {
-    align-self: center;
-    padding: calc(var(--header-h) + 40px) 48px 64px max(24px, calc((100vw - 1120px) / 2));
+    padding-top: calc(var(--header-h) + 48px);
+    padding-bottom: 64px;
+  }
+
+  .hero-title {
+    font-size: clamp(3rem, 5vw, 4.8rem);
+    white-space: nowrap;
+  }
+
+  .hero-lead {
+    font-size: 1.08rem;
   }
 
   .hero-actions {
     display: flex;
     flex-wrap: wrap;
+  }
+
+  .hero-dots {
+    right: max(24px, calc((100vw - 1120px) / 2));
+    bottom: 32px;
+  }
+}
+
+/* 表示中の写真をゆっくり寄せる (動きを減らす設定の人には出さない) */
+@media (prefers-reduced-motion: no-preference) {
+  .hero-slide img {
+    transform: scale(1.02);
+    transition: transform 8s ease-out;
+  }
+
+  .hero-slide.is-active img {
+    transform: scale(1.08);
   }
 }
 
@@ -517,7 +642,7 @@ body.nav-open .site-header .logo-dark {
 
 /* ---------- お知らせ ---------- */
 .news {
-  padding-top: 48px;
+  background: var(--paper-deep);
 }
 
 .news-head {
@@ -748,7 +873,7 @@ body.nav-open .site-header .logo-dark {
 
 /* ---------- こだわり ---------- */
 .concept {
-  background: var(--paper-deep);
+  background: var(--paper);
 }
 
 .concept-grid {

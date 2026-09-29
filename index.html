@@ -18,7 +18,8 @@
     <meta name="twitter:card" content="summary_large_image">
     <link rel="icon" type="image/png" href="./images/load.png">
     <link rel="apple-touch-icon" href="./images/load.png">
-    <link rel="preload" as="image" href="./images/web/roastbeef-panini-960.webp" imagesrcset="./images/web/roastbeef-panini-960.webp 960w, ./images/web/roastbeef-panini-1600.webp 1600w" imagesizes="(min-width: 900px) 55vw, 100vw">
+    <link rel="preload" as="image" href="./images/web/hero-panini-m.webp" media="(max-width: 899px)">
+    <link rel="preload" as="image" imagesrcset="./images/web/hero-panini-1280.webp 1280w, ./images/web/hero-panini-1920.webp 1920w" imagesizes="100vw" media="(min-width: 900px)">
     <link rel="stylesheet" href="./assets/css/site.css">
     <script type="application/ld+json">
     {
@@ -67,6 +68,7 @@
         <symbol id="i-chevron" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></symbol>
         <symbol id="i-book" viewBox="0 0 24 24"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2zM4 21V5M8 7h7"/></symbol>
         <symbol id="i-bag" viewBox="0 0 24 24"><path d="M5 8h14l-1 13H6zM9 8V6a3 3 0 0 1 6 0v2"/></symbol>
+        <symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 16V11a6 6 0 0 1 12 0v5l2 2H4zM10 21h4"/></symbol>
         <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></symbol>
     </svg>
 
@@ -77,8 +79,8 @@
                 <img class="logo-dark" src="./images/web/logo-horizontal-black.webp" alt="Cafe&amp;Baru Enka" width="640" height="256">
             </a>
             <nav class="site-nav" aria-label="メインメニュー">
-                <a href="#news">お知らせ</a>
                 <a href="#about">お店について</a>
+                <a href="#news">お知らせ</a>
                 <a href="menu.html">メニュー</a>
                 <a href="#access">アクセス</a>
                 <a class="btn btn-wine" href="https://www.hotpepper.jp/strJ004421212/yoyaku/?vos=othpporgzzzzx00000001" target="_blank" rel="noopener noreferrer">予約する</a>
@@ -90,8 +92,8 @@
     </header>
 
     <nav class="mobile-nav" id="mobile-nav" aria-label="メインメニュー">
-        <a href="#news">お知らせ</a>
         <a href="#about">お店について</a>
+        <a href="#news">お知らせ</a>
         <a href="menu.html">メニュー</a>
         <a href="#access">アクセス・営業時間</a>
         <a class="btn btn-wine" href="https://www.hotpepper.jp/strJ004421212/yoyaku/?vos=othpporgzzzzx00000001" target="_blank" rel="noopener noreferrer">
@@ -105,13 +107,30 @@
     <main id="top">
         <!-- ファーストビュー: 何の店か / いつ開いているか / 次に何をするか -->
         <section class="hero" aria-labelledby="hero-title">
-            <div class="hero-photo">
-                <img src="./images/web/roastbeef-panini-960.webp"
-                     srcset="./images/web/roastbeef-panini-960.webp 960w, ./images/web/roastbeef-panini-1600.webp 1600w"
-                     sizes="(min-width: 900px) 55vw, 100vw"
-                     alt="木のプレートにのった焼きたてのパニーニ" width="960" height="617" fetchpriority="high">
+            <div class="hero-slides" aria-hidden="true">
+                <picture class="hero-slide is-active">
+                    <source media="(min-width: 900px)" srcset="./images/web/hero-panini-1280.webp 1280w, ./images/web/hero-panini-1920.webp 1920w" sizes="100vw">
+                    <img src="./images/web/hero-panini-m.webp" alt="" width="800" height="1100" fetchpriority="high" decoding="async">
+                </picture>
+                <picture class="hero-slide">
+                    <source media="(min-width: 900px)" data-srcset="./images/web/hero-counter-1280.webp 1280w, ./images/web/hero-counter-1920.webp 1920w" sizes="100vw">
+                    <img data-src="./images/web/hero-counter-m.webp" alt="" width="800" height="1100" decoding="async">
+                </picture>
+                <picture class="hero-slide">
+                    <source media="(min-width: 900px)" data-srcset="./images/web/hero-soda-1280.webp 1280w, ./images/web/hero-soda-1920.webp 1920w" sizes="100vw">
+                    <img data-src="./images/web/hero-soda-m.webp" alt="" width="800" height="1100" decoding="async">
+                </picture>
+                <picture class="hero-slide">
+                    <source media="(min-width: 900px)" data-srcset="./images/web/hero-wood-wall-1280.webp 1280w, ./images/web/hero-wood-wall-1920.webp 1920w" sizes="100vw">
+                    <img data-src="./images/web/hero-wood-wall-m.webp" alt="" width="800" height="1100" decoding="async">
+                </picture>
+                <picture class="hero-slide">
+                    <source media="(min-width: 900px)" data-srcset="./images/web/hero-bar-1280.webp 1280w, ./images/web/hero-bar-1920.webp 1920w" sizes="100vw">
+                    <img data-src="./images/web/hero-bar-m.webp" alt="" width="800" height="1100" decoding="async">
+                </picture>
             </div>
-            <div class="hero-body">
+            <div class="hero-shade" aria-hidden="true"></div>
+            <div class="container hero-body">
                 <p class="hero-kicker">
                     <span>向ヶ丘遊園駅 徒歩3分</span><span>Cafe&amp;Baru Enka 煙霞</span>
                 </p>
@@ -132,24 +151,18 @@
                 <a class="hero-tel" href="tel:0448198004">
                     <svg class="icon" aria-hidden="true"><use href="#i-phone"/></svg>お電話でも 044-819-8004
                 </a>
+                <!-- 最新のお知らせ1件。押すとお知らせ一覧へ移動 -->
+                <a class="hero-news" id="hero-news" href="#news">
+                    <svg class="icon hero-news-bell" aria-hidden="true"><use href="#i-bell"/></svg>
+                    <span class="hero-news-body">
+                        <span class="hero-news-label">最新のお知らせ</span>
+                        <span class="hero-news-meta" id="hero-news-meta"></span>
+                        <span class="hero-news-title" id="hero-news-title">お知らせを読み込んでいます…</span>
+                    </span>
+                    <span class="hero-news-more">一覧へ<svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></span>
+                </a>
             </div>
-        </section>
-
-        <!-- お知らせ: 限定メニューや営業情報 (Firestore から読み込み) -->
-        <section class="section news" id="news" aria-labelledby="news-title">
-            <div class="container">
-                <div class="news-head">
-                    <div>
-                        <p class="kicker">NEWS</p>
-                        <h2 class="section-title" id="news-title">お知らせ・限定メニュー</h2>
-                    </div>
-                </div>
-                <div class="news-list" id="news-list">
-                    <p class="news-empty">お知らせを読み込んでいます…</p>
-                </div>
-                <div class="news-list" id="news-archive" hidden></div>
-                <button class="btn btn-outline news-more" id="news-more" type="button" hidden aria-controls="news-archive" aria-expanded="false">過去のお知らせを見る</button>
-            </div>
+            <div class="hero-dots" id="hero-dots" aria-hidden="true"></div>
         </section>
 
         <!-- 昼と夜のふたつの顔 -->
@@ -201,6 +214,23 @@
             </div>
         </section>
 
+        <!-- お知らせ: 限定メニューや営業情報 (Firestore から読み込み) -->
+        <section class="section news" id="news" aria-labelledby="news-title">
+            <div class="container">
+                <div class="news-head">
+                    <div>
+                        <p class="kicker">NEWS</p>
+                        <h2 class="section-title" id="news-title">お知らせ・限定メニュー</h2>
+                    </div>
+                </div>
+                <div class="news-list" id="news-list">
+                    <p class="news-empty">お知らせを読み込んでいます…</p>
+                </div>
+                <div class="news-list" id="news-archive" hidden></div>
+                <button class="btn btn-outline news-more" id="news-more" type="button" hidden aria-controls="news-archive" aria-expanded="false">過去のお知らせを見る</button>
+            </div>
+        </section>
+
         <!-- こだわり -->
         <section class="section concept" id="concept" aria-labelledby="concept-title">
             <div class="container concept-grid">
@@ -234,15 +264,23 @@
             <div class="container section-head">
                 <p class="kicker">GALLERY</p>
                 <h2 class="section-title" id="gallery-title">店内の様子</h2>
-                <p class="section-lead">横にスワイプして見られます。</p>
+                <p class="section-lead">店内の雰囲気とメニューの写真です。横にスワイプして見られます。</p>
             </div>
             <div class="gallery-rail" tabindex="0" aria-label="店内とメニューの写真">
                 <figure><img src="./images/web/tables-720.webp" alt="木のテーブルと白い椅子のテーブル席" width="720" height="480" loading="lazy" decoding="async"><figcaption>テーブル席</figcaption></figure>
+                <figure><img src="./images/web/window-seats-720.webp" alt="大きな窓のそばのテーブル席" width="720" height="480" loading="lazy" decoding="async"><figcaption>窓際の席</figcaption></figure>
+                <figure><img src="./images/web/panini-portrait-720.webp" alt="木のプレートにのったパニーニ" width="720" height="768" loading="lazy" decoding="async"><figcaption>パニーニ</figcaption></figure>
+                <figure><img src="./images/web/bar-seats-720.webp" alt="花を飾ったカウンター席" width="720" height="480" loading="lazy" decoding="async"><figcaption>カウンター席</figcaption></figure>
+                <figure><img src="./images/web/wood-wall-seats-720.webp" alt="木の壁に沿ったテーブル席" width="720" height="480" loading="lazy" decoding="async"><figcaption>木の壁の席</figcaption></figure>
                 <figure><img src="./images/web/melon-soda-720.webp" alt="アイスがのったメロンクリームソーダ" width="720" height="555" loading="lazy" decoding="async"><figcaption>クリームソーダ</figcaption></figure>
-                <figure><img src="./images/web/window-seats-720.webp" alt="窓際のテーブル席" width="720" height="480" loading="lazy" decoding="async"><figcaption>窓際の席</figcaption></figure>
+                <figure><img src="./images/web/arch-720.webp" alt="アーチ型のくぼみに飾られた絵" width="720" height="480" loading="lazy" decoding="async"><figcaption>アーチの飾り棚</figcaption></figure>
+                <figure><img src="./images/web/dripper-720.webp" alt="木の壁に飾られたワイヤーの装飾" width="720" height="480" loading="lazy" decoding="async"><figcaption>壁の装飾</figcaption></figure>
                 <figure><img src="./images/web/coffee-720.webp" alt="木のソーサーにのったコーヒー" width="720" height="832" loading="lazy" decoding="async"><figcaption>ハンドドリップコーヒー</figcaption></figure>
-                <figure><img src="./images/web/dripper-720.webp" alt="壁に取り付けたドリッパー" width="720" height="480" loading="lazy" decoding="async"><figcaption>ドリッパー</figcaption></figure>
+                <figure><img src="./images/web/wall-deco-720.webp" alt="季節の飾りつけをした木の壁" width="720" height="704" loading="lazy" decoding="async"><figcaption>季節の壁飾り</figcaption></figure>
                 <figure><img src="./images/web/gnocchi-720.webp" alt="チーズソースのニョッキ" width="720" height="672" loading="lazy" decoding="async"><figcaption>チーズソースのニョッキ</figcaption></figure>
+                <figure><img src="./images/web/glasses-720.webp" alt="天井から吊り下げたワイングラス" width="720" height="576" loading="lazy" decoding="async"><figcaption>吊り下げたグラス</figcaption></figure>
+                <figure><img src="./images/web/roastbeef-720.webp" alt="サラダを添えたローストビーフ" width="720" height="383" loading="lazy" decoding="async"><figcaption>期間限定のローストビーフ</figcaption></figure>
+                <figure><img src="./images/web/storefront-720.webp" alt="「2F Enka Cafe&amp;Baru」の看板" width="720" height="480" loading="lazy" decoding="async"><figcaption>2Fの看板</figcaption></figure>
             </div>
             <div class="container gallery-foot">
                 <span>最新の写真は Instagram で更新しています。</span>
