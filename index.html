@@ -1,1167 +1,372 @@
-<!--
-░█▄█░█▀█░█▀▄░█▀▀░░░█▀▄░█░█░░░█▀▄░▀█▀░█▀█░▀█▀░█▀█░█▀▄░█▀█
-░█░█░█▀█░█░█░█▀▀░░░█▀▄░░█░░░░█▀▄░░█░░█░█░░█░░█▀█░█▀▄░█░█
-░▀░▀░▀░▀░▀▀░░▀▀▀░░░▀▀░░░▀░░░░▀░▀░▀▀▀░▀░▀░░▀░░▀░▀░▀░▀░▀▀▀
--->
 <!DOCTYPE html>
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>enka - カフェ・バル | 向ヶ丘の燻製カフェ＆バル</title>
-    <meta name="description" content="向ヶ丘遊園駅徒歩3分、登戸駅徒歩6分。燻製料理とハンドドリップコーヒーのカフェ＆バル『enka』。パニーニやニョッキ、夜は燻製メニューとお酒も楽しめます。">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self'; connect-src 'self' https://firestore.googleapis.com; frame-src https://www.google.com; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <title>Cafe&amp;Baru Enka 煙霞 | 向ヶ丘遊園の燻製カフェ＆バル</title>
+    <meta name="description" content="向ヶ丘遊園駅 徒歩3分。昼はパニーニとハンドドリップコーヒーのカフェ、夜は自家製の燻製料理とお酒のバル。Cafe&amp;Baru Enka（煙霞）。">
     <link rel="canonical" href="https://enka-cafe-baru.com/">
+    <meta name="theme-color" content="#22160f">
     <meta property="og:type" content="website">
-    <meta property="og:title" content="enka - カフェ・バル | 向ヶ丘の燻製カフェ＆バル">
-    <meta property="og:description" content="向ヶ丘遊園駅徒歩3分、登戸駅徒歩6分。燻製料理とハンドドリップコーヒーのカフェ＆バル。昼はカフェ、夜はバルとして楽しめます。">
+    <meta property="og:site_name" content="Cafe&amp;Baru Enka">
+    <meta property="og:title" content="Cafe&amp;Baru Enka 煙霞 | 向ヶ丘遊園の燻製カフェ＆バル">
+    <meta property="og:description" content="昼はカフェ、夜はバル。向ヶ丘遊園駅 徒歩3分、パニーニと燻製料理のお店。">
     <meta property="og:url" content="https://enka-cafe-baru.com/">
-    <meta property="og:image" content="https://enka-cafe-baru.com/images/hero.jpg">
+    <meta property="og:image" content="https://enka-cafe-baru.com/images/web/og.jpg">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="enka - カフェ・バル | 向ヶ丘の燻製カフェ＆バル">
-    <meta name="twitter:description" content="向ヶ丘遊園駅徒歩3分、登戸駅徒歩6分。燻製料理とハンドドリップコーヒーのカフェ＆バル。">
     <link rel="icon" type="image/png" href="./images/load.png">
     <link rel="apple-touch-icon" href="./images/load.png">
-    <link rel="preload" as="image" href="./images/hero.jpg">
-    <script>
-        document.documentElement.classList.add('js-animations-pending');
-    </script>
+    <link rel="preload" as="image" href="./images/web/roastbeef-panini-960.webp" imagesrcset="./images/web/roastbeef-panini-960.webp 960w, ./images/web/roastbeef-panini-1600.webp 1600w" imagesizes="(min-width: 900px) 55vw, 100vw">
+    <link rel="stylesheet" href="./assets/css/site.css">
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "CafeOrCoffeeShop",
-      "name": "enka",
+      "name": "Cafe&Baru Enka",
+      "alternateName": "煙霞",
       "url": "https://enka-cafe-baru.com/",
-      "image": "https://enka-cafe-baru.com/images/hero.jpg",
-      "description": "向ヶ丘遊園駅徒歩3分、登戸駅徒歩6分。燻製料理とハンドドリップコーヒーのカフェ＆バル。",
+      "image": "https://enka-cafe-baru.com/images/web/og.jpg",
+      "description": "向ヶ丘遊園駅徒歩3分。昼はパニーニとハンドドリップコーヒーのカフェ、夜は自家製の燻製料理とお酒のバル。",
       "telephone": "+81-44-819-8004",
       "address": {
         "@type": "PostalAddress",
         "addressRegion": "神奈川県",
         "addressLocality": "川崎市多摩区",
         "streetAddress": "登戸2512 稲田第3ビル 2F",
-        "postalCode": "214-0014"
+        "postalCode": "214-0014",
+        "addressCountry": "JP"
       },
-      "servesCuisine": ["Cafe", "Coffee", "Smoked dishes"],
+      "openingHoursSpecification": [
+        { "@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday", "Tuesday", "Thursday", "Friday", "Saturday", "Sunday"], "opens": "11:00", "closes": "16:00" },
+        { "@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday", "Tuesday", "Thursday", "Friday", "Saturday", "Sunday"], "opens": "18:00", "closes": "23:00" }
+      ],
+      "servesCuisine": ["Cafe", "Coffee", "Smoked dishes", "Panini"],
       "priceRange": "¥¥",
-      "sameAs": [
-        "https://www.instagram.com/cafe_and_baru_enka/"
-      ]
+      "menu": "https://enka-cafe-baru.com/menu.html",
+      "acceptsReservations": true,
+      "sameAs": ["https://www.instagram.com/cafe_and_baru_enka/"]
     }
     </script>
-    <link rel="stylesheet" href="./assets/css/tailwind.css">
-    <link rel="stylesheet" href="./assets/fontawesome/css/all.min.css">
-
-    <style>
-        /* --- ローカルフォントの読み込み設定 --- */
-        @font-face {
-            font-family: 'EnkaLocalFont';
-            src: url('./fonts/59314.ttf') format('truetype'); /* TTF形式のフォント */
-            font-weight: normal;
-            font-style: normal;
-            font-display: swap;
-        }
-
-        /* カスタムスタイル */
-        html,
-        body {
-            font-family: 'EnkaLocalFont', 'YourLocalFontName', sans-serif !important;
-            background:
-                linear-gradient(180deg, #f9f5ed 0%, #f6f1e8 42%, #fffaf2 100%);
-            color: #201915;
-        }
-        button,
-        input,
-        textarea,
-        select {
-            font-family: 'EnkaLocalFont', 'YourLocalFontName', sans-serif !important;
-        }
-
-        /* JSが失敗してもコンテンツが消えないよう、初期状態は表示にする */
-        .gsap-fade-up {
-            opacity: 1;
-            transform: none;
-        }
-        .js-animations-pending .gsap-fade-up:not([data-animate="static"]),
-        .js-gsap-ready .gsap-fade-up:not([data-animate="static"]) {
-            opacity: 0;
-            transform: translateY(40px);
-        }
-        .gsap-fade-up[data-animate="static"] {
-            opacity: 1;
-            transform: none;
-        }
-        .gsap-fade-in {
-            opacity: 1;
-        }
-        .js-animations-pending .gsap-fade-in,
-        .js-gsap-ready .gsap-fade-in {
-            opacity: 0;
-        }
-        /* 文字アニメーション用の基本スタイル */
-        .gsap-char {
-            display: inline-block;
-        }
-        :root {
-            --enka-ink: #201915;
-            --enka-muted: #6c5d50;
-            --enka-paper: #fffaf2;
-            --enka-card: rgba(255, 252, 246, 0.88);
-            --enka-brown: #4d2f1c;
-            --enka-amber: #c9842f;
-            --enka-line: rgba(77, 47, 28, 0.14);
-        }
-        .section-kicker {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.45rem;
-            color: var(--enka-amber);
-            font-size: 0.85rem;
-            font-weight: 700;
-            letter-spacing: 0.16em;
-        }
-        .section-title {
-            color: var(--enka-ink);
-            letter-spacing: 0.02em;
-            line-height: 1.25;
-        }
-        .section-copy {
-            color: var(--enka-muted);
-            line-height: 1.9;
-        }
-        .surface-card {
-            background: var(--enka-card);
-            border: 1px solid var(--enka-line);
-            border-radius: 8px;
-            box-shadow: 0 22px 55px rgba(53, 35, 20, 0.09);
-        }
-        .btn-primary,
-        .btn-secondary {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.55rem;
-            border-radius: 999px;
-            min-height: 3rem;
-            padding: 0.8rem 1.45rem;
-            font-weight: 700;
-            transition: transform 0.22s ease, box-shadow 0.22s ease, background 0.22s ease;
-        }
-        .btn-primary {
-            background: #fff;
-            color: var(--enka-ink);
-            box-shadow: 0 14px 36px rgba(0,0,0,0.2);
-        }
-        .btn-secondary {
-            border: 1px solid rgba(255,255,255,0.74);
-            color: #fff;
-            background: rgba(0,0,0,0.26);
-        }
-        .btn-primary:hover,
-        .btn-secondary:hover {
-            transform: translateY(-2px);
-        }
-        .quick-strip {
-            position: relative;
-            z-index: 3;
-            padding-top: 2rem;
-            padding-bottom: 1.25rem;
-            background: linear-gradient(180deg, rgba(249, 245, 237, 0.96), rgba(249, 245, 237, 0));
-        }
-
-        /* --- ヒーローセクションの背景画像（スライドショー） --- */
-        .hero-slider {
-            position: absolute;
-            inset: 0;
-            overflow: hidden;
-        }
-        .hero-bg-slide {
-            position: absolute;
-            inset: 0;
-            background-size: cover;
-            background-position: center;
-            opacity: 0;
-            transition: opacity 1.4s ease-in-out;
-        }
-        .hero-bg-slide.is-active {
-            opacity: 1;
-        }
-        .hero-overlay {
-            position: absolute;
-            inset: 0;
-            background:
-                linear-gradient(90deg, rgba(10, 8, 6, 0.9), rgba(41, 29, 19, 0.64) 48%, rgba(41, 29, 19, 0.28)),
-                linear-gradient(180deg, rgba(10, 8, 6, 0.22), rgba(10, 8, 6, 0.72));
-            pointer-events: none;
-            z-index: 0;
-        }
-        .hero-content {
-            position: relative;
-            z-index: 1;
-            text-shadow: 0 14px 38px rgba(0,0,0,0.5);
-        }
-        .hero-fact {
-            border: 1px solid rgba(255,255,255,0.22);
-            background: rgba(255,255,255,0.12);
-            backdrop-filter: blur(10px);
-            border-radius: 999px;
-            padding: 0.55rem 0.9rem;
-            white-space: nowrap;
-        }
-        @media (max-width: 639px) {
-            #hero-primary-actions a { padding: 0.85rem 1rem; font-size: 0.9rem; }
-        }
-        #hero-subtitle,
-        #hero-latest-news-body {
-            overflow-wrap: anywhere;
-            word-break: break-all;
-            line-break: anywhere;
-        }
-        #hero-latest-news {
-            max-width: min(36rem, 100%);
-            width: min(36rem, calc(100vw - 3rem));
-            box-sizing: border-box;
-            overflow: hidden;
-        }
-        #hero-latest-news > div:last-child {
-            min-width: 0;
-        }
-        .hero-cta-secondary {
-            border: 1px solid rgba(255,255,255,0.7);
-            color: #fff;
-            background-color: transparent;
-        }
-        .hero-cta-secondary:hover {
-            background-color: rgba(255,255,255,0.15);
-        }
-
-        /* ヘッダーの背景がスクロールで変わるスタイル */
-        #header {
-            color: #fff;
-        }
-        .header-scrolled {
-            background-color: rgba(255, 250, 242, 0.92);
-            backdrop-filter: blur(10px);
-            box-shadow: 0 12px 34px rgba(53, 35, 20, 0.08);
-            color: #1f1a17;
-        }
-        .header-scrolled .header-link,
-        .header-scrolled .header-brand,
-        .header-scrolled #mobile-menu-button {
-            color: #1f1a17;
-        }
-
-        /* --- ローディングアニメーション --- */
-        #loader {
-            background-color: #fff;
-            transition: opacity 0.5s ease-out;
-        }
-
-        #loader img {
-            width: 12rem; /* 192px */
-            height: 12rem; /* 192px */
-            filter: drop-shadow(0 18px 24px rgba(60, 39, 19, 0.28));
-            transform: translateY(-4px);
-        }
-        .loader-inner {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 1.25rem;
-        }
-        .loader-track {
-            width: min(18rem, 58vw);
-            height: 8px;
-            overflow: hidden;
-            border-radius: 999px;
-            background: #d7c4aa;
-            box-shadow: inset 0 1px 2px rgba(68, 45, 24, 0.22);
-        }
-        .loader-bar {
-            width: 100%;
-            height: 100%;
-            border-radius: inherit;
-            background: linear-gradient(90deg, #5b3519, #8a541f, #b8792b);
-            transform: scaleX(0);
-            transform-origin: left center;
-            transition: transform 0.7s cubic-bezier(0.65, 0, 0.35, 1);
-            box-shadow: 0 0 14px rgba(138, 84, 31, 0.38);
-        }
-        .loader-credit {
-            color: rgba(77, 47, 28, 0.52);
-            font-size: 0.78rem;
-            letter-spacing: 0.16em;
-        }
-
-        /* --- コンテンツの初期状態 --- */
-        header, main, footer {
-            opacity: 0;
-        }
-
-        /* Featured Menu カードのスタイル */
-        .menu-card {
-            border: 1px solid var(--enka-line);
-            border-radius: 8px;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        .menu-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
-        }
-        .menu-card img {
-            object-position: center 65%;
-        }
-        .menu-card-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.35rem;
-            border-radius: 999px;
-            background: #f3eadf;
-            color: #69431e;
-            padding: 0.35rem 0.7rem;
-            font-size: 0.78rem;
-            font-weight: 700;
-        }
-
-        /* ギャラリー */
-        /* ギャラリー（横スクロール＋左右ナビ） */
-        .gallery-wrapper { position: relative; }
-        .gallery-viewport {
-            overflow: hidden;
-        }
-        .gallery-rail {
-            display: flex;
-            gap: 1.25rem;
-            transition: transform 0.5s ease;
-            will-change: transform;
-            padding: 0 0.25rem;
-        }
-        .gallery-card {
-            flex: 0 0 calc((100% - 2.5rem) / 3); /* 3枚表示、gap 1.25rem *2 */
-            overflow: hidden;
-            border-radius: 8px;
-            position: relative;
-            aspect-ratio: 1 / 1;
-            box-shadow: 0 15px 25px -10px rgba(0,0,0,0.25);
-            background: rgba(255,255,255,0.04);
-            border: 1px solid rgba(255,255,255,0.08);
-        }
-        .gallery-card img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.6s ease;
-        }
-        .gallery-card:hover img {
-            transform: scale(1.05);
-        }
-        .gallery-caption {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            padding: 0.9rem 1rem;
-            background: linear-gradient(180deg, transparent, rgba(0,0,0,0.6));
-            color: #fff;
-            font-weight: 600;
-            letter-spacing: 0.03em;
-        }
-        .gallery-nav {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background: rgba(0,0,0,0.6);
-            color: #fff;
-            width: 44px;
-            height: 44px;
-            border-radius: 999px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: background 0.2s ease;
-            box-shadow: 0 10px 25px -10px rgba(0,0,0,0.45);
-            z-index: 10;
-            backdrop-filter: blur(6px);
-            font-size: 14px;
-        }
-        .gallery-nav:hover {
-            background: rgba(255,255,255,0.2);
-        }
-        .gallery-nav.disabled {
-            opacity: 0.35;
-            pointer-events: none;
-        }
-        .gallery-nav.left { left: 8px; }
-        .gallery-nav.right { right: 8px; }
-    </style>
 </head>
-<body class="antialiased">
+<body>
+    <!-- アイコン (ページ内で使い回す SVG) -->
+    <svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+        <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+        <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></symbol>
+        <symbol id="i-phone" viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></symbol>
+        <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18M9 15l2 2 4-4"/></symbol>
+        <symbol id="i-train" viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="14" rx="3"/><path d="M5 11h14M9 21l-2-4M15 21l2-4"/><circle cx="9" cy="14" r=".6"/><circle cx="15" cy="14" r=".6"/></symbol>
+        <symbol id="i-seat" viewBox="0 0 24 24"><path d="M6 12V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v7M4 12h16v4H4zM6 16v5M18 16v5"/></symbol>
+        <symbol id="i-closed" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18M10 14l4 4M14 14l-4 4"/></symbol>
+        <symbol id="i-insta" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".8"/></symbol>
+        <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
+        <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+        <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+        <symbol id="i-chevron" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></symbol>
+        <symbol id="i-book" viewBox="0 0 24 24"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2zM4 21V5M8 7h7"/></symbol>
+        <symbol id="i-bag" viewBox="0 0 24 24"><path d="M5 8h14l-1 13H6zM9 8V6a3 3 0 0 1 6 0v2"/></symbol>
+        <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></symbol>
+    </svg>
 
-    <!-- ローディング画面 -->
-    <div id="loader" class="fixed inset-0 z-[100] flex items-center justify-center">
-        <div class="loader-inner" aria-label="Loading">
-            <img src="./images/load.png" alt="Loading...">
-            <div class="loader-track" aria-hidden="true">
-                <div id="loader-bar" class="loader-bar"></div>
-            </div>
-            <p class="loader-credit">site by rintaro</p>
-        </div>
-    </div>
-
-    <!-- ヘッダー -->
-    <header id="header" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
-        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
-            <a href="#" class="header-brand flex items-center space-x-2 text-2xl font-bold tracking-wider transition-colors">
-                <img src="./images/load.png" alt="enka logo" class="h-8">
-                <span>enka</span>
+    <header class="site-header" id="site-header">
+        <div class="container">
+            <a class="brand" href="#top" aria-label="Cafe&amp;Baru Enka トップへ">
+                <img class="logo-light" src="./images/web/logo-horizontal-white.webp" alt="Cafe&amp;Baru Enka" width="640" height="262">
+                <img class="logo-dark" src="./images/web/logo-horizontal-black.webp" alt="Cafe&amp;Baru Enka" width="640" height="256">
             </a>
-            <nav class="hidden md:flex space-x-8 items-center">
-                <a href="#" class="header-link hover:text-amber-600 transition-colors">トップ</a>
-                <a href="#about" class="header-link hover:text-amber-600 transition-colors">お店について</a>
-                <a href="#concept" class="header-link hover:text-amber-600 transition-colors">こだわり</a>
-                <a href="menu.html" class="header-link hover:text-amber-600 transition-colors">メニュー</a>
-                <a href="#access" class="header-link hover:text-amber-600 transition-colors">アクセス</a>
-                <a href="https://www.hotpepper.jp/strJ004421212/yoyaku/?vos=othpporgzzzzx00000001" target="_blank" rel="noopener noreferrer" class="bg-amber-500 text-stone-900 px-5 py-2 rounded-full font-semibold hover:bg-amber-400 transition-colors">予約する</a>
+            <nav class="site-nav" aria-label="メインメニュー">
+                <a href="#news">お知らせ</a>
+                <a href="#about">お店について</a>
+                <a href="menu.html">メニュー</a>
+                <a href="#access">アクセス</a>
+                <a class="btn btn-wine" href="https://www.hotpepper.jp/strJ004421212/yoyaku/?vos=othpporgzzzzx00000001" target="_blank" rel="noopener noreferrer">予約する</a>
             </nav>
-            <button id="mobile-menu-button" class="md:hidden text-2xl z-50">
-                <i class="fas fa-bars"></i>
+            <button class="menu-toggle" id="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-nav" aria-label="メニューを開く">
+                <svg class="icon" aria-hidden="true"><use href="#i-menu"/></svg>
             </button>
         </div>
     </header>
 
-    <!-- モバイルメニュー -->
-    <div id="mobile-menu" class="md:hidden bg-white/90 backdrop-blur-md fixed top-0 left-0 right-0 shadow-lg pt-[64px] z-40">
-        <a href="#" class="block text-center py-3 hover:bg-gray-100">トップ</a>
-        <a href="#about" class="block text-center py-3 hover:bg-gray-100">お店について</a>
-        <a href="#concept" class="block text-center py-3 hover:bg-gray-100">こだわり</a>
-        <a href="menu.html" class="block text-center py-3 hover:bg-gray-100">メニュー</a>
-        <a href="#access" class="block text-center py-3 hover:bg-gray-100">アクセス</a>
-        <a href="https://www.hotpepper.jp/strJ004421212/yoyaku/?vos=othpporgzzzzx00000001" target="_blank" rel="noopener noreferrer" class="block text-center py-3 hover:bg-gray-100">予約する</a>
-    </div>
+    <nav class="mobile-nav" id="mobile-nav" aria-label="メインメニュー">
+        <a href="#news">お知らせ</a>
+        <a href="#about">お店について</a>
+        <a href="menu.html">メニュー</a>
+        <a href="#access">アクセス・営業時間</a>
+        <a class="btn btn-wine" href="https://www.hotpepper.jp/strJ004421212/yoyaku/?vos=othpporgzzzzx00000001" target="_blank" rel="noopener noreferrer">
+            <svg class="icon" aria-hidden="true"><use href="#i-calendar"/></svg>Webで予約する
+        </a>
+        <a class="btn btn-ghost-light" href="tel:0448198004">
+            <svg class="icon" aria-hidden="true"><use href="#i-phone"/></svg>電話する 044-819-8004
+        </a>
+    </nav>
 
-    <main>
-        <!-- ヒーローセクション -->
-        <section class="min-h-[100svh] flex items-center text-white relative overflow-hidden pt-24 pb-24">
-            <div class="hero-slider hero-bg">
-                <div class="hero-bg-slide is-active" style="background-image: url('./images/hero.jpg');"></div>
-                <div class="hero-bg-slide" data-bg="./images/大量の写真/店舗写真/LINE_ALBUM_2025.7.7_250707_1.jpg"></div>
-                <div class="hero-bg-slide" data-bg="./images/大量の写真/店舗写真/LINE_ALBUM_2025.7.7_250707_10.jpg"></div>
-                <div class="hero-bg-slide" data-bg="./images/大量の写真/店舗写真/LINE_ALBUM_2025.7.7_250707_15.jpg"></div>
-                <div class="hero-bg-slide" data-bg="./images/大量の写真/店舗写真/LINE_ALBUM_2025.7.7_250707_30.jpg"></div>
+    <main id="top">
+        <!-- ファーストビュー: 何の店か / いつ開いているか / 次に何をするか -->
+        <section class="hero" aria-labelledby="hero-title">
+            <div class="hero-photo">
+                <img src="./images/web/roastbeef-panini-960.webp"
+                     srcset="./images/web/roastbeef-panini-960.webp 960w, ./images/web/roastbeef-panini-1600.webp 1600w"
+                     sizes="(min-width: 900px) 55vw, 100vw"
+                     alt="木のプレートにのった焼きたてのパニーニ" width="960" height="617" fetchpriority="high">
             </div>
-            <div class="hero-overlay"></div>
-            <div class="hero-content container mx-auto px-6">
-                <div class="max-w-3xl">
-                    <p id="hero-brand" class="mb-4 text-2xl md:text-3xl font-semibold tracking-[0.32em] uppercase text-white/95">Enka</p>
-                    <h1 id="hero-title" class="text-5xl md:text-7xl font-bold tracking-wider leading-tight">A moment of peace.</h1>
-                    <p id="hero-subtitle" class="mt-5 max-w-3xl text-base sm:text-lg md:text-2xl text-white/90 leading-relaxed">向ヶ丘遊園駅から徒歩3分、登戸駅から徒歩6分。燻製とコーヒーのお店</p>
-                    <div class="mt-6 flex flex-wrap gap-3 text-sm md:text-base text-white/90">
-                        <span class="hero-fact"><i class="fas fa-train mr-2 text-amber-300"></i>向ヶ丘遊園 北口 徒歩3分</span>
-                        <span class="hero-fact"><i class="fas fa-train mr-2 text-amber-300"></i>登戸駅 徒歩6分</span>
-                        <span class="hero-fact"><i class="fas fa-clock mr-2 text-amber-300"></i>11:00-16:00 / 18:00-23:00</span>
-                        <span class="hero-fact"><i class="fas fa-chair mr-2 text-amber-300"></i>全12席</span>
-                    </div>
-                </div>
-                <div id="hero-primary-actions" class="mt-6 flex flex-wrap items-start gap-3">
-                    <a href="menu.html" class="btn-primary">
-                        <i class="fas fa-book-open"></i>
-                        メニューを見る
+            <div class="hero-body">
+                <p class="hero-kicker">
+                    <span>向ヶ丘遊園駅 徒歩3分</span><span>Cafe&amp;Baru Enka 煙霞</span>
+                </p>
+                <h1 class="hero-title" id="hero-title">昼はカフェ、<br>夜はバル。</h1>
+                <p class="hero-lead"><span>焼きたてのパニーニと</span><span>ハンドドリップコーヒー。</span><br><span>夜は自家製の燻製料理と</span><span>お酒をどうぞ。</span></p>
+                <p class="open-status" id="open-status" data-state="unknown" aria-live="polite">
+                    <span class="dot" aria-hidden="true"></span>
+                    <span id="open-status-text">11:00–16:00 / 18:00–23:00（水曜定休）</span>
+                </p>
+                <div class="hero-actions">
+                    <a class="btn btn-light" href="menu.html">
+                        <svg class="icon" aria-hidden="true"><use href="#i-book"/></svg>メニューを見る
                     </a>
-                    <a href="#access" class="btn-secondary">
-                        <i class="fas fa-location-dot"></i>
-                        アクセス
+                    <a class="btn btn-wine" href="https://www.hotpepper.jp/strJ004421212/yoyaku/?vos=othpporgzzzzx00000001" target="_blank" rel="noopener noreferrer">
+                        <svg class="icon" aria-hidden="true"><use href="#i-calendar"/></svg>席を予約する
                     </a>
                 </div>
-                <div class="mt-4 flex flex-col sm:flex-row items-start gap-3 text-sm text-white/85">
-                    <a href="https://www.hotpepper.jp/strJ004421212/yoyaku/?vos=othpporgzzzzx00000001" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 underline-offset-4 hover:underline hover:text-white transition-colors">
-                        <i class="fas fa-calendar-check"></i>
-                        予約する
-                    </a>
-                    <span class="hidden sm:inline text-white/35">/</span>
-                    <a href="tel:0448198004" class="inline-flex items-center gap-2 underline-offset-4 hover:underline hover:text-white transition-colors" aria-label="電話で予約する">
-                        <i class="fas fa-phone"></i>
-                        電話する
-                    </a>
-                </div>
-                <!-- 最新のお知らせ（最上位1件だけ表示） -->
-                <div id="hero-latest-news" class="mt-8 flex items-start gap-3 px-4 py-3 rounded-lg bg-white/15 backdrop-blur-sm border border-white/20 text-left shadow-lg">
-                    <div class="flex-shrink-0 text-amber-300"><i class="fas fa-bell"></i></div>
-                    <div class="space-y-1 text-sm md:text-base">
-                        <p class="uppercase tracking-[0.2em] text-white/70 text-xs md:text-[13px]">最新のお知らせ</p>
-                        <div class="text-white/90" id="hero-latest-news-body">読み込み中...</div>
-                    </div>
-                </div>
-            </div>
-            <!-- Scroll Indicator -->
-            <div class="absolute bottom-10 right-10 text-white text-center opacity-70 hidden md:flex flex-col items-center gsap-fade-in">
-                <span class="text-sm tracking-widest">SCROLL</span>
-                <div class="mt-2 animate-bounce">
-                    <i class="fas fa-arrow-down"></i>
-                </div>
-            </div>
-        </section>
-
-        <section class="quick-strip px-6">
-            <div class="container mx-auto grid md:grid-cols-3 gap-4">
-                <a href="menu.html" class="surface-card p-5 flex items-center gap-4 hover:-translate-y-1 transition-transform">
-                    <span class="w-11 h-11 rounded-full bg-amber-100 text-amber-800 flex items-center justify-center"><i class="fas fa-utensils"></i></span>
-                    <span><span class="block font-bold">メニューを見る</span><span class="block text-sm text-stone-500 mt-1">ランチ、ドリンク、夜のバルまで</span></span>
-                </a>
-                <a href="https://www.hotpepper.jp/strJ004421212/yoyaku/?vos=othpporgzzzzx00000001" target="_blank" rel="noopener noreferrer" class="surface-card p-5 flex items-center gap-4 hover:-translate-y-1 transition-transform">
-                    <span class="w-11 h-11 rounded-full bg-amber-100 text-amber-800 flex items-center justify-center"><i class="fas fa-calendar-check"></i></span>
-                    <span><span class="block font-bold">席を予約する</span><span class="block text-sm text-stone-500 mt-1">少人数利用もお気軽に</span></span>
-                </a>
-                <a href="#access" class="surface-card p-5 flex items-center gap-4 hover:-translate-y-1 transition-transform">
-                    <span class="w-11 h-11 rounded-full bg-amber-100 text-amber-800 flex items-center justify-center"><i class="fas fa-train"></i></span>
-                    <span><span class="block font-bold">駅からの行き方</span><span class="block text-sm text-stone-500 mt-1">向ヶ丘遊園3分、登戸6分</span></span>
+                <a class="hero-tel" href="tel:0448198004">
+                    <svg class="icon" aria-hidden="true"><use href="#i-phone"/></svg>お電話でも 044-819-8004
                 </a>
             </div>
         </section>
 
-        <!-- Aboutセクション -->
-        <section id="about" class="py-20 md:py-32 overflow-hidden">
-            <div class="container mx-auto px-6">
-                <!-- md以上ではrelative、スマホでは通常のブロック -->
-                <div class="md:relative md:flex md:items-end">
-                    <!-- 画像のコンテナ: スマホでは幅いっぱい、下マージンを追加 -->
-                    <div class="w-full md:w-9/12 gsap-fade-up mb-8 md:mb-0">
-                        <div class="relative pt-[56.25%] rounded-lg shadow-2xl overflow-hidden">
-                            <img src="./images/大量の写真/店舗写真/LINE_ALBUM_2025.7.7_250707_1.jpg" alt="店内の落ち着いたテーブル席" class="absolute inset-0 w-full h-full object-cover" loading="lazy">
-                        </div>
+        <!-- お知らせ: 限定メニューや営業情報 (Firestore から読み込み) -->
+        <section class="section news" id="news" aria-labelledby="news-title">
+            <div class="container">
+                <div class="news-head">
+                    <div>
+                        <p class="kicker">NEWS</p>
+                        <h2 class="section-title" id="news-title">お知らせ・限定メニュー</h2>
                     </div>
+                </div>
+                <div class="news-list" id="news-list">
+                    <p class="news-empty">お知らせを読み込んでいます…</p>
+                </div>
+                <div class="news-list" id="news-archive" hidden></div>
+                <button class="btn btn-outline news-more" id="news-more" type="button" hidden aria-controls="news-archive" aria-expanded="false">過去のお知らせを見る</button>
+            </div>
+        </section>
 
-                    <!-- 説明文パネル: スマホでは通常のブロック、md以上でabsolute配置 -->
-                    <div class="w-full md:absolute md:bottom-0 md:right-0 md:w-7/12 lg:w-1/2 gsap-fade-up md:mb-[-4rem]" data-gsap-delay="0.2">
-                         <div class="surface-card backdrop-blur-md p-8 md:p-10">
-                             <p class="section-kicker mb-3">ABOUT</p>
-                             <h2 class="section-title text-3xl md:text-4xl font-bold mb-6">駅近にある、静かな余白。</h2>
-                             <p class="section-copy mb-4">
-                                「enka」は、都会の喧騒から少し離れた場所に佇む、あなたのための隠れ家です。
-                                厳選された特別なコーヒーと、燻製の素材を活かした手作りパニーニやニョッキなどをお楽しみいただけます。
-                            </p>
-                             <p class="section-copy">
-                                ミニマルで洗練された空間で、読書をしたり、友人と語らったり、あるいはただ静かに物思いにふけったり。
-                                思い思いの「余白」の時間をお過ごしください。
-                            </p>
+        <!-- 昼と夜のふたつの顔 -->
+        <section class="section" id="about" aria-labelledby="about-title">
+            <div class="container">
+                <div class="section-head reveal">
+                    <p class="kicker">CAFE &amp; BARU</p>
+                    <h2 class="section-title" id="about-title">ひとつのお店で、<br>ふたつの時間。</h2>
+                    <p class="section-lead">全12席の小さなお店です。お昼はゆっくりランチとコーヒーを、夜は燻製をつまみにお酒を。</p>
+                </div>
+                <div class="times">
+                    <article class="time-card cafe reveal">
+                        <div class="time-card-photo">
+                            <img src="./images/web/panini-720.webp" alt="3種類のパニーニ" width="720" height="768" loading="lazy" decoding="async">
                         </div>
-                    </div>
+                        <div class="time-card-head">
+                            <h3>CAFE TIME</h3>
+                            <p>11:00–16:00（L.O. 15:30）</p>
+                        </div>
+                        <div class="time-card-body">
+                            <p>注文を受けてから焼き上げるパニーニや、もちもちのニョッキ。食後は一杯ずつ淹れるハンドドリップコーヒーと季節のパフェをどうぞ。</p>
+                            <ul class="chips" aria-label="昼のおすすめ">
+                                <li>パニーニ</li><li>ニョッキ</li><li>ハンドドリップコーヒー</li><li>パフェ</li>
+                            </ul>
+                            <a class="text-link" href="menu.html#lunch">ランチメニューを見る<svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+                        </div>
+                    </article>
+                    <article class="time-card bar reveal">
+                        <div class="time-card-photo">
+                            <img src="./images/web/bar-seats-720.webp" alt="カウンター席とキッチン" width="720" height="480" loading="lazy" decoding="async">
+                        </div>
+                        <div class="time-card-head">
+                            <h3>BAR TIME</h3>
+                            <p>18:00–23:00（料理 L.O. 22:00）</p>
+                        </div>
+                        <div class="time-card-body">
+                            <p>日替わりの燻製盛り合わせやアヒージョを、クラフトビールや日本酒と。仕事帰りの一杯から、少人数の集まりまで。</p>
+                            <ul class="chips" aria-label="夜のおすすめ">
+                                <li>燻製盛り合わせ</li><li>アヒージョ</li><li>鴨肉のコンフィ</li><li>日本酒</li>
+                            </ul>
+                            <a class="text-link" href="menu.html#dinner">ディナーメニューを見る<svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+                        </div>
+                    </article>
+                </div>
+                <p class="takeout-note reveal">
+                    <svg class="icon" aria-hidden="true"><use href="#i-bag"/></svg>
+                    <span><strong>パニーニはテイクアウトもできます。</strong>11:00〜15:30</span>
+                </p>
+            </div>
+        </section>
+
+        <!-- こだわり -->
+        <section class="section concept" id="concept" aria-labelledby="concept-title">
+            <div class="container concept-grid">
+                <div class="concept-photo reveal">
+                    <img src="./images/web/counter-960.webp" srcset="./images/web/counter-960.webp 960w, ./images/web/counter-1600.webp 1600w" sizes="(min-width: 900px) 55vw, 100vw" alt="カウンター越しに見える店内とキッチン" width="960" height="640" loading="lazy" decoding="async">
+                </div>
+                <div class="reveal">
+                    <p class="kicker">OUR WAY</p>
+                    <h2 class="section-title" id="concept-title">煙と香りを、<br>ていねいに。</h2>
+                    <p class="section-lead">店名の「煙霞（えんか）」は、立ちのぼる煙とかすみのこと。</p>
+                    <ol class="points">
+                        <li>
+                            <h3>店内で仕込む燻製</h3>
+                            <p>自家製の燻製チーズやベーコンを、パニーニにも夜のおつまみにも。</p>
+                        </li>
+                        <li>
+                            <h3>焼きたてのパニーニ</h3>
+                            <p>ご注文をいただいてから焼き上げます。ハーフサイズもあります。</p>
+                        </li>
+                        <li>
+                            <h3>一杯ずつのハンドドリップ</h3>
+                            <p>豆の個性に合わせて、一杯ずつ丁寧に淹れています。</p>
+                        </li>
+                    </ol>
                 </div>
             </div>
         </section>
 
-        <!-- Conceptセクション (新規追加) -->
-        <section id="concept" class="py-20 md:py-32 bg-[#f3eadf] overflow-hidden">
-            <div class="container mx-auto px-6">
-                <div class="text-center mb-16">
-                    <p class="section-kicker justify-center gsap-fade-up">CONCEPT</p>
-                    <h2 class="section-title text-3xl md:text-4xl font-bold gsap-fade-up mt-3">enkaが大切にしていること</h2>
-                    <p class="section-copy mt-3 gsap-fade-up" data-gsap-delay="0.1">コーヒー、燻製、居心地。小さなお店だからこそ、ひとつずつ丁寧に。</p>
-                </div>
-                <div class="grid md:grid-cols-3 gap-12 text-center">
-                    <div class="gsap-fade-up" data-gsap-delay="0.2">
-                        <div class="surface-card p-8 h-full transition-all duration-300 hover:shadow-xl">
-                            <div class="text-5xl text-amber-700 mb-4"><i class="fas fa-coffee"></i></div>
-                            <h3 class="text-2xl font-bold mb-3">一杯ずつ淹れるコーヒー</h3>
-                            <p class="text-gray-600 leading-relaxed">
-                                世界中から厳選した豆を、一杯ずつ丁寧にハンドドリップ。豆の個性が際立つ、格別な味わいをお届けします。
-                            </p>
-                        </div>
-                    </div>
-                    <div class="gsap-fade-up" data-gsap-delay="0.3">
-                        <div class="surface-card p-8 h-full transition-all duration-300 hover:shadow-xl">
-                            <div class="text-5xl text-orange-900 mb-4"><i class="fas fa-cloud-meatball"></i></div>
-                            <h3 class="text-2xl font-bold mb-3">香りを楽しむ燻製料理</h3>
-                            <p class="text-gray-600 leading-relaxed">
-                                食材の旨味を最大限に引き出す、こだわりの燻製料理。パニーニやニョッキなど、独創的なメニューをご用意しています。
-                            </p>
-                        </div>
-                    </div>
-                    <div class="gsap-fade-up" data-gsap-delay="0.4">
-                        <div class="surface-card p-8 h-full transition-all duration-300 hover:shadow-xl">
-                            <div class="text-5xl text-stone-500 mb-4"><i class="fas fa-couch"></i></div>
-                            <h3 class="text-2xl font-bold mb-3">ふっと落ち着く空間</h3>
-                            <p class="text-gray-600 leading-relaxed">
-                                ミニマルで洗練された、居心地の良い空間。おひとりで、または大切な人と、心安らぐ時間をお過ごしください。
-                            </p>
-                        </div>
-                    </div>
-                </div>
+        <!-- 写真 -->
+        <section class="section gallery" id="gallery" aria-labelledby="gallery-title">
+            <div class="container section-head">
+                <p class="kicker">GALLERY</p>
+                <h2 class="section-title" id="gallery-title">店内の様子</h2>
+                <p class="section-lead">横にスワイプして見られます。</p>
+            </div>
+            <div class="gallery-rail" tabindex="0" aria-label="店内とメニューの写真">
+                <figure><img src="./images/web/tables-720.webp" alt="木のテーブルと白い椅子のテーブル席" width="720" height="480" loading="lazy" decoding="async"><figcaption>テーブル席</figcaption></figure>
+                <figure><img src="./images/web/melon-soda-720.webp" alt="アイスがのったメロンクリームソーダ" width="720" height="555" loading="lazy" decoding="async"><figcaption>クリームソーダ</figcaption></figure>
+                <figure><img src="./images/web/window-seats-720.webp" alt="窓際のテーブル席" width="720" height="480" loading="lazy" decoding="async"><figcaption>窓際の席</figcaption></figure>
+                <figure><img src="./images/web/coffee-720.webp" alt="木のソーサーにのったコーヒー" width="720" height="832" loading="lazy" decoding="async"><figcaption>ハンドドリップコーヒー</figcaption></figure>
+                <figure><img src="./images/web/dripper-720.webp" alt="壁に取り付けたドリッパー" width="720" height="480" loading="lazy" decoding="async"><figcaption>ドリッパー</figcaption></figure>
+                <figure><img src="./images/web/gnocchi-720.webp" alt="チーズソースのニョッキ" width="720" height="672" loading="lazy" decoding="async"><figcaption>チーズソースのニョッキ</figcaption></figure>
+            </div>
+            <div class="container gallery-foot">
+                <span>最新の写真は Instagram で更新しています。</span>
+                <a class="btn btn-ghost-light" href="https://www.instagram.com/cafe_and_baru_enka/" target="_blank" rel="noopener noreferrer">
+                    <svg class="icon" aria-hidden="true"><use href="#i-insta"/></svg>Instagram を見る
+                </a>
             </div>
         </section>
 
-        <!-- Featured Menuセクション (新規追加) -->
-        <section id="featured-menu" class="py-20 md:py-32 overflow-hidden">
-            <div class="container mx-auto px-6">
-                <div class="text-center mb-16">
-                    <p class="section-kicker justify-center gsap-fade-up" data-animate="static">RECOMMEND</p>
-                    <h2 class="section-title text-3xl md:text-4xl font-bold gsap-fade-up mt-3" data-animate="static">はじめての方にもおすすめ</h2>
-                    <p class="section-copy mt-3 gsap-fade-up" data-gsap-delay="0.1" data-animate="static">お店の個性が伝わりやすい定番メニューです。</p>
+        <!-- アクセス・営業時間 -->
+        <section class="section" id="access" aria-labelledby="access-title">
+            <div class="container">
+                <div class="section-head reveal">
+                    <p class="kicker">ACCESS</p>
+                    <h2 class="section-title" id="access-title">アクセス・営業時間</h2>
                 </div>
-                <div class="grid md:grid-cols-3 gap-8">
-                    <!-- Menu Card 1 -->
-                    <div class="bg-white rounded-lg shadow-lg overflow-hidden menu-card gsap-fade-up" data-gsap-delay="0.2">
-                        <img src="./images/大量の写真/Food・Drink/パニーニ.jpg" alt="パニーニ" class="w-full h-64 object-cover" loading="lazy" decoding="async">
-                        <div class="p-6">
-                            <span class="menu-card-badge mb-4"><i class="fas fa-fire"></i> ランチ</span>
-                            <h3 class="text-2xl font-bold mb-2">燻製ベーコンとチーズのパニーニ</h3>
-                            <p class="text-gray-600 mb-4">
-                                香り高い燻製ベーコンととろけるチーズの組み合わせが絶妙な、当店自慢のパニーニです。
-                            </p>
-                        </div>
-                    </div>
-                    <!-- Menu Card 2 -->
-                    <div class="bg-white rounded-lg shadow-lg overflow-hidden menu-card gsap-fade-up" data-gsap-delay="0.3">
-                        <img src="./images/大量の写真/Food・Drink/チーズソースのニョッキ.jpg" alt="チーズソースのニョッキ" class="w-full h-64 object-cover" loading="lazy" decoding="async">
-                        <div class="p-6">
-                            <span class="menu-card-badge mb-4"><i class="fas fa-utensils"></i> フード</span>
-                            <h3 class="text-2xl font-bold mb-2">チーズソースのニョッキ</h3>
-                            <p class="text-gray-600 mb-4">
-                                もちもちの自家製ニョッキに、濃厚なチーズソースをたっぷりと絡めました。
-                            </p>
-                        </div>
-                    </div>
-                    <!-- Menu Card 3 -->
-                    <div class="bg-white rounded-lg shadow-lg overflow-hidden menu-card gsap-fade-up" data-gsap-delay="0.4">
-                        <img src="./images/大量の写真/Food・Drink/ハンドドリップコーヒー.jpg" alt="ハンドドリップコーヒー" class="w-full h-64 object-cover" loading="lazy" decoding="async">
-                        <div class="p-6">
-                            <span class="menu-card-badge mb-4"><i class="fas fa-mug-hot"></i> コーヒー</span>
-                            <h3 class="text-2xl font-bold mb-2">ハンドドリップコーヒー</h3>
-                            <p class="text-gray-600 mb-4">
-                                厳選されたスペシャルティコーヒー豆の個性を最大限に引き出した、至極の一杯。
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                <div class="text-center mt-16 gsap-fade-up">
-                    <a href="menu.html" class="inline-flex items-center justify-center gap-2 bg-stone-900 text-white px-8 py-3 rounded-full text-lg hover:bg-stone-700 transition-all duration-300 transform hover:-translate-y-1">
-                        <i class="fas fa-book-open"></i>
-                        すべてのメニューを見る
-                    </a>
-                </div>
-            </div>
-        </section>
-
-        <!-- Galleryセクション -->
-        <section id="gallery" class="py-16 md:py-24 bg-[#211813] text-white overflow-hidden">
-            <div class="container mx-auto px-6 space-y-10">
-                <div class="text-center">
-                    <p class="text-sm uppercase tracking-[0.3em] text-white/60">GALLERY</p>
-                    <h2 class="text-3xl md:text-4xl font-bold mt-2">enkaの空気を写真で</h2>
-                    <p class="text-white/70 mt-3">店内の雰囲気やドリンクの彩りをそのままお届けします。</p>
-                </div>
-                <div class="gallery-wrapper">
-                    <div class="gallery-viewport">
-                        <div class="gallery-nav left" id="gallery-prev" aria-label="前の写真">
-                            <i class="fas fa-chevron-left"></i>
-                        </div>
-                        <div class="gallery-nav right" id="gallery-next" aria-label="次の写真">
-                            <i class="fas fa-chevron-right"></i>
-                        </div>
-                        <div class="gallery-rail" id="gallery-rail" aria-live="polite">
-                            <figure class="gallery-card">
-                                <img src="./images/大量の写真/店舗写真/LINE_ALBUM_2025.7.7_250707_1.jpg" alt="木の温もりあるカウンターとテーブル席" loading="lazy" decoding="async">
-                                <figcaption class="gallery-caption">店内の落ち着いた夕景</figcaption>
-                            </figure>
-                            <figure class="gallery-card">
-                                <img src="./images/大量の写真/店舗写真/LINE_ALBUM_2025.7.7_250707_10.jpg" alt="壁に取り付けられたドリッパーホルダー" loading="lazy" decoding="async">
-                                <figcaption class="gallery-caption">ハンドドリップの道具たち</figcaption>
-                            </figure>
-                            <figure class="gallery-card">
-                                <img src="./images/大量の写真/店舗写真/LINE_ALBUM_2025.7.7_250707_15.jpg" alt="窓際のテーブル席と柔らかな照明" loading="lazy" decoding="async">
-                                <figcaption class="gallery-caption">窓際のテーブル席</figcaption>
-                            </figure>
-                            <figure class="gallery-card">
-                                <img src="./images/大量の写真/店舗写真/IMG_4477.JPG" alt="壁面の装飾とドリッパーのディスプレイ" loading="lazy" decoding="async">
-                                <figcaption class="gallery-caption">季節のウォールデコ</figcaption>
-                            </figure>
-                            <figure class="gallery-card">
-                                <img src="./images/大量の写真/Food・Drink/IMG_4374.JPG" alt="バニラアイスがのったメロンクリームソーダ" loading="lazy" decoding="async">
-                                <figcaption class="gallery-caption">メロンクリームソーダ</figcaption>
-                            </figure>
-                            <figure class="gallery-card">
-                                <img src="./images/大量の写真/店舗写真/IMG_4380.JPG" alt="店内カウンター越しの備品ディスプレイ" loading="lazy" decoding="async">
-                                <figcaption class="gallery-caption">カウンター周りの備品</figcaption>
-                            </figure>
-                        </div>
-                    </div>
-                </div>
-                <div class="text-center gsap-fade-up" data-animate="static">
-                    <a href="https://www.instagram.com/cafe_and_baru_enka/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 border border-white/50 text-white px-6 py-3 rounded-full hover:bg-white hover:text-stone-900 transition-colors">
-                        <i class="fab fa-instagram"></i>
-                        Instagramで最新情報を見る
-                    </a>
-                </div>
-            </div>
-        </section>
-
-        <!-- CTA セクション -->
-        <section id="reservation-cta" class="relative py-16 md:py-24 bg-gradient-to-r from-stone-900 via-stone-800 to-stone-600 text-white overflow-hidden">
-            <div class="absolute inset-0 opacity-40 pointer-events-none">
-                <video id="reservation-video" class="w-full h-full object-cover" data-src="./images/大量の写真/Food・Drink/IMG_6215.mp4" poster="./images/大量の写真/Food・Drink/パニーニ.jpg" muted loop playsinline preload="none"></video>
-                <div class="absolute inset-0 bg-gradient-to-r from-stone-900/80 via-stone-900/60 to-stone-700/70"></div>
-            </div>
-            <div class="container mx-auto px-6 relative">
-                <div class="max-w-4xl mx-auto text-center space-y-6">
-                    <p class="text-sm uppercase tracking-[0.3em] text-white/70">RESERVATION</p>
-                    <h2 class="text-3xl md:text-4xl font-bold gsap-fade-up">夜のバルタイムも、お昼のカフェも。</h2>
-                    <p class="text-lg text-white/80 gsap-fade-up" data-gsap-delay="0.1">
-                        少人数の貸切やイベント利用も歓迎です。ご希望の時間を下のボタンからお知らせください。スタッフが丁寧にご案内いたします。
-                    </p>
-                    <div class="flex flex-col md:flex-row items-center justify-center gap-4 gsap-fade-up" data-gsap-delay="0.2">
-                        <a href="https://www.hotpepper.jp/strJ004421212/yoyaku/?vos=othpporgzzzzx00000001" target="_blank" rel="noopener noreferrer" class="bg-white text-stone-900 font-semibold px-8 py-3 rounded-full shadow-lg hover:bg-stone-200 transition-colors">
-                            Webで予約する
-                        </a>
-                        <a href="tel:0448198004" class="bg-amber-400 text-stone-900 font-semibold px-8 py-3 rounded-full shadow-lg hover:bg-amber-300 transition-colors">
-                            044-819-8004 に電話
-                        </a>
-                    </div>
-                    <p class="text-sm text-white/70" data-animate="static">受付時間: 11:00-16:00 / 18:00-23:00（定休日: 水曜日・不定休）</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Accessセクション -->
-        <section id="access" class="py-20 md:py-32 bg-[#f3eadf] overflow-hidden">
-            <div class="container mx-auto px-6">
-                <div class="text-center mb-16">
-                    <p class="section-kicker justify-center" data-animate="static">ACCESS</p>
-                    <h2 class="section-title text-3xl md:text-4xl font-bold mt-3">店舗情報・アクセス</h2>
-                    <p class="section-copy mt-3 gsap-fade-up" data-gsap-delay="0.1" data-animate="static">向ヶ丘遊園駅から徒歩3分、登戸駅から徒歩6分。お近くまで来たら地図をご確認ください。</p>
-                    <div class="mt-6 flex flex-col md:flex-row items-center justify-center gap-3 text-sm md:text-base text-stone-700 gsap-fade-up" data-animate="static">
-                        <span class="inline-flex items-center gap-2"><i class="fas fa-train text-stone-500"></i> 小田急線 向ヶ丘遊園駅 北口 徒歩3分</span>
-                        <span class="hidden md:inline text-stone-300">/</span>
-                        <span class="inline-flex items-center gap-2"><i class="fas fa-train text-stone-500"></i> 登戸駅 徒歩6分</span>
-                        <span class="hidden md:inline text-stone-300">/</span>
-                        <span class="inline-flex items-center gap-2"><i class="fas fa-chair text-stone-500"></i> 全12席</span>
-                        <span class="hidden md:inline text-stone-300">/</span>
-                        <span class="inline-flex items-center gap-2"><i class="fas fa-calendar-times text-stone-500"></i> 水曜日・不定休</span>
-                    </div>
-                </div>
-                <!-- md以上でrelativeにし、はみ出しの基準点とする -->
-                <div class="md:relative md:flex md:justify-start">
-                    <!-- マップのコンテナ -->
-                    <div class="h-[400px] md:h-[500px] w-full md:w-10/12 rounded-lg shadow-2xl overflow-hidden gsap-fade-up" data-animate="static">
-                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2293.4245521263424!2d139.56603063694567!3d35.61805896932246!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6018f1c0fd21ccbf%3A0xb5430b8fd88f7a34!2zQ2FmZe-8hkJhcnUgRW5rYSjjgqvjg5Xjgqcm44OQ44OrIOOCqOODs-OCqyk!5e0!3m2!1sja!2sjp!4v1756204285727!5m2!1sja!2sjp" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-                    </div>
-
-                    <!-- 説明文パネル (md以上でabsolute配置し、右下にはみ出す) -->
-                    <div class="w-full mt-[-4rem] md:mt-0 md:absolute md:bottom-0 md:right-0 md:w-2/3 lg:w-1/2 md:mb-[-4rem]">
-                        <div class="surface-card backdrop-blur-md p-8 md:p-10 gsap-fade-up" data-gsap-delay="0.3" data-animate="static">
-                            <h3 class="text-2xl font-bold mb-6">店舗情報</h3>
-                            <div class="space-y-4 text-gray-700">
-                                <p><i class="fas fa-map-marker-alt w-6 text-stone-600"></i> 〒214-0014 神奈川県川崎市多摩区登戸２５１２ 稲田第3ビル 2F</p>
-                                <p><i class="fas fa-clock w-6 text-stone-600"></i> 昼営業: 11:00 - 16:00</p>
-                                <p><i class="fas fa-clock w-6 text-stone-600"></i> 夜営業: 18:00 - 23:00</p>
-                                <p><i class="fas fa-calendar-times w-6 text-stone-600"></i> 定休日: 水曜日・不定休</p>
-                                <p><i class="fas fa-phone w-6 text-stone-600"></i> Tel: 044-819-8004 </p>
-                                <p><i class="fas fa-train w-6 text-stone-600"></i> 小田急線 向ヶ丘遊園駅 北口より徒歩3分</p>
-                                <p><i class="fas fa-train w-6 text-stone-600"></i> 登戸駅より徒歩6分</p>
-                                <div class="pt-3 border-t border-stone-200">
-                                    <p class="font-semibold text-stone-800 mb-2"><i class="fas fa-chair w-6 text-stone-600"></i> 席数（全12席）</p>
-                                    <ul class="space-y-1 pl-2 text-sm text-gray-700">
-                                        <li>2名掛け テーブル席 × 1</li>
-                                        <li>3名掛け テーブル席 × 1</li>
-                                        <li>4名掛け テーブル席 × 1</li>
-                                        <li>カウンター席 × 3</li>
-                                    </ul>
-                                </div>
+                <div class="access-grid">
+                    <div class="info-card reveal">
+                        <dl class="info-list">
+                            <div>
+                                <svg class="icon" aria-hidden="true"><use href="#i-train"/></svg>
+                                <dt>最寄り駅</dt>
+                                <dd>小田急線 向ヶ丘遊園駅 北口 徒歩3分<small>JR・小田急線 登戸駅 徒歩6分</small></dd>
                             </div>
+                            <div>
+                                <svg class="icon" aria-hidden="true"><use href="#i-pin"/></svg>
+                                <dt>住所</dt>
+                                <dd>〒214-0014<br>神奈川県川崎市多摩区登戸2512 稲田第3ビル 2F</dd>
+                            </div>
+                            <div>
+                                <svg class="icon" aria-hidden="true"><use href="#i-clock"/></svg>
+                                <dt>営業時間</dt>
+                                <dd>昼 11:00–16:00（L.O. 15:30）<br>夜 18:00–23:00<small>料理 L.O. 22:00 / ドリンク L.O. 22:30</small></dd>
+                            </div>
+                            <div>
+                                <svg class="icon" aria-hidden="true"><use href="#i-closed"/></svg>
+                                <dt>定休日</dt>
+                                <dd>水曜日・不定休<small>臨時のお休みはお知らせと Instagram でご案内します。</small></dd>
+                            </div>
+                            <div>
+                                <svg class="icon" aria-hidden="true"><use href="#i-seat"/></svg>
+                                <dt>席数</dt>
+                                <dd>全12席<small>テーブル 2名・3名・4名 各1卓 / カウンター 3席</small></dd>
+                            </div>
+                            <div>
+                                <svg class="icon" aria-hidden="true"><use href="#i-phone"/></svg>
+                                <dt>電話</dt>
+                                <dd><a href="tel:0448198004">044-819-8004</a></dd>
+                            </div>
+                        </dl>
+                        <div class="info-actions">
+                            <a class="btn btn-wine" href="https://www.google.com/maps/search/?api=1&amp;query=%E7%A5%9E%E5%A5%88%E5%B7%9D%E7%9C%8C%E5%B7%9D%E5%B4%8E%E5%B8%82%E5%A4%9A%E6%91%A9%E5%8C%BA%E7%99%BB%E6%88%B82512%20%E7%A8%B2%E7%94%B0%E7%AC%AC3%E3%83%93%E3%83%AB" target="_blank" rel="noopener noreferrer">
+                                <svg class="icon" aria-hidden="true"><use href="#i-pin"/></svg>地図で開く
+                            </a>
+                            <a class="btn btn-outline" href="tel:0448198004">
+                                <svg class="icon" aria-hidden="true"><use href="#i-phone"/></svg>電話する
+                            </a>
+                        </div>
+                    </div>
+                    <div class="access-visual reveal">
+                        <div class="signboard">
+                            <img src="./images/web/signboard-720.webp" alt="ビル入口の「2F Cafe&amp;Baru Enka」の看板" width="720" height="480" loading="lazy" decoding="async">
+                            <p><strong>ビル2階のお店です。</strong>入口のこの看板が目印です。</p>
+                        </div>
+                        <div class="map">
+                            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2293.4245521263424!2d139.56603063694567!3d35.61805896932246!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6018f1c0fd21ccbf%3A0xb5430b8fd88f7a34!2zQ2FmZe-8hkJhcnUgRW5rYSjjgqvjg5Xjgqcm44OQ44OrIOOCqOODs-OCqyk!5e0!3m2!1sja!2sjp!4v1756204285727!5m2!1sja!2sjp" title="Cafe&amp;Baru Enka の地図" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Newsセクション (新規追加) -->
-        <section id="news" class="py-20 md:py-32 bg-white overflow-hidden">
-            <div class="container mx-auto px-6">
-                <div class="text-center mb-16">
-                    <p class="section-kicker justify-center gsap-fade-up" data-animate="static">NEWS</p>
-                    <h2 class="section-title text-3xl md:text-4xl font-bold gsap-fade-up mt-3" data-animate="static">お知らせ</h2>
-                    <p class="section-copy mt-3 gsap-fade-up" data-gsap-delay="0.1" data-animate="static">季節限定メニューや営業情報はこちらでご案内します。</p>
+        <!-- 予約 -->
+        <section class="section reserve" id="reserve" aria-labelledby="reserve-title">
+            <div class="container">
+                <p class="kicker">RESERVATION</p>
+                <h2 class="section-title" id="reserve-title">ご予約はWebかお電話で</h2>
+                <p class="section-lead">少人数の貸切やイベントのご相談もお気軽にどうぞ。</p>
+                <div class="reserve-actions">
+                    <a class="btn btn-light" href="https://www.hotpepper.jp/strJ004421212/yoyaku/?vos=othpporgzzzzx00000001" target="_blank" rel="noopener noreferrer">
+                        <svg class="icon" aria-hidden="true"><use href="#i-calendar"/></svg>ホットペッパーで予約
+                    </a>
+                    <a class="btn btn-ghost-light" href="tel:0448198004">
+                        <svg class="icon" aria-hidden="true"><use href="#i-phone"/></svg>044-819-8004
+                    </a>
                 </div>
-
-                <div class="max-w-4xl mx-auto" id="news-list">
-                    <!-- お知らせはnews.jsonから動的に読み込まれます -->
-                </div>
+                <p class="reserve-note">お電話は営業時間内（11:00–16:00 / 18:00–23:00）にお願いします。</p>
             </div>
         </section>
     </main>
 
-    <!-- フッター -->
-    <footer id="contact" class="bg-stone-800 text-white py-12">
-        <div class="container mx-auto px-6 text-center">
-            <p class="text-2xl font-bold tracking-wider mb-4">enka</p>
-            <div class="flex justify-center mb-6">
-                <a href="https://www.instagram.com/cafe_and_baru_enka/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-sm hover:text-gray-300 transition-colors">
-                    <i class="fab fa-instagram text-xl"></i>
-                    Instagram
+    <footer class="site-footer">
+        <div class="container">
+            <img class="footer-logo" src="./images/web/logo-stacked-white.webp" alt="Cafe&amp;Baru Enka 煙霞" width="302" height="480" loading="lazy">
+            <p>神奈川県川崎市多摩区登戸2512 稲田第3ビル 2F</p>
+            <p>11:00–16:00 / 18:00–23:00（水曜・不定休）</p>
+            <div class="footer-links">
+                <a href="menu.html">メニュー</a>
+                <a href="#access">アクセス</a>
+                <a href="https://www.instagram.com/cafe_and_baru_enka/" target="_blank" rel="noopener noreferrer">
+                    <svg class="icon" aria-hidden="true"><use href="#i-insta"/></svg>Instagram
                 </a>
+                <a href="https://www.hotpepper.jp/strJ004421212/yoyaku/?vos=othpporgzzzzx00000001" target="_blank" rel="noopener noreferrer">ホットペッパー</a>
             </div>
-            <div class="mb-6">
-                <a href="./admin/index.html" class="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-full border border-white/70 text-white hover:bg-white/10 transition-colors text-sm font-semibold">
-                    <i class="fas fa-user-lock"></i>
-                    管理者ログイン
-                </a>
-            </div>
-            <a href="https://www.hotpepper.jp/strJ004421212/yoyaku/?vos=othpporgzzzzx00000001" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 bg-amber-500 text-stone-900 px-6 py-3 rounded-full font-semibold hover:bg-amber-400 transition-colors mb-6">
-                <i class="fas fa-calendar-check"></i>
-                Hot Pepperで予約する
+            <a class="admin-link" href="./admin/index.html">
+                <svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg>管理者ログイン
             </a>
-            <p class="text-sm text-gray-400">&copy; 2025 Cafe and Baru enka All Rights Reserved.</p>
+            <p class="copyright">&copy; 2025 Cafe&amp;Baru Enka ・ site by rintaro</p>
         </div>
     </footer>
 
-    <!-- Back to Top Button -->
-    <a href="#" id="back-to-top-button" class="fixed bottom-8 right-8 z-50 w-12 h-12 bg-stone-800 text-white rounded-full flex items-center justify-center shadow-lg transform scale-0 transition-all duration-300 ease-in-out hover:bg-stone-700 hover:scale-110">
-        <i class="fas fa-arrow-up"></i>
-    </a>
+    <!-- スマホ: スクロール後に出る固定ボタン -->
+    <nav class="action-bar" id="action-bar" aria-label="予約と連絡">
+        <a href="https://www.hotpepper.jp/strJ004421212/yoyaku/?vos=othpporgzzzzx00000001" target="_blank" rel="noopener noreferrer">
+            <svg class="icon" aria-hidden="true"><use href="#i-calendar"/></svg>予約
+        </a>
+        <a href="tel:0448198004">
+            <svg class="icon" aria-hidden="true"><use href="#i-phone"/></svg>電話
+        </a>
+        <a href="#access">
+            <svg class="icon" aria-hidden="true"><use href="#i-pin"/></svg>地図・時間
+        </a>
+    </nav>
 
-    <script src="./assets/js/vendor/gsap.min.js"></script>
-    <script src="./assets/js/vendor/ScrollTrigger.min.js"></script>
-
-
-    <script>
-        let pageRevealed = false;
-        function revealAnimatedContent(forceReveal = false) {
-            const selector = forceReveal
-                ? '.gsap-fade-up, .gsap-fade-in'
-                : '.gsap-fade-up[data-animate="static"], .gsap-fade-in[data-animate="static"]';
-
-            if (forceReveal) {
-                document.documentElement.classList.remove('js-animations-pending', 'js-gsap-ready');
-            }
-
-            document.querySelectorAll(selector).forEach(el => {
-                el.style.opacity = '1';
-                el.style.transform = 'none';
-            });
-        }
-
-        function revealPageFallback() {
-            if (pageRevealed) return;
-            pageRevealed = true;
-            const loader = document.getElementById('loader');
-            const loaderBar = document.getElementById('loader-bar');
-            if (loaderBar) loaderBar.style.transform = 'scaleX(1)';
-            if (loader) {
-                loader.style.opacity = '0';
-                setTimeout(() => {
-                    loader.style.display = 'none';
-                }, 500);
-            }
-            document.querySelectorAll('header, main, footer').forEach(el => {
-                el.style.opacity = '1';
-            });
-            document.querySelectorAll('#hero-brand, #hero-title, #hero-subtitle, #hero-primary-actions').forEach(el => {
-                el.style.opacity = '1';
-                el.style.transform = 'none';
-            });
-            revealAnimatedContent(true);
-        }
-
-        setTimeout(revealPageFallback, 3500);
-
-        function initCoreInteractions() {
-            if (window.__enkaCoreInitialized) return;
-            window.__enkaCoreInitialized = true;
-
-            const heroSlides = Array.from(document.querySelectorAll('.hero-bg-slide'));
-            let heroSlideIndex = 0;
-            heroSlides.forEach((slide, idx) => {
-                const bg = slide.dataset.bg;
-                if (bg) {
-                    setTimeout(() => {
-                        slide.style.backgroundImage = `url('${bg}')`;
-                    }, 300 * idx);
-                }
-            });
-            if (heroSlides.length > 1) {
-                setInterval(() => {
-                    const next = (heroSlideIndex + 1) % heroSlides.length;
-                    heroSlides[heroSlideIndex].classList.remove('is-active');
-                    heroSlides[next].classList.add('is-active');
-                    heroSlideIndex = next;
-                }, 6500);
-            }
-
-            const reservationVideo = document.getElementById('reservation-video');
-            if (reservationVideo?.dataset.src) {
-                const loadReservationVideo = () => {
-                    if (reservationVideo.src) return;
-                    reservationVideo.src = reservationVideo.dataset.src;
-                    reservationVideo.load();
-                    reservationVideo.play().catch(() => {});
-                };
-                if ('IntersectionObserver' in window) {
-                    const videoObserver = new IntersectionObserver((entries, observer) => {
-                        if (entries.some(entry => entry.isIntersecting)) {
-                            loadReservationVideo();
-                            observer.disconnect();
-                        }
-                    }, { rootMargin: '360px 0px' });
-                    videoObserver.observe(reservationVideo);
-                } else {
-                    loadReservationVideo();
-                }
-            }
-
-            const galleryRail = document.getElementById('gallery-rail');
-            const prevBtn = document.getElementById('gallery-prev');
-            const nextBtn = document.getElementById('gallery-next');
-            const galleryCards = Array.from(document.querySelectorAll('#gallery-rail .gallery-card'));
-            const visibleCount = 3;
-            let galleryIndex = 0;
-            const getGap = () => {
-                if (!galleryRail) return 0;
-                const style = window.getComputedStyle(galleryRail);
-                return parseFloat(style.columnGap || style.gap || '20');
-            };
-            const getCardWidth = () => galleryCards[0]?.getBoundingClientRect().width || 0;
-            const updateGallery = (offsetIndex = galleryIndex) => {
-                if (!galleryRail) return;
-                const gap = getGap();
-                const w = getCardWidth();
-                const maxIndex = Math.max(0, galleryCards.length - visibleCount);
-                galleryIndex = Math.max(0, Math.min(offsetIndex, maxIndex));
-                galleryRail.style.transform = `translateX(-${(w + gap) * galleryIndex}px)`;
-                prevBtn?.classList.toggle('disabled', galleryIndex === 0);
-                nextBtn?.classList.toggle('disabled', galleryIndex >= maxIndex);
-            };
-            prevBtn?.addEventListener('click', () => updateGallery(galleryIndex - 1));
-            nextBtn?.addEventListener('click', () => updateGallery(galleryIndex + 1));
-            window.addEventListener('resize', () => updateGallery(galleryIndex));
-            setTimeout(() => updateGallery(0), 400);
-
-            const header = document.getElementById('header');
-            const updateHeader = () => {
-                if (!header) return;
-                header.classList.toggle('header-scrolled', window.scrollY > 50);
-            };
-            updateHeader();
-            window.addEventListener('scroll', updateHeader, { passive: true });
-
-            const mobileMenuButton = document.getElementById('mobile-menu-button');
-            const mobileMenu = document.getElementById('mobile-menu');
-            let isMenuOpen = false;
-            if (mobileMenu) {
-                mobileMenu.style.opacity = '0';
-                mobileMenu.style.transform = 'translateY(-100%)';
-                mobileMenu.style.pointerEvents = 'none';
-            }
-            mobileMenuButton?.addEventListener('click', () => {
-                isMenuOpen = !isMenuOpen;
-                if (!mobileMenu) return;
-                if (window.gsap) {
-                    gsap.to(mobileMenu, {
-                        yPercent: isMenuOpen ? 0 : -100,
-                        autoAlpha: isMenuOpen ? 1 : 0,
-                        duration: 0.4,
-                        ease: 'power2.out'
-                    });
-                } else {
-                    mobileMenu.style.opacity = isMenuOpen ? '1' : '0';
-                    mobileMenu.style.transform = isMenuOpen ? 'translateY(0)' : 'translateY(-100%)';
-                    mobileMenu.style.pointerEvents = isMenuOpen ? 'auto' : 'none';
-                }
-            });
-
-            const backToTopButton = document.getElementById('back-to-top-button');
-            const updateBackToTop = () => {
-                backToTopButton?.classList.toggle('scale-100', window.scrollY > 400);
-            };
-            updateBackToTop();
-            window.addEventListener('scroll', updateBackToTop, { passive: true });
-            backToTopButton?.addEventListener('click', (e) => {
-                e.preventDefault();
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            });
-        }
-
-        document.addEventListener('DOMContentLoaded', initCoreInteractions);
-
-        window.addEventListener('load', () => {
-            initCoreInteractions();
-            if (!window.gsap || !window.ScrollTrigger) {
-                revealPageFallback();
-                return;
-            }
-
-            document.documentElement.classList.add('js-gsap-ready');
-
-            gsap.registerPlugin(ScrollTrigger);
-
-            const loader = document.getElementById('loader');
-            const loaderBar = document.getElementById('loader-bar');
-            const timeline = gsap.timeline();
-
-            if (loaderBar) {
-                loaderBar.style.transform = 'scaleX(0.18)';
-                requestAnimationFrame(() => {
-                    loaderBar.style.transform = 'scaleX(0.9)';
-                });
-            }
-
-            timeline
-                .to(loaderBar, { scaleX: 1, transformOrigin: "left center", duration: 0.45, ease: "power2.inOut" })
-                .to(loader, { opacity: 0, duration: 0.8, ease: "power1.inOut" })
-                .set(loader, { display: "none" })
-                .call(() => { pageRevealed = true; })
-                .to(["#header", "main", "footer"], { opacity: 1, duration: 1, ease: 'power1.inOut' }, "-=0.5")
-                .fromTo("#hero-brand", { y: 18, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, ease: "power2.out" }, "-=0.85")
-                .fromTo("#hero-title", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, ease: "power2.out" }, "-=0.8")
-                .fromTo("#hero-subtitle", { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, ease: "power2.out" }, "-=0.6")
-                .fromTo("#hero-primary-actions", { y: 18, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, ease: "power2.out" }, "-=0.45")
-                .to(".gsap-fade-in", { opacity: 1, duration: 1, ease: 'power2.out' }, "-=0.5");
-
-            gsap.to(".hero-bg", {
-                scrollTrigger: {
-                    trigger: "main",
-                    start: "top top",
-                    end: "bottom top",
-                    scrub: true
-                },
-                yPercent: 25,
-                ease: "none"
-            });
-
-            function setupScrollTriggers() {
-                const fadeUpElements = document.querySelectorAll('.gsap-fade-up');
-
-                fadeUpElements.forEach(el => {
-                    if (el.dataset.animate === "static") {
-                        el.style.opacity = 1;
-                        el.style.transform = 'none';
-                        return;
-                    }
-                    if (el.dataset.scrollAnimated === "true") return;
-                    el.dataset.scrollAnimated = "true";
-
-                    const delay = parseFloat(el.dataset.gsapDelay) || 0;
-                    gsap.fromTo(el,
-                        { opacity: 0, y: 50 },
-                        {
-                            opacity: 1,
-                            y: 0,
-                            duration: 1.1,
-                            delay,
-                            ease: 'power3.out',
-                            scrollTrigger: {
-                                trigger: el,
-                                start: 'top 90%',
-                                toggleActions: 'play none none none',
-                            }
-                        }
-                    );
-                });
-
-                ScrollTrigger.refresh();
-            }
-
-            setupScrollTriggers();
-            // News loading is handled by Firebase module script (see bottom).
-        });
-
-    </script>
-
-    <script>
-        const ENKA_ALLOWED_BADGE_CLASSES = new Set([
-            "bg-stone-500",
-            "bg-stone-700",
-            "bg-amber-500",
-            "bg-amber-700",
-            "bg-orange-500",
-            "bg-red-500",
-            "bg-red-600",
-            "bg-green-500",
-            "bg-green-600",
-            "bg-blue-500",
-            "bg-blue-600",
-            "bg-purple-500",
-            "bg-pink-500",
-            "bg-teal-500"
-        ]);
-
-        function escapeHtml(value) {
-            return String(value ?? "").replace(/[&<>"']/g, char => ({
-                "&": "&amp;",
-                "<": "&lt;",
-                ">": "&gt;",
-                '"': "&quot;",
-                "'": "&#39;"
-            })[char]);
-        }
-
-        function safeBadgeClass(value) {
-            const className = String(value ?? "").trim();
-            return ENKA_ALLOWED_BADGE_CLASSES.has(className) ? className : "bg-stone-500";
-        }
-
-        function safeImageUrl(value) {
-            const text = String(value ?? "").trim();
-            if (!text) return "";
-            try {
-                const url = new URL(text, window.location.origin);
-                return ["http:", "https:"].includes(url.protocol) ? url.href : "";
-            } catch {
-                return "";
-            }
-        }
-
-        async function loadLocalNewsFallback() {
-            const newsListEl = document.getElementById("news-list");
-            const latestEl = document.getElementById("hero-latest-news-body");
-            if (!newsListEl && !latestEl) return;
-            try {
-                const res = await fetch("news.json", { cache: "no-store" });
-                if (!res.ok) throw new Error("news.json load failed");
-                const items = await res.json();
-                if (!Array.isArray(items) || !items.length) return;
-                if (latestEl && (!latestEl.dataset.loaded || latestEl.textContent.includes("読み込み"))) {
-                    const item = items[0];
-                    const categoryClass = safeBadgeClass(item.category_color);
-                    latestEl.dataset.loaded = "true";
-                    latestEl.innerHTML = `
-                        <div class="flex items-center gap-2">
-                            <span class="inline-flex items-center gap-1 px-2 py-[2px] rounded-full text-xs font-semibold text-white ${categoryClass}">${escapeHtml(item.category || "お知らせ")}</span>
-                            <time class="text-white/70 text-xs" datetime="${escapeHtml(item.datetime || "")}">${escapeHtml(item.date || item.datetime || "")}</time>
-                        </div>
-                        <div class="font-semibold">${escapeHtml(item.title || "")}</div>
-                        <a href="#news" class="inline-block text-sm underline underline-offset-4">お知らせを読む</a>
-                    `;
-                }
-                if (newsListEl && (!newsListEl.dataset.loaded || newsListEl.textContent.includes("読み込み") || newsListEl.textContent.includes("まだお知らせ"))) {
-                    newsListEl.dataset.loaded = "true";
-                    newsListEl.innerHTML = items.map(item => {
-                        const imageUrl = safeImageUrl(item.image);
-                        const imageHtml = imageUrl
-                            ? `<div class="md:w-1/3 lg:w-1/4"><img src="${escapeHtml(imageUrl)}" alt="${escapeHtml(item.alt || "")}" class="w-full rounded-lg object-cover aspect-video shadow-md" loading="lazy" decoding="async"></div>`
-                            : '<div class="hidden md:block md:w-1/3 lg:w-1/4"></div>';
-                        const categoryClass = safeBadgeClass(item.category_color);
-                        return `
-                        <div class="flex flex-col md:flex-row gap-6 border-b border-gray-200 py-8 last:border-b-0">
-                            ${imageHtml}
-                            <div class="flex-1">
-                                <p class="text-sm text-gray-500 mb-2">
-                                    <time datetime="${escapeHtml(item.datetime || "")}">${escapeHtml(item.date || "")}</time>
-                                    <span class="ml-4 inline-block ${categoryClass} text-white text-xs font-semibold px-2 py-1 rounded">${escapeHtml(item.category || "")}</span>
-                                </p>
-                                <h3 class="text-xl font-bold mb-2">${escapeHtml(item.title || "")}</h3>
-                                <p class="text-gray-600 leading-relaxed">${escapeHtml(item.content || "")}</p>
-                            </div>
-                        </div>`;
-                    }).join("");
-                }
-                revealAnimatedContent?.();
-            } catch (err) {
-                console.error("ローカルJSONのお知らせ読み込みに失敗:", err);
-            }
-        }
-        document.addEventListener("DOMContentLoaded", () => {
-            setTimeout(loadLocalNewsFallback, 1200);
-        });
-    </script>
-
-    <script src="./assets/js/home-news.bundle.js" defer></script>
+    <script src="./assets/js/home.bundle.js" defer></script>
 </body>
 </html>

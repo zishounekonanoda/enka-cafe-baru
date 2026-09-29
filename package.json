@@ -7,11 +7,13 @@
     "doc": "docs"
   },
   "scripts": {
-    "build": "npm run build:css && npm run build:js && npm run copy:vendor && npm run normalize:built",
+    "build": "npm run build:css && npm run build:js && npm run copy:vendor && npm run normalize:built && npm run build:font",
     "build:css": "tailwindcss -i ./src/tailwind.css -o ./assets/css/tailwind.css --minify",
-    "build:js": "esbuild ./src/home-news.js --bundle --minify --format=iife --outfile=./assets/js/home-news.bundle.js && esbuild ./src/admin.js --bundle --minify --format=iife --outfile=./assets/js/admin.bundle.js && esbuild ./src/menu-page.js --bundle --minify --format=iife --outfile=./assets/js/menu.bundle.js",
+    "build:js": "esbuild ./src/home.js --bundle --minify --format=iife --outfile=./assets/js/home.bundle.js && esbuild ./src/admin.js --bundle --minify --format=iife --outfile=./assets/js/admin.bundle.js && esbuild ./src/menu-page.js --bundle --minify --format=iife --outfile=./assets/js/menu.bundle.js",
     "copy:vendor": "node ./scripts/copy-vendor-assets.mjs",
-    "normalize:built": "node ./scripts/normalize-built-assets.mjs"
+    "normalize:built": "node ./scripts/normalize-built-assets.mjs",
+    "build:font": "python scripts/subset-font.py",
+    "test": "node --test tests/*.mjs"
   },
   "repository": {
     "type": "git",
@@ -26,8 +28,7 @@
   "homepage": "https://github.com/zishounekonanoda/enka-cafe-baru#readme",
   "dependencies": {
     "@fortawesome/fontawesome-free": "^6.4.0",
-    "firebase": "^12.14.0",
-    "gsap": "^3.12.2"
+    "firebase": "^12.14.0"
   },
   "devDependencies": {
     "esbuild": "^0.28.1",
