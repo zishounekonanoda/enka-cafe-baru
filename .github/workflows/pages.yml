@@ -1,0 +1,54 @@
+# 公開してよいファイルだけを集めて GitHub Pages に配信する。
+# ソースコード・テスト・ツール類 (NewsEditor.exe など) はリポジトリには残るが、サイトからは取得できない。
+name: Deploy site
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+      - run: npm test
+
+      - name: Collect public files
+        run: |
+          mkdir -p _site/images _site/fonts
+          cp index.html menu.html news.json CNAME robots.txt sitemap.xml _site/
+          cp -r admin assets _site/
+          cp -r images/web images/load.png images/mini-hero.jpg _site/images/
+          cp fonts/enka-hand.woff2 _site/fonts/
+          touch _site/.nojekyll
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

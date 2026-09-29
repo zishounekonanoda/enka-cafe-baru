@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self'; connect-src 'self' https://firestore.googleapis.com; frame-src https://www.google.com; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
     <title>メニュー - enka - カフェ・バル</title>
     <meta name="description" content="enkaのランチ・ドルチェ・ディナー・ドリンク・アルコールメニュー一覧。向ヶ丘遊園駅徒歩3分、燻製料理とコーヒーを楽しめるカフェ＆バル。">
     <link rel="canonical" href="https://enka-cafe-baru.com/menu.html">
@@ -10,7 +12,7 @@
     <meta property="og:title" content="メニュー - enka - カフェ・バル">
     <meta property="og:description" content="ランチ・ドルチェ・ディナー・ドリンク・アルコールの最新メニュー。向ヶ丘遊園駅徒歩3分の燻製カフェ＆バル『enka』。">
     <meta property="og:url" content="https://enka-cafe-baru.com/menu.html">
-    <meta property="og:image" content="https://enka-cafe-baru.com/images/hero.jpg">
+    <meta property="og:image" content="https://enka-cafe-baru.com/images/web/og.jpg">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="メニュー - enka - カフェ・バル">
     <meta name="twitter:description" content="ランチ・ドルチェ・ディナー・ドリンク・アルコールの最新メニュー。">
@@ -31,7 +33,7 @@
     <style>
         @font-face {
             font-family: 'EnkaLocalFont';
-            src: url('./fonts/59314.ttf') format('truetype');
+            src: url('./fonts/enka-hand.woff2') format('woff2');
             font-weight: normal;
             font-style: normal;
             font-display: swap;
@@ -49,7 +51,7 @@
             scroll-behavior: smooth;
         }
         body {
-            font-family: 'EnkaLocalFont', 'YourLocalFontName', sans-serif;
+            font-family: "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Noto Sans JP", "Yu Gothic UI", "Yu Gothic", Meiryo, sans-serif;
             background:
                 radial-gradient(circle at top left, rgba(201, 132, 47, 0.14), transparent 34rem),
                 linear-gradient(180deg, #f9f5ed 0%, #f6f1e8 48%, #fffaf2 100%);
@@ -90,6 +92,13 @@
             font-size: 0.85rem;
             font-weight: 700;
             letter-spacing: 0.14em;
+        }
+        .menu-hero h1,
+        .menu-section-title,
+        .section-card h3 {
+            font-family: 'EnkaLocalFont', sans-serif;
+            font-weight: normal;
+            letter-spacing: 0.04em;
         }
         .menu-section-title {
             line-height: 1.25;
@@ -187,12 +196,8 @@
     </div>
     <header class="menu-page-header text-white shadow-lg sticky top-0 z-50">
         <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between gap-6">
-            <a href="index.html" class="flex items-center space-x-3">
-                <img src="./images/load.png" alt="enka logo" class="h-10 w-10">
-                <div>
-                    <p class="text-sm uppercase tracking-widest">Cafe & Baru</p>
-                    <p class="text-xl font-semibold">enka</p>
-                </div>
+            <a href="index.html" class="flex items-center" aria-label="Cafe&amp;Baru Enka トップへ">
+                <img src="./images/web/logo-horizontal-white.webp" alt="Cafe&amp;Baru Enka" class="h-10 w-auto" width="640" height="262">
             </a>
             <nav id="menu-nav" class="menu-nav hidden md:flex gap-2 text-sm tracking-wide">
                 <a href="#lunch" class="hover:text-amber-200">ランチ</a>
@@ -230,49 +235,12 @@
 
     <footer class="bg-stone-900 text-stone-200 py-10 mt-6">
         <div class="max-w-6xl mx-auto px-6 text-center space-y-3">
-            <p class="text-lg font-semibold tracking-widest">enka</p>
+            <p class="text-lg font-semibold tracking-widest">Cafe&amp;Baru Enka</p>
             <p class="text-xs text-stone-400">&copy; 2025 Cafe &amp; Baru enka</p>
         </div>
     </footer>
     <script src="./assets/js/menu.bundle.js" defer></script>
-    <script>
-        function showMenuContent() {
-            const loader = document.getElementById('loader');
-            const loaderBar = document.getElementById('loader-bar');
-            const main = document.querySelector('main');
-
-            if (loaderBar) {
-                loaderBar.style.transform = 'scaleX(0.18)';
-                requestAnimationFrame(() => {
-                    loaderBar.style.transform = 'scaleX(0.9)';
-                });
-            }
-
-            setTimeout(() => {
-                if (loaderBar) {
-                    loaderBar.style.transform = 'scaleX(1)';
-                }
-                if (loader) {
-                    loader.classList.add('fade-out');
-                    loader.style.opacity = '0';
-                    loader.style.visibility = 'hidden';
-                    setTimeout(() => {
-                        loader.style.display = 'none';
-                    }, 650);
-                }
-                main?.classList.add('content-visible');
-            }, 650);
-        }
-
-        window.addEventListener('load', showMenuContent);
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', () => {
-                setTimeout(showMenuContent, 1200);
-            });
-        } else {
-            setTimeout(showMenuContent, 1200);
-        }
-    </script>
+    <script src="./assets/js/menu-loader.js"></script>
 </body>
 </html>
 
