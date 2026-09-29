@@ -39,6 +39,9 @@ jobs:
           cp fonts/enka-hand.woff2 _site/fonts/
           touch _site/.nojekyll
 
+      - name: Add content hashes to CSS/JS URLs
+        run: node scripts/stamp-assets.mjs _site
+
       - uses: actions/upload-pages-artifact@v3
         with:
           path: _site
