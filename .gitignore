@@ -1,2 +1,12 @@
 node_modules/
 npm-debug.log*
+
+# 別プロジェクト・作業用ファイル (公開リポジトリに入れない)
+backend/
+docs/
+old_menu.bytes
+*.zip
+
+# 撮影元の写真素材 (サイトでは images/web/ の最適化済み画像を使う)
+images/大量の写真/
+_site/

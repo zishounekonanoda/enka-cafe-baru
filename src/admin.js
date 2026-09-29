@@ -4,6 +4,13 @@ import { getFirestore, collection, doc, getDoc, getDocFromServer, getDocs, runTr
 import { defaultMenuData } from "./menu-data.js";
 import { createMenuStore, updateMenuItem } from "./menu-store.mjs";
 
+// 他サイトの iframe に埋め込まれた管理画面は操作させない（クリックジャッキング対策）。
+// GitHub Pages ではヘッダーで frame-ancestors を指定できないため、画面側で防ぐ。
+if (window.top !== window.self) {
+  document.documentElement.innerHTML = "";
+  throw new Error("admin page must not be framed");
+}
+
 const firebaseConfig = {
   apiKey: "AIzaSyCpKJ5PuXPLXubvvXzRimZj9YnQ_1jsikc",
   authDomain: "enka-a3819.firebaseapp.com",
