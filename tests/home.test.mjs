@@ -35,3 +35,24 @@ test('Firestore REST の値をお知らせの項目に変換する', () => {
   assert.deepEqual(item, { title: '<b>限定</b>', datetime: '2026-09-01', image: null, updatedAt: '2026-09-01T00:00:00Z' });
   assert.deepEqual(fromFirestoreDocument({}), {});
 });
+
+test('メニューのような入れ子の配列・マップも変換する', async () => {
+  const { fromFirestoreDocument } = await import('../src/firestore-rest.js');
+  const menu = fromFirestoreDocument({
+    fields: {
+      groups: { arrayValue: { values: [{ mapValue: { fields: {
+        id: { stringValue: 'lunch' },
+        sections: { arrayValue: { values: [{ mapValue: { fields: {
+          title: { stringValue: 'パニーニ' },
+          notes: { arrayValue: {} },
+          items: { arrayValue: { values: [{ mapValue: { fields: { name: { stringValue: '燻製 鴨肉のロースト' }, price: { stringValue: '¥1080' } } } }] } }
+        } } }] } }
+      } } }] } },
+      count: { integerValue: '3' }
+    }
+  });
+  assert.deepEqual(menu, {
+    groups: [{ id: 'lunch', sections: [{ title: 'パニーニ', notes: [], items: [{ name: '燻製 鴨肉のロースト', price: '¥1080' }] }] }],
+    count: 3
+  });
+});
