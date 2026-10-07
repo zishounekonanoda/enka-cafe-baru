@@ -1,7 +1,6 @@
-// お知らせは読むだけなので Firebase SDK を使わず Firestore の REST API で取得する (SDK だと約290KB)。
-// 公開されている読み取り専用の API キー。書き込みは firestore.rules で管理者に限定している。
-const NEWS_ENDPOINT = "https://firestore.googleapis.com/v1/projects/enka-a3819/databases/(default)/documents/news"
-  + "?key=AIzaSyCpKJ5PuXPLXubvvXzRimZj9YnQ_1jsikc&pageSize=100";
+import { listDocuments } from "./firestore-rest.js";
+
+export { fromFirestoreDocument } from "./firestore-rest.js";
 
 // トップに最初から開いて見せる件数。残りは「過去のお知らせ」にたたむ。
 const NEWS_VISIBLE = 3;
@@ -127,20 +126,9 @@ function renderNews(items) {
   }
 }
 
-// Firestore REST のドキュメントを { title: "...", ... } の形に直す
-export function fromFirestoreDocument(doc) {
-  const item = {};
-  for (const [key, value] of Object.entries(doc?.fields ?? {})) {
-    item[key] = value.stringValue ?? value.timestampValue ?? value.integerValue ?? value.booleanValue ?? null;
-  }
-  return item;
-}
-
 async function loadNews() {
   try {
-    const res = await fetch(NEWS_ENDPOINT, { cache: "no-store" });
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const items = ((await res.json()).documents ?? []).map(fromFirestoreDocument);
+    const items = await listDocuments("news");
     if (items.length) return items;
   } catch (err) {
     console.error("Firestoreからのお知らせ読み込みに失敗:", err);

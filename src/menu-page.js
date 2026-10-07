@@ -1,19 +1,5 @@
-import { initializeApp } from "firebase/app";
-import { getFirestore, doc, getDoc } from "firebase/firestore";
+import { getDocument } from "./firestore-rest.js";
 import { defaultMenuData } from "./menu-data.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyCpKJ5PuXPLXubvvXzRimZj9YnQ_1jsikc",
-  authDomain: "enka-a3819.firebaseapp.com",
-  projectId: "enka-a3819",
-  storageBucket: "enka-a3819.firebasestorage.app",
-  messagingSenderId: "443017242406",
-  appId: "1:443017242406:web:c09fcbd620295312bcc3e7",
-  measurementId: "G-EGEKEVL665"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
 
 const borderByTheme = {
   amber: "border-amber-100",
@@ -125,8 +111,8 @@ function renderGroup(group) {
 
 async function loadMenuData() {
   try {
-    const snap = await getDoc(doc(db, "menus", "current"));
-    if (snap.exists()) return normalizeMenuData(snap.data());
+    const data = await getDocument("menus/current");
+    if (data) return normalizeMenuData(data);
   } catch (err) {
     console.error("Firestoreからメニューを読み込めませんでした:", err);
   }
