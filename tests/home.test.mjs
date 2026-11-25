@@ -7,9 +7,10 @@ const at = (weekday, hhmm) => {
   return { weekday, minutes: h * 60 + m };
 };
 
-test('水曜日は時間に関係なく定休日と表示する', () => {
-  assert.equal(openStatus(at(3, '12:00')).state, 'closed');
-  assert.match(openStatus(at(3, '12:00')).text, /定休日/);
+test('木曜日は時間に関係なく定休日と表示し、水曜日は営業する', () => {
+  assert.equal(openStatus(at(4, '12:00')).state, 'closed');
+  assert.match(openStatus(at(4, '12:00')).text, /木曜.*定休日/);
+  assert.equal(openStatus(at(3, '12:00')).state, 'open');
 });
 
 test('営業時間の境界で営業中・準備中・終了を切り替える', () => {

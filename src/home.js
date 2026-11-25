@@ -5,12 +5,12 @@ export { fromFirestoreDocument } from "./firestore-rest.js";
 // トップに最初から開いて見せる件数。残りは「過去のお知らせ」にたたむ。
 const NEWS_VISIBLE = 3;
 
-// 営業時間 (日本時間, 分単位)。水曜定休。
+// 営業時間 (日本時間, 分単位)。木曜定休。
 const HOURS = [
   { open: 11 * 60, close: 16 * 60, label: "カフェタイム" },
   { open: 18 * 60, close: 23 * 60, label: "バルタイム" }
 ];
-const CLOSED_WEEKDAY = 3;
+const CLOSED_WEEKDAY = 4;
 
 // ファーストビューの写真を切り替える間隔
 const SLIDE_INTERVAL = 6500;
@@ -43,7 +43,7 @@ function tokyoNow(date = new Date()) {
 
 export function openStatus(now) {
   if (now.weekday === CLOSED_WEEKDAY) {
-    return { state: "closed", text: "本日（水曜）は定休日です" };
+    return { state: "closed", text: "本日（木曜）は定休日です" };
   }
   for (const slot of HOURS) {
     if (now.minutes < slot.open) {
