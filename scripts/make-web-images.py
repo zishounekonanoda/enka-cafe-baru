@@ -40,7 +40,7 @@ SOURCES = {
     # 黒い背景で撮った料理 (HEIC / DNG)
     "panini-trio": ("Food・Drink/IMG_7778.heic", [720, 1200], (0.05, 0.12, 0.95, 0.95)),
     "duck-confit": ("Food・Drink/IMG_7802.HEIC", [720], (0.0, 0.45, 1.0, 0.95)),
-    "ajillo-duo": ("Food・Drink/IMG_7807.HEIC", [720, 1200], (0.0, 0.6, 1.0, 0.95)),
+    "ajillo-duo": ("Food・Drink/IMG_7807.HEIC", [720, 1200], (0.0, 0.52, 1.0, 0.86)),
     "tomato-gnocchi": ("Food・Drink/IMG_7792.HEIC", [720], (0.0, 0.45, 1.0, 0.95)),
     "baldango": ("Food・Drink/IMG_7786.HEIC", [720], (0.0, 0.45, 1.0, 0.95)),
     "smoked-platter": ("Food・Drink/IMG_7782.heic", [720], (0.0, 0.45, 1.0, 0.8)),
